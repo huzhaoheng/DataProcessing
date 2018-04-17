@@ -12,15 +12,14 @@ $("#find-union-btn").click(function () {
 	});
 	
 	var query = findUnionQueryBuilder(datasets);
-	console.log(query);
+	
 	$.getJSON(
 				'/getNodes',
 				{arg: JSON.stringify({"query" : query})},
 				function (response) 
 				{
 					var result = response.elements['nodes'];
-					console.log(result);
-
+					
 					$("#nav-tabs").empty();
 					$("#tab-content").empty();
 

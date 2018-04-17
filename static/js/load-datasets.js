@@ -19,7 +19,7 @@ function loadDataset() {
 					dataset_index = -1;
 					for (dataset in result){
 
-						var stripped = repository.replace(/[^0-9a-zA-Z]/gi, '')
+						var stripped = dataset.replace(/[^0-9a-zA-Z]/gi, '');
 						
 						dataset_index += 1;
 						var data = [];

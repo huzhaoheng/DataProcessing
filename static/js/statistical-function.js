@@ -88,7 +88,6 @@ function propertyBtnHandler(ele){
 		{arg: JSON.stringify({"query" : query})},
 		function (response){
 			var result = response.elements;
-			console.log(result);
 			for (key in result){
 				var properties = result[key];
 				for(property in properties){
@@ -134,9 +133,8 @@ function functionLiClickHandler(ele){
 		}
 		$(ele).closest('tr').find('td:eq(3)').empty();
 	}
-	console.log(selected);
+
 	$(ele).parent().prev().text(selected);
-	console.log($(ele).parent().prev().text());
 }
 
 function chartTypeLiClickHandler(ele) {
@@ -224,14 +222,12 @@ $("#statistical-function-submit").on('click', function() {
 	}
 
 	var query = statisticalFunctionQuery(data);
-	console.log(query);
 
 	$.getJSON(
 		'/getValue',
 		{arg: JSON.stringify({"query" : query})},
 		function (response){
 			var result = response.elements;
-			console.log(result);
 			var labels = [],
 				data = [];
 

@@ -33,7 +33,6 @@ $( "#select-data" ).on('shown.bs.modal', function(){
 
 
 function draw(graph) {
-	console.log(graph);
 	window.graph = graph
 	var source = Object.keys(graph)[0];
 	var treeData = {"name" : source, "parent" : null, "children" : []};
@@ -99,7 +98,6 @@ function draw(graph) {
 		width = $("#select-data-graph").width() - margin.right - margin.left,
 		height = $("#select-data-graph").height() - margin.top - margin.bottom;
 
-	console.log(width, height);
 
 	window.i = 0;
 	var duration = 750,
@@ -742,6 +740,7 @@ $("#select-data-submit").click(function () {
 	var res = selectDatatQuery(window.path, window.source, window.name);
 	var query = res[0],
 		names = res[1];
+
 	$.getJSON(
 				'/getPath',
 				{arg: JSON.stringify({"query" : query, "names" : names})},
@@ -753,6 +752,9 @@ $("#select-data-submit").click(function () {
 					
 					var tab_index = -1;
 					for (name in result){
+
+						var stripped = name.replace(/[^0-9a-zA-Z]/gi, '')
+
 						tab_index += 1;
 						var data = [];
 						Object.values(result[name]).forEach(each => {
@@ -767,13 +769,13 @@ $("#select-data-submit").click(function () {
 						else{
 							div.setAttribute("class", "tab-pane");
 						}
-						div.setAttribute("id", name + "-div");
+						div.setAttribute("id", stripped + "-div");
 
 						var p = document.createElement("p");
 
 						var new_table = document.createElement("table"); 
 						new_table.setAttribute("data-classes", "table table-hover table-condensed");
-						new_table.setAttribute("id", name);
+						new_table.setAttribute("id", stripped);
 
 						div.appendChild(p);
 						p.appendChild(new_table);
@@ -784,7 +786,7 @@ $("#select-data-submit").click(function () {
 						}
 						
 						var a = document.createElement("a");
-						a.setAttribute("href", "#" + name + "-div");
+						a.setAttribute("href", "#" + stripped + "-div");
 						a.setAttribute("data-toggle", "tab");
 						a.innerHTML = name;
 
@@ -793,7 +795,7 @@ $("#select-data-submit").click(function () {
 						document.getElementById("nav-tabs").appendChild(li);
 						document.getElementById("tab-content").appendChild(div);
 
-						displayInTable(data, "data", "#" + name);
+						displayInTable(data, "data", "#" + stripped);
 					}
 
 					window.source = null;

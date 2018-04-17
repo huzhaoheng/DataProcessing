@@ -94,6 +94,7 @@ function formatData(data) {
 			true;
 		}
 	}
+
 	return ret;
 }
 
