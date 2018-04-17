@@ -1,0 +1,1969 @@
+{
+	"name": "query",
+	"inputs": [],
+	"output": {
+		"type": {
+			"kind": "OBJECT",
+			"name": "Query"
+		},
+		"isScalar": false,
+		"isObject": true,
+		"isAList": false
+	},
+	"children": [{
+		"name": "reddit",
+		"inputs": [],
+		"output": {
+			"type": {
+				"kind": "OBJECT",
+				"name": "redditQuery",
+				"ofType": null
+			},
+			"isScalar": false,
+			"isObject": true,
+			"isAList": false
+		},
+		"children": [{
+			"name": "searchSubredditTopics",
+			"inputs": [{
+				"name": "query",
+				"description": null,
+				"inputType": "String",
+				"value": null
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "subreddit",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "searchSubreddits",
+			"inputs": [{
+				"name": "query",
+				"description": null,
+				"inputType": "String",
+				"value": null
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "subreddit",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "search",
+			"inputs": [{
+				"name": "query",
+				"description": null,
+				"inputType": "String",
+				"value": "strike"
+			}, {
+				"name": "time",
+				"description": "hour, day, week, month, year, all",
+				"inputType": "String",
+				"value": "all"
+			}, {
+				"name": "subreddit",
+				"description": null,
+				"inputType": "String",
+				"value": "UIUC"
+			}, {
+				"name": "restrictSr",
+				"description": "Restricts search results to the given subreddit",
+				"inputType": "Boolean",
+				"value": "false"
+			}, {
+				"name": "sort",
+				"description": "relevance, hot, top, new, comments",
+				"inputType": "String",
+				"value": "relevance"
+			}, {
+				"name": "syntax",
+				"description": "cloudsearch, lucene, plain",
+				"inputType": "String",
+				"value": null
+			}, {
+				"name": "count",
+				"description": null,
+				"inputType": "Int",
+				"value": "50"
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "redditLink",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [{
+				"name": "approved_by",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "archived",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "author_name",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "author_flair_css_class",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "author_flair_text",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "banned_by",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "brand_safe",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "contest_mode",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "clicked",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "created",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "created_utc",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "domain",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "downs",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "distinguished",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "edited",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "gilded",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "hidden",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "hide_score",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "id",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "is_self",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "likes",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "link_flair_css_class",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "link_flair_text",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "locked",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "media",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "mod_reports",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "LIST",
+						"name": null,
+						"ofType": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						}
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "true"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "name",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "num_comments",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "num_reports",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "over_18",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "post_hint",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "permalink",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "quarantine",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "report_reasons",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "removal_reason",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "saved",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "score",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": true
+			}, {
+				"name": "selftext",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "selftext_html",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "secure_media",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "secure_media_embed",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "stickied",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "spoiler",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "subreddit_display_name",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "suggested_sort",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "subreddit_id",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "subreddit_type",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "subreddit_name_prefixed",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "thumbnail",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "title",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": true
+			}, {
+				"name": "url",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": true
+			}, {
+				"name": "ups",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "user_reports",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "LIST",
+						"name": null,
+						"ofType": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						}
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "true"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "visited",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isScalar": "true",
+					"isObject": "false",
+					"isAList": "false"
+				},
+				"children": [],
+				"selected": false
+			}, {
+				"name": "replies",
+				"inputs": [],
+				"output": {
+					"type": {
+						"kind": "LIST",
+						"name": null,
+						"ofType": {
+							"kind": "OBJECT",
+							"name": "redditComment",
+							"ofType": null
+						}
+					},
+					"isScalar": "false",
+					"isObject": "true",
+					"isAList": "true"
+				},
+				"children": [{
+					"name": "comment_author_name",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": true
+				}, {
+					"name": "author_flair_css_class",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "author_flair_text",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "archived",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Boolean",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "approved_by",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "banned_by",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "body",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": true
+				}, {
+					"name": "body_html",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "created_utc",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "comment_created",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "controversiality",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Int",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "distinguished",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Boolean",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "comment_downs",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Int",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "edited",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Boolean",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "gilded",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Int",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "comment_id",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "link_id",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "link_author",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "link_title",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "link_permalink",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "link_url",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "likes",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Int",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "mod_reports",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "LIST",
+							"name": null,
+							"ofType": {
+								"kind": "SCALAR",
+								"name": "String",
+								"ofType": null
+							}
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "true"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "comment_name",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "comment_num_comments",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Int",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "comment_num_reports",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Int",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "comment_over_18",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Boolean",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "parent_id",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "quarantine",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Boolean",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "report_reasons",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "LIST",
+							"name": null,
+							"ofType": {
+								"kind": "SCALAR",
+								"name": "String",
+								"ofType": null
+							}
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "true"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "removal_reason",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "saved",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Boolean",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "comment_score",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Int",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": true
+				}, {
+					"name": "subreddit_id",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "subreddit_display_name",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "subreddit_name_prefixed",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "score_hidden",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Boolean",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "stickied",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Boolean",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "subreddit_type",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "comment_ups",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "SCALAR",
+							"name": "Int",
+							"ofType": null
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "false"
+					},
+					"children": [],
+					"selected": false
+				}, {
+					"name": "user_reports",
+					"inputs": [],
+					"output": {
+						"type": {
+							"kind": "LIST",
+							"name": null,
+							"ofType": {
+								"kind": "SCALAR",
+								"name": "String",
+								"ofType": null
+							}
+						},
+						"isScalar": "true",
+						"isObject": "false",
+						"isAList": "true"
+					},
+					"children": [],
+					"selected": false
+				}],
+				"selected": true
+			}],
+			"selected": true
+		}, {
+			"name": "getCompleteReplies",
+			"inputs": [{
+				"name": "id",
+				"description": null,
+				"inputType": "String",
+				"value": null
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "redditComment",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "getNewComments",
+			"inputs": [{
+				"name": "subredditName",
+				"description": null,
+				"inputType": "String",
+				"value": null
+			}, {
+				"name": "extra",
+				"description": "for fetchMore",
+				"inputType": "Int",
+				"value": "0"
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "redditComment",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "searchSubredditNames",
+			"inputs": [{
+				"name": "query",
+				"description": null,
+				"inputType": "String",
+				"value": null
+			}, {
+				"name": "exact",
+				"description": null,
+				"inputType": "Boolean",
+				"value": "false"
+			}, {
+				"name": "includeNsfw",
+				"description": null,
+				"inputType": "Boolean",
+				"value": "true"
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					}
+				},
+				"isScalar": true,
+				"isObject": false,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "getPopularSubreddits",
+			"inputs": [{
+				"name": "options",
+				"description": null,
+				"inputType": "Int",
+				"value": "0"
+			}, {
+				"name": "extra",
+				"description": "for fetchMore",
+				"inputType": "Int",
+				"value": "0"
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "subreddit",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "getNewSubreddits",
+			"inputs": [{
+				"name": "options",
+				"description": null,
+				"inputType": "Int",
+				"value": "0"
+			}, {
+				"name": "extra",
+				"description": "for fetchMore",
+				"inputType": "Int",
+				"value": "0"
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "subreddit",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "getGoldSubreddits",
+			"inputs": [{
+				"name": "options",
+				"description": null,
+				"inputType": "Int",
+				"value": "0"
+			}, {
+				"name": "extra",
+				"description": "for fetchMore",
+				"inputType": "Int",
+				"value": "0"
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "subreddit",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "getDefaultSubreddits",
+			"inputs": [{
+				"name": "options",
+				"description": null,
+				"inputType": "Int",
+				"value": "0"
+			}, {
+				"name": "extra",
+				"description": "for fetchMore",
+				"inputType": "Int",
+				"value": "0"
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "subreddit",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "getHot",
+			"inputs": [{
+				"name": "subredditName",
+				"description": null,
+				"inputType": "String",
+				"value": null
+			}, {
+				"name": "options",
+				"description": null,
+				"inputType": "Int",
+				"value": "0"
+			}, {
+				"name": "extra",
+				"description": "for fetchMore",
+				"inputType": "Int",
+				"value": "0"
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "redditLink",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "getNew",
+			"inputs": [{
+				"name": "subredditName",
+				"description": null,
+				"inputType": "String",
+				"value": null
+			}, {
+				"name": "options",
+				"description": null,
+				"inputType": "Int",
+				"value": "0"
+			}, {
+				"name": "extra",
+				"description": "for fetchMore",
+				"inputType": "Int",
+				"value": "0"
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "redditLink",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "getTop",
+			"inputs": [{
+				"name": "subredditName",
+				"description": null,
+				"inputType": "String",
+				"value": null
+			}, {
+				"name": "options",
+				"description": null,
+				"inputType": "Int",
+				"value": "0"
+			}, {
+				"name": "extra",
+				"description": "for fetchMore",
+				"inputType": "Int",
+				"value": "0"
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "redditLink",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "getControversial",
+			"inputs": [{
+				"name": "subredditName",
+				"description": null,
+				"inputType": "String",
+				"value": null
+			}, {
+				"name": "options",
+				"description": null,
+				"inputType": "Int",
+				"value": "0"
+			}, {
+				"name": "extra",
+				"description": "for fetchMore",
+				"inputType": "Int",
+				"value": "0"
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "redditLink",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}, {
+			"name": "getRising",
+			"inputs": [{
+				"name": "subredditName",
+				"description": null,
+				"inputType": "String",
+				"value": null
+			}, {
+				"name": "options",
+				"description": null,
+				"inputType": "Int",
+				"value": "0"
+			}, {
+				"name": "extra",
+				"description": "for fetchMore",
+				"inputType": "Int",
+				"value": "0"
+			}],
+			"output": {
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "redditLink",
+						"ofType": null
+					}
+				},
+				"isScalar": false,
+				"isObject": true,
+				"isAList": true
+			},
+			"children": [],
+			"selected": false
+		}],
+		"selected": true
+	}],
+	"selected": true
+}

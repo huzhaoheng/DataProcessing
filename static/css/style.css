@@ -1,0 +1,98 @@
+#select-data .modal-dialog {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+}
+
+#select-data .modal-content {
+	height: 100%;
+	border-radius: 0;
+}
+
+#select-data .modal-body {
+	height: 85%;
+}
+
+#select-data-graph {
+	margin: 10px auto;
+	height: 100%;
+	background-color: white;
+}
+
+.modal-body {
+	position: relative;
+	overflow-y: auto;
+}
+
+.panel-default > .panel-heading-custom {
+	background: #343A40; 
+	color: #fff;
+	height: 40px;
+}
+
+marquee{
+	height: 100%;
+}
+
+marquee p
+{
+    white-space:nowrap;
+}
+
+
+#statistical-function .modal-dialog {
+	width: 80%;
+	height: 60%;
+	padding: 0;
+}
+
+#statistical-function .modal-content {
+	height: 80%;
+	border-radius: 0;
+}
+
+#statistical-function .modal-body {
+	height: 75%;
+}
+
+/*#chart .modal-dialog {
+	width: 80%;
+	height: 60%;
+	padding: 0;
+}
+
+#chart .modal-content {
+	height: 80%;
+	border-radius: 0;
+}
+
+#chart .modal-body {
+	height: 75%;
+}
+*/
+
+
+
+
+
+
+.node {
+    cursor: pointer;
+}
+.node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+.node text {
+    font: 20px sans-serif;
+}
+path.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+}
+.link text {
+    font: 14px sans-serif;
+    fill: black;
+}

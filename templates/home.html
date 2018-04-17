@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Welcome</title>
+
+		<meta name="description" content="Source code generated using layoutit.com">
+		<meta name="author" content="LayoutIt!">
+
+		<link href="../static/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../static/css/style.css" rel="stylesheet">
+		<link href="../static/css/bootstrap-table.css" rel="stylesheet">
+	</head>
+
+	<body onload="initialization('{{username}}', '{{hashkey}}');">
+		<nav class="navbar navbar-default navbar-light" role="navigation">
+			<div class="navbar-header">
+				 
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+				</button> 
+
+				<a class="navbar-brand" href="http://listen.online/home">
+					listen
+				</a>
+
+				<a class="navbar-brand" href="http://listen.online/home">
+					<marquee direction = "up" scrollamount="3" id="marquee">
+						<p>online</p>
+					</marquee>
+				</a>
+
+
+			</div>
+			
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome, {{username}}</a>
+					</li>
+				</ul>
+			</div>
+			
+		</nav>
+
+		<!-- <div class="panel-group center-block" id="create-dataset-panel" style="width: 15%;" >
+			<div class="panel panel-default">
+				<div class="panel-heading panel-heading-custom" style="text-align:center;">
+					 <p>
+					 	<a class="panel-title" data-toggle="collapse" data-parent="#create-dataset-panel" href="#create-dataset-panel-items">Create new dataset</a>
+					 </p>
+				</div>
+				<div id="create-dataset-panel-items" class="panel-collapse collapse">
+					<div class="panel-body">
+						<p>
+							<button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#select-data" id="select-data-btn" style="background-color:#007BFF">1. Select Data</button>
+							<div class="modal fade" id="select-data" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+												×
+											</button>
+											<h4 class="modal-title" id="myModalLabel">
+												Select Data
+											</h4>
+										</div>
+										<div class="modal-body">
+											<div id="cy"></div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" data-dismiss="modal" id="select-data-close">
+												Close
+											</button> 
+											<button type="button" class="btn btn-primary" id="select-data-submit">
+												Submit
+											</button>
+										</div>
+									</div>
+		
+								</div>
+								
+							</div>
+						</p>
+					</div>
+
+					<div class="panel-body">
+						<p>
+							<button type="button" class="btn btn-primary btn-sm btn-block" id="save-as-new-dataset" style="background-color:#007BFF">2. Save as New Datasets</button>
+						</p>
+					</div>
+				</div>
+			</div>
+									
+		</div> -->
+
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-2">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="panel-group" id="repositories-panel">
+										<div class="panel panel-default">
+											<div id="repositories-custom" class="panel-heading panel-heading-custom" style="text-align:center" onclick="highLight('#repositories-custom', '.panel-heading-custom'); loadRepository();">
+												<a class="panel-title" data-toggle="collapse" data-parent="#repositories-panel" href="#">Repositories</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<div class="panel-group" id="datasets-panel">
+										<div class="panel panel-default">
+											<div id="datasets-custom" class="panel-heading panel-heading-custom" style="text-align:center" onclick="highLight('#datasets-custom', '.panel-heading-custom'); loadDataset();">
+												<a class="panel-title" data-toggle="collapse" data-parent="#datasets-panel" href="#">Datasets</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<div class="panel-group" id="create-dataset-panel">
+										<div class="panel panel-default">
+											<div id="create-dataset-custom" class="panel-heading panel-heading-custom" style="text-align:center;" onclick="highLight('#create-dataset-custom', '.panel-heading-custom');">
+												 <p>
+												 	<a class="panel-title" data-toggle="collapse" data-parent="#create-dataset-panel" href="#create-dataset-panel-items">Create new dataset</a>
+												 </p>
+											</div>
+											<div id="create-dataset-panel-items" class="panel-collapse collapse">
+												<div class="panel-body">
+													<p>
+														<button type="button" class="sidebar-btn btn btn-primary btn-sm btn-block" data-target="#select-data" id="select-data-btn" onclick="highLight('#select-data-btn', '.sidebar-btn');">Select Data From Context</button>
+
+														<div class="modal fade" id="select-data" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+															<div class="modal-dialog">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+																			×
+																		</button>
+																		<h4 class="modal-title" id="myModalLabel">
+																			Select Data
+																		</h4>
+																	</div>
+																	<div class="modal-body">
+																		<div id="select-data-graph"></div>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-default" data-dismiss="modal" id="select-data-close">
+																			Close
+																		</button> 
+																		<button type="button" class="btn btn-primary" id="select-data-submit">
+																			Submit
+																		</button>
+																	</div>
+																</div>
+																
+															</div>
+															
+														</div>
+													</p>
+												</div>
+
+												<div class="panel-body">
+													<p>
+														<button type="button" class="sidebar-btn btn btn-primary btn-sm btn-block" id="save-as-new-dataset" onclick="highLight('#save-as-new-dataset', '.sidebar-btn');">Save Context as New Dataset</button>
+													</p>
+												</div>
+
+												<!-- <div class="panel-body">
+													<p>
+														<button type="button" class="sidebar-btn btn btn-primary btn-sm btn-block" data-target="#keep-adding-data" id="keep-adding-data-btn" onclick="highLight('#keep-adding-data-btn', '.sidebar-btn');">Keep adding data to dataset</button>
+
+														<div class="modal fade" id="keep-adding-data" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+															<div class="modal-dialog">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+																			×
+																		</button>
+																		<h4 class="modal-title" id="myModalLabel">
+																			Select Data
+																		</h4>
+																	</div>
+																	<div class="modal-body">
+																		<div id="keep-adding-data-graph"></div>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-default" data-dismiss="modal" id="keep-adding-data-close">
+																			Close
+																		</button> 
+																		<button type="button" class="btn btn-primary" id="keep-adding-data-submit">
+																			Submit
+																		</button>
+																	</div>
+																</div>
+																
+															</div>
+															
+														</div>
+													</p>
+												</div> -->
+
+											</div>
+										</div>
+									
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<div class="panel-group" id="dataset-operations-panel">
+										<div class="panel panel-default">
+											<div id="dataset-operations-custom" class="panel-heading panel-heading-custom" style="text-align:center" onclick="highLight('#dataset-operations-custom', '.panel-heading-custom');">
+												<p>
+													<a class="panel-title" data-toggle="collapse" data-parent="#dataset-operations-panel" href="#dataset-operations-panel-items">Dataset operations</a>
+												</p>
+												 
+											</div>
+											<div id="dataset-operations-panel-items" class="panel-collapse collapse">
+												<div class="panel-body">
+													<p>
+														<button type="button" id="download-dataset-btn" class="btn btn-primary btn-sm btn-block sidebar-btn" onclick="highLight('#download-dataset-btn', '.sidebar-btn');">Download Datasets</button>
+													</p>
+												</div>
+
+												<div class="panel-body">
+													<p>
+														<button type="button" id="delete-dataset-btn" class="btn btn-primary btn-sm btn-block sidebar-btn" onclick="highLight('#delete-dataset-btn', '.sidebar-btn');" data-toggle="confirmation" data-btn-ok-label="Continue" data-btn-ok-icon="glyphicon glyphicon-share-alt" data-btn-ok-class="btn-success" data-btn-cancel-label="Stoooop!" data-btn-cancel-icon="glyphicon glyphicon-ban-circle" data-btn-cancel-class="btn-danger" data-title="Is it ok?" data-content="This might be dangerous">Delete Datasets</button>
+													</p>
+												</div>
+
+												<div class="panel-body">
+													<p>
+														<button type="button" id="rename-dataset-btn" class="btn btn-primary btn-sm btn-block sidebar-btn" data-target="#rename-dataset" onclick="highLight('#rename-dataset-btn', '.sidebar-btn');">Rename Dataset</button>
+														<div class="modal fade" id="rename-dataset" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+															<div class="modal-dialog">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		 
+																		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+																			×
+																		</button>
+																		<h4 class="modal-title" id="myModalLabel">
+																			Rename Dataset
+																		</h4>
+																	</div>
+																	<div class="modal-body">
+																		<div class="btn-group" id="rename-dataset-new-name">
+																			<form class="form-search">
+																				Enter new name:  <input class="input-medium search-query" type="text" />
+																			</form>
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+																		 
+																		<button type="button" class="btn btn-default" data-dismiss="modal" id="rename-dataset-close">
+																			Close
+																		</button> 
+																		<button type="button" class="btn btn-primary" id="rename-dataset-submit">
+																			Submit
+																		</button>
+																	</div>
+																</div>
+																
+															</div>
+															
+														</div>
+													</p>
+												</div>
+
+												<div class="panel-body">
+													<p>
+														<button type="button" id="find-intersection-btn" class="btn btn-primary btn-sm btn-block sidebar-btn" onclick="highLight('#find-intersection-btn', '.sidebar-btn');">Find Intersection</button>
+													</p>
+												</div>
+
+												<div class="panel-body">
+													<p>
+														<button type="button" id="find-union-btn" class="btn btn-primary btn-sm btn-block sidebar-btn" onclick="highLight('#find-union-btn', '.sidebar-btn');">Find Union</button>
+													</p>
+												</div>
+				
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<div class="panel-group" id="tools-panel">
+										<div class="panel panel-default">
+											<div id="tools-custom" class="panel-heading panel-heading-custom" style="text-align:center;" onclick="highLight('#tools-custom', '.panel-heading-custom');">
+												 <p>
+												 	<a class="panel-title" data-toggle="collapse" data-parent="#tools-panel" href="#tools-panel-items">Tools</a>
+												 </p>
+											</div>
+
+											<div id="tools-panel-items" class="panel-collapse collapse">
+												<div class="panel-body">
+													<p>
+														<button type="button" class="sidebar-btn btn btn-primary btn-sm btn-block" data-target="#statistical-function" data-toggle="modal" id="statistical-function-btn" onclick="highLight('#statistical-function-btn', '.sidebar-btn');">Statistical Function</button>
+
+														<div class="modal fade" id="statistical-function" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+															<div class="modal-dialog">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+																			×
+																		</button>
+																		<h4 class="modal-title" id="myModalLabel">
+																			Statistical Function
+																		</h4>
+																	</div>
+																	<div class="modal-body">
+																		<table class="table table-bordered table-hover" id="statistical-function-table">
+																			<thead>
+																				<tr>
+																					<th class="text-center">
+																						#
+																					</th>
+																					<th class="text-center">
+																						Dataset
+																					</th>
+																					<th class="text-center">
+																						Function
+																					</th>
+																					<th class="text-center">
+																						Distinct
+																					</th>
+																					<th class="text-center">
+																						Property
+																					</th>
+																					<th class="text-center">
+																						Alias
+																					</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr id='addr1'>
+																					<td>1</td>
+																					<td>
+																						<div class="btn-group" style="width : 100%">
+																							<button type="button" class="btn btn-block btn-secondary statistical-function-dataset-btn" data-toggle="dropdown" onclick="datasetBtnHandler(this);">Dataset</button>
+																							<ul class="dropdown-menu statistical-function-dataset" role="menu">
+																								
+																								<!-- <li><a href="#">Action</a></li>
+																								<li><a href="#">Another action</a></li>
+																								<li><a href="#">Something else here</a></li> -->
+																								
+																							</ul>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="btn-group" style="width : 100%">
+																							<button type="button" class="btn btn-block btn-secondary statistical-function-function-btn" data-toggle="dropdown">Function</button>
+																							<ul class="dropdown-menu statistical-function-function" role="menu">
+																								<li onclick='functionLiClickHandler(this);'><a href="#">COUNT</a></li>
+																								<li onclick='functionLiClickHandler(this);'><a href="#">MAX</a></li>
+																								<li onclick='functionLiClickHandler(this);'><a href="#">MIN</a></li>
+																								<li onclick='functionLiClickHandler(this);'><a href="#">AVG</a></li>
+																								<li onclick='functionLiClickHandler(this);'><a href="#">SUM</a></li>
+																								<li onclick='functionLiClickHandler(this);'><a href="#">STDEV</a></li>
+																							</ul>
+																						</div>
+																					</td>
+																					<td style="text-align:center;">
+																					<!-- <input type="text" name='mobile0' placeholder='Mobile' class="form-control"/> -->
+																					</td>
+																					<td>
+																						<div class="btn-group" style="width : 100%">
+																							<button type="button" class="btn btn-block btn-secondary statistical-function-property-btn" data-toggle="dropdown" onclick='propertyBtnHandler(this);'>Property</button>
+																							<ul class="dropdown-menu statistical-function-property" role="menu">
+																							</ul>
+																						</div>
+																					</td>
+																					<td>
+																						<input type="text" name='alias' class="form-control statistical-function-alias"/>
+																					</td>
+																				</tr>
+																				
+																			</tbody>
+																		</table>
+
+																		<div style="text-align: center">
+																			<a id="statistical-function-add-row" class="btn btn-default pull-left">Add Row</a>
+
+																			<div class="btn-group dropdown">
+																				<a type="button" class="btn btn-default statistical-function-chart-type-btn dropdown-toggle" data-toggle="dropdown">Chart Type</a>
+
+																				<ul class="dropdown-menu statistical-function-chart-type" role="menu">
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">line</a></li>
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">bar</a></li>
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">radar</a></li>
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">pie</a></li>
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">doughnut</a></li>
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">polarArea</a></li>
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">bubble</a></li>
+																				</ul>
+																			</div>
+																		
+																			<a id="statistical-function-delete-row" class="btn btn-default pull-right">Delete Row</a>
+																		</div>
+
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-default" data-dismiss="modal" id="statistical-function-close">
+																			Close
+																		</button> 
+																		<button type="button" class="btn btn-primary" id="statistical-function-submit">
+																			Submit
+																		</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</p>
+												</div>
+											</div>
+										</div>
+									
+									</div>
+								</div>
+							</div>
+
+						</div>
+						
+						<div class="col-md-10" id="display-area">
+							<div class="tabbable" id="tabs-276292">
+								<ul class="nav nav-tabs" id="nav-tabs">
+									<!-- <li>
+										<a href="#panel-466988" data-toggle="tab">第一部分</a>
+									</li>
+									<li class="active">
+										<a href="#panel-785178" data-toggle="tab">第二部分</a>
+									</li> -->
+								</ul>
+								<div class="tab-content" id="tab-content">     
+									<!-- <div class="tab-pane" id="panel-466988">
+										<p>
+											第一部分内容.
+										</p>
+									</div>
+									<div class="tab-pane active" id="panel-785178">
+										<p>
+											第二部分内容.
+										</p>
+									</div> -->
+								</div>
+							</div>
+
+							<!-- <p>
+								<table id="table" data-classes="table table-hover table-condensed"></table>
+							</p> -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<button type="button" class="btn btn-default btn-sm btn-block" data-toggle="modal" data-target="#filter" id="filter-trigger-btn" style="display: none;">Filter</button>
+		<div class="modal fade" id="filter" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							×
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							Filter
+						</h4>
+					</div>
+
+					<div class="modal-body">
+						<form id="filter-form" role="form">
+							
+							<!-- <div class="form-group">
+
+								<label for="node_name" class="col-sm-6 control-label">Alias for this node (required)</label>
+								<div class="col-sm-6">
+									<input type="text" class="form-control" id="node_name" name="node_name" placeholder="Name">
+								</div>
+
+							</div>
+
+							<div class="form-group">
+
+								<label class="col-sm-4 control-label">property</label>
+								<div class="dropdown col-sm-2", style="padding: 0;">
+									<button class="btn btn-block btn-secondary dropdown-toggle" type="button" id="not_dropdown_btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+									<div class="dropdown-menu" aria-labelledby="not_dropdown_btn" style="min-width: 0; width: 100%;">
+										<p class="dropdown-item">IS</p>
+										<p class="dropdown-item">NOT</p>
+									</div>
+								</div>
+
+							</div> -->
+
+						</form>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal" id="filter-close">
+							Close
+						</button> 
+						<button type="button" class="btn btn-primary" id="filter-submit">
+							Submit
+						</button>
+					</div>
+
+				</div>
+				
+			</div>
+			
+		</div>
+
+
+		<button type="button" class="btn btn-default btn-sm btn-block" data-toggle="modal" data-target="#chart" id="chart-trigger-btn" style="display: none;">Chart</button>
+		<div class="modal fade" id="chart" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							×
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							Chart
+						</h4>
+					</div>
+
+					<div class="modal-body">
+						<canvas id="myChart" width="800" height="800"></canvas>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal" id="chart-close">
+							Close
+						</button> 
+						<!-- <button type="button" class="btn btn-primary" id="chart-submit">
+							Submit
+						</button> -->
+					</div>
+
+				</div>
+				
+			</div>
+			
+		</div>
+
+	</body>
+
+
+	<div>
+		<script src="../static/js/jquery.min.js"></script>
+		<script src="../static/js/d3.v3.js"></script>
+		<script src="../static/js/bootstrap.min.js"></script>
+		<script src="../static/js/bootstrap-table.js"></script>
+		<script src="../static/js/bootstrap-confirmation.min.js"></script>
+		<script src="../static/js/Chart.min.js"></script>
+
+
+		<script src="../static/js/initialization.js"></script>
+		<script src="../static/js/query-builder.js"></script>
+		<script src="../static/js/style.js"></script>
+		<script src="../static/js/display-in-table.js"></script>
+		<script src="../static/js/load-repositories.js"></script>
+		<script src="../static/js/load-datasets.js"></script>
+		<script src="../static/js/select-data.js"></script>
+		<script src="../static/js/save-as-new-dataset.js"></script>
+		<script src="../static/js/dataset-operations.js"></script>
+		<script src="../static/js/delete_dataset.js"></script>
+		<script src="../static/js/download_dataset.js"></script>
+		<script src="../static/js/rename-dataset.js"></script>
+		<script src="../static/js/find-intersection.js"></script>
+		<script src="../static/js/find-union.js"></script>
+		<script src="../static/js/statistical-function.js"></script>
+
+	</div>
+</html>
