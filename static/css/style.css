@@ -150,7 +150,7 @@ div.table_description {
 }
 
 #operation {
-	font-size:28px;
+	font-size:18px;
 }
 
 #network-popUp {
@@ -160,9 +160,9 @@ div.table_description {
 	left:170px;
 	/*z-index:299;*/
 	z-index:0;
-	width:250px;
-	height:120px;
-	background-color: #f9f9f9;
+	/*width:250px;
+	height:180px;*/
+	background-color: white;
 	border-style:solid;
 	border-width:3px;
 	border-color: #5394ed;

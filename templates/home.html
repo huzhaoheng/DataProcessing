@@ -591,21 +591,38 @@
 
 
 		<div id="network-popUp">
-			<span id="operation">node</span><br>
-			<table style="margin:auto;">
+			<span id="operation">node</span>
+			<table style="margin:auto; width: 70%; height: 60%">
 				<tr>
-					<td>id</td>
-					<td><input id="node-id" value="new value" /></td>
+					<td>
+						<div class="btn-group dropdown" style="width: 100%;">
+							<a type="button" class="btn btn-default data-flow-type-btn dropdown-toggle" data-toggle="dropdown" style="width: 100%">Type</a>
+
+							<ul class="dropdown-menu data-flow-type" role="menu" id="data-flow-type">
+								<li onclick='dataFlowTypeLiClickHandler(this);'><a href="#">Repository</a></li>
+								<li onclick='dataFlowTypeLiClickHandler(this);'><a href="#">Dataset</a></li>
+							</ul>
+						</div>
+
+					</td>
 				</tr>
 				
 				<tr>
-					<td>label</td><td><input id="node-label" value="new value" /></td>
+					<td>
+						<div class="btn-group dropdown" style="width: 100%">
+							<a type="button" class="btn btn-default data-flow-name-btn dropdown-toggle" data-toggle="dropdown" style="width: 100%">Name</a>
+
+							<ul class="dropdown-menu data-flow-name" role="menu" id="data-flow-name">
+								<!-- <li onclick='dataFlowLiClickHandler(this);'><a href="#">aaa</a></li>
+								<li onclick='dataFlowLiClickHandler(this);'><a href="#">bbb</a></li> -->
+							</ul>
+						</div>
+					</td>
 				</tr>
 			</table>
-			<input type="button" value="save" id="saveButton" />
-			<input type="button" value="cancel" id="cancelButton" />
+			<input type="button" class="btn btn-default" value="save" id="saveButton" />
+			<input type="button" class="btn btn-default" value="cancel" id="cancelButton" />
 		</div>
-		<br/>
 	
 
 	</body>
