@@ -51,7 +51,7 @@ function getGraphStructureQuery(source, name){
 	return query;
 }
 
-function getPropertiesOfObject(source, name, resource, object) {
+function getPropertiesOfObjectQuery(source, name, resource, object) {
 	var query = "MATCH (d:Data)-[:In" + source + "]->(s:" + source + ") WHERE s.name = '" + name +
 				"' AND d.system_user_username = '" + window.username + 
 				"' AND d.system_user_hashkey = '" + window.hashkey + 
@@ -276,5 +276,15 @@ function statisticalFunctionQuery(data){
 
 	query += "RETURN " + ret_format.join(",");
 
+	return query;
+}
+
+
+function getResourceAndObjectPairsQuery(type, name){
+	var query = "MATCH (d:Data)-[r:In" + type + "]->(x:" + type + ") WHERE " + 
+				"x.system_user_username = '" + window.username + "' AND " + 
+				"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
+				"x.name = '" + name + "' " + 
+				"RETURN DISTINCT [d.resource, d.object, keys(d)];";
 	return query;
 }

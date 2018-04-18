@@ -98,7 +98,6 @@ function draw(graph) {
 		width = $("#select-data-graph").width() - margin.right - margin.left,
 		height = $("#select-data-graph").height() - margin.top - margin.bottom;
 
-
 	window.i = 0;
 	var duration = 750,
 		root;
@@ -436,7 +435,7 @@ function createForm(resource, object, upper_relation) {
 	form.appendChild(div);*/
 	//---------------------------------------------------------------
 
-	var query = getPropertiesOfObject(window.source, window.name, resource, object);
+	var query = getPropertiesOfObjectQuery(window.source, window.name, resource, object);
 	$.getJSON(
 				'/getPropertiesOfObject',
 				{arg: JSON.stringify({'query' : query, 'resource' : resource, 'object' : object})},

@@ -287,11 +287,11 @@
 													</p>
 												</div>
 
-												<div class="panel-body">
+												<!-- <div class="panel-body">
 													<p>
 														<button type="button" id="find-union-btn" class="btn btn-primary btn-sm btn-block sidebar-btn" onclick="highLight('#find-union-btn', '.sidebar-btn');">Find Union</button>
 													</p>
-												</div>
+												</div> -->
 				
 											</div>
 										</div>
@@ -622,6 +622,133 @@
 			</table>
 			<input type="button" class="btn btn-default" value="save" id="saveButton" />
 			<input type="button" class="btn btn-default" value="cancel" id="cancelButton" />
+		</div>
+
+
+		<button type="button" class="btn btn-default btn-sm btn-block" data-toggle="modal" data-target="#data-flow-filter" id="data-flow-filter-trigger-btn" style="display: none;">Filter</button>
+		<div class="modal fade" id="data-flow-filter" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							×
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							Filter
+						</h4>
+					</div>
+
+					<div class="modal-body">
+
+						<div style="text-align: center">
+
+							<a id="data-flow-filter-add-row" class="btn btn-default pull-left">Add Row</a>
+
+							<div class="btn-group dropdown">
+								<a type="button" class="btn btn-default data-flow-filter-resource-btn dropdown-toggle" data-toggle="dropdown" onclick="dataFlowFilterResourceBtnHandler(this);">Resource</a>
+								<ul class="dropdown-menu data-flow-filter-resource" role="menu">
+									<!-- <li onclick='chartTypeLiClickHandler(this);'><a href="#">line</a></li>
+									<li onclick='chartTypeLiClickHandler(this);'><a href="#">bar</a></li>
+									<li onclick='chartTypeLiClickHandler(this);'><a href="#">radar</a></li>
+									<li onclick='chartTypeLiClickHandler(this);'><a href="#">pie</a></li>
+									<li onclick='chartTypeLiClickHandler(this);'><a href="#">doughnut</a></li>
+									<li onclick='chartTypeLiClickHandler(this);'><a href="#">polarArea</a></li>
+									<li onclick='chartTypeLiClickHandler(this);'><a href="#">bubble</a></li> -->
+								</ul>
+							</div>
+
+							<div class="btn-group dropdown">
+								<a type="button" class="btn btn-default data-flow-filter-object-btn dropdown-toggle" data-toggle="dropdown">Object</a>
+								<ul class="dropdown-menu data-flow-filter-object" role="menu">
+									<!-- <li onclick='chartTypeLiClickHandler(this);'><a href="#">line</a></li>
+									<li onclick='chartTypeLiClickHandler(this);'><a href="#">bar</a></li>
+									<li onclick='chartTypeLiClickHandler(this);'><a href="#">radar</a></li>
+									<li onclick='chartTypeLiClickHandler(this);'><a href="#">pie</a></li>
+									<li onclick='chartTypeLiClickHandler(this);'><a href="#">doughnut</a></li>
+									<li onclick='chartTypeLiClickHandler(this);'><a href="#">polarArea</a></li>
+									<li onclick='chartTypeLiClickHandler(this);'><a href="#">bubble</a></li> -->
+								</ul>
+							</div>
+
+							<a id="data-flow-filter-delete-row" class="btn btn-default pull-right">Delete Row</a>
+																		
+						</div>
+
+						<br>
+
+						<table class='table table-bordered table-hover' id='data-flow-filter-table'>
+							<thead>
+								<tr>
+									<th class='text-center'>
+										Condition
+									</th>
+									<th class='text-center'>
+										Property
+									</th>
+									<th class='text-center'>
+										IS/NOT
+									</th>
+									<th class='text-center'>
+										Operator
+									</th>
+									<th class='text-center'>
+										Value
+									</th>
+								</tr>
+							</thead>
+																			
+							<tbody>
+								<tr id='data-flow-filter-table-addr1'>
+									<td style='text-align: center; vertical-align: middle;'>1</td>
+
+									<td>
+										<div class='btn-group' style='width : 100%'>
+											<button type='button' class='btn btn-block btn-secondary data-flow-filter-property-btn' data-toggle='dropdown' onclick='dataFlowFilterPropertyBtnHandler(this);'>Property</button>
+											<ul class='dropdown-menu data-flow-filter-property' role='menu'></ul>
+										</div>
+									</td>
+
+									<td>
+										<div class='btn-group' style='width : 100%'>
+											<button type='button' class='btn btn-block btn-secondary data-flow-filter-boolean-btn' data-toggle='dropdown'>Boolean</button>
+											<ul class='dropdown-menu data-flow-filter-boolean' role='menu'>
+												<li onclick='dataFlowFilterBooleanLiClickHandler(this);'><a href='#'>IS</a></li>
+												<li onclick='dataFlowFilterBooleanLiClickHandler(this);'><a href='#'>NOT</a></li>
+											</ul>
+										</div>
+									</td>
+
+									<td>
+										<div class='btn-group' style='width : 100%'>
+											<button type='button' class='btn btn-block btn-secondary data-flow-filter-operator-btn' data-toggle='dropdown'>Operator</button>
+											<ul class='dropdown-menu data-flow-filter-operator' role='menu'></ul>
+										</div>
+									</td>
+
+									<td>
+										<div class='btn-group' style='width : 100%'>
+										</div>
+									</td>
+								</tr>
+																				
+							</tbody>
+						</table>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal" id="data-flow-filter-close">
+							Close
+						</button> 
+						<button type="button" class="btn btn-primary" id="data-flow-filter-submit">
+							Submit
+						</button>
+					</div>
+
+				</div>
+				
+			</div>
+			
 		</div>
 	
 

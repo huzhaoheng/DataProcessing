@@ -268,6 +268,36 @@ def getDatasetProperties():
 
 
 
+@app.route('/getResourceAndObjectPairs')
+def getResourceAndObjectPairs():
+    query = json.loads(request.args.get('arg'))['query']
+    result = graph.cypher.execute(query)
+    result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
+    ret = {}
+    for each in result:
+        # print (each)
+        resource, obj, properties = each[0]
+        if resource not in ret:
+            ret[resource] = {obj : {}}
+            for Property in properties:
+                if Property not in ["resource", "object", "neo4j_id", "system_user_username", "system_user_hashkey", "internal_id"]:
+                    ret[resource][obj]['_'.join(Property.split("_")[:-1])] = Property.split("_")[-1]
+        else:
+            if obj not in ret[resource]:
+                ret[resource][obj] = {}
+                for Property in properties:
+                    if Property not in ["resource", "object", "neo4j_id", "system_user_username", "system_user_hashkey", "internal_id"]:
+                        ret[resource][obj]['_'.join(Property.split("_")[:-1])] = Property.split("_")[-1]
+            else:
+                for Property in properties:
+                    if Property not in ["resource", "object", "neo4j_id", "system_user_username", "system_user_hashkey", "internal_id"]:
+                        if '_'.join(Property.split("_")[:-1]) not in ret[resource][obj]:
+                            ret[resource][obj]['_'.join(Property.split("_")[:-1])] = Property.split("_")[-1]
+
+
+    return jsonify(elements = ret)
+
+
 # @app.route('/getConnectedObject')
 # def getConnectedObject():
 #     query = json.loads(request.args.get('arg'))['query']
