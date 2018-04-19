@@ -48,56 +48,6 @@
 			
 		</nav>
 
-		<!-- <div class="panel-group center-block" id="create-dataset-panel" style="width: 15%;" >
-			<div class="panel panel-default">
-				<div class="panel-heading panel-heading-custom" style="text-align:center;">
-					 <p>
-					 	<a class="panel-title" data-toggle="collapse" data-parent="#create-dataset-panel" href="#create-dataset-panel-items">Create new dataset</a>
-					 </p>
-				</div>
-				<div id="create-dataset-panel-items" class="panel-collapse collapse">
-					<div class="panel-body">
-						<p>
-							<button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#select-data" id="select-data-btn" style="background-color:#007BFF">1. Select Data</button>
-							<div class="modal fade" id="select-data" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-												×
-											</button>
-											<h4 class="modal-title" id="myModalLabel">
-												Select Data
-											</h4>
-										</div>
-										<div class="modal-body">
-											<div id="cy"></div>
-										</div>
-										<div class="modal-footer">
-											<button type="button" class="btn btn-default" data-dismiss="modal" id="select-data-close">
-												Close
-											</button> 
-											<button type="button" class="btn btn-primary" id="select-data-submit">
-												Submit
-											</button>
-										</div>
-									</div>
-		
-								</div>
-								
-							</div>
-						</p>
-					</div>
-
-					<div class="panel-body">
-						<p>
-							<button type="button" class="btn btn-primary btn-sm btn-block" id="save-as-new-dataset" style="background-color:#007BFF">2. Save as New Datasets</button>
-						</p>
-					</div>
-				</div>
-			</div>
-									
-		</div> -->
 
 		<div class="container-fluid">
 			<div class="row">
@@ -177,40 +127,6 @@
 														<button type="button" class="sidebar-btn btn btn-primary btn-sm btn-block" id="save-as-new-dataset" onclick="highLight('#save-as-new-dataset', '.sidebar-btn');">Save Context as New Dataset</button>
 													</p>
 												</div>
-
-												<!-- <div class="panel-body">
-													<p>
-														<button type="button" class="sidebar-btn btn btn-primary btn-sm btn-block" data-target="#keep-adding-data" id="keep-adding-data-btn" onclick="highLight('#keep-adding-data-btn', '.sidebar-btn');">Keep adding data to dataset</button>
-
-														<div class="modal fade" id="keep-adding-data" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-															<div class="modal-dialog">
-																<div class="modal-content">
-																	<div class="modal-header">
-																		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-																			×
-																		</button>
-																		<h4 class="modal-title" id="myModalLabel">
-																			Select Data
-																		</h4>
-																	</div>
-																	<div class="modal-body">
-																		<div id="keep-adding-data-graph"></div>
-																	</div>
-																	<div class="modal-footer">
-																		<button type="button" class="btn btn-default" data-dismiss="modal" id="keep-adding-data-close">
-																			Close
-																		</button> 
-																		<button type="button" class="btn btn-primary" id="keep-adding-data-submit">
-																			Submit
-																		</button>
-																	</div>
-																</div>
-																
-															</div>
-															
-														</div>
-													</p>
-												</div> -->
 
 											</div>
 										</div>
@@ -316,6 +232,127 @@
 														<button type="button" class="sidebar-btn btn btn-primary btn-sm btn-block" data-target="#create-statistical-report" data-toggle="modal" id="create-statistical-report-btn" onclick="highLight('#create-statistical-report-btn', '.sidebar-btn');">Create Statistical Report</button>
 
 														<div class="modal fade" id="create-statistical-report" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+															<div class="modal-dialog">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+																			×
+																		</button>
+																		<h4 class="modal-title" id="myModalLabel">
+																			Statistical Report
+																		</h4>
+																	</div>
+																	<div class="modal-body">
+																		<table class="table table-bordered table-hover" id="create-statistical-report-table">
+																			<thead>
+																				<tr>
+																					<th class="text-center">
+																						#
+																					</th>
+																					<th class="text-center">
+																						Dataset
+																					</th>
+																					<th class="text-center">
+																						Function
+																					</th>
+																					<th class="text-center">
+																						Distinct
+																					</th>
+																					<th class="text-center">
+																						Property
+																					</th>
+																					<th class="text-center">
+																						Values
+																					</th>
+																					<th class="text-center">
+																						Alias
+																					</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr id='addr1'>
+																					<td>1</td>
+																					<td>
+																						<div class="btn-group" style="width : 100%">
+																							<button type="button" class="btn btn-block btn-secondary create-statistical-report-dataset-btn" data-toggle="dropdown" onclick="datasetBtnHandler(this);">Dataset</button>
+																							<ul class="dropdown-menu create-statistical-report-dataset" role="menu">					
+																							</ul>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="btn-group" style="width : 100%">
+																							<button type="button" class="btn btn-block btn-secondary create-statistical-report-function-btn" data-toggle="dropdown">Function</button>
+																							<ul class="dropdown-menu create-statistical-report-function" role="menu">
+																								<li onclick='functionLiClickHandler(this);'><a href="#">COUNT</a></li>
+																								<li onclick='functionLiClickHandler(this);'><a href="#">MAX</a></li>
+																								<li onclick='functionLiClickHandler(this);'><a href="#">MIN</a></li>
+																								<li onclick='functionLiClickHandler(this);'><a href="#">AVG</a></li>
+																								<li onclick='functionLiClickHandler(this);'><a href="#">SUM</a></li>
+																								<li onclick='functionLiClickHandler(this);'><a href="#">STDEV</a></li>
+																								<li onclick='functionLiClickHandler(this);'><a href="#">WORD FREQ</a></li>
+																							</ul>
+																						</div>
+																					</td>
+																					<td style="text-align:center;">
+																					</td>
+																					<td>
+																						<div class="btn-group" style="width : 100%">
+																							<button type="button" class="btn btn-block btn-secondary create-statistical-report-property-btn" data-toggle="dropdown" onclick='propertyBtnHandler(this);'>Property</button>
+																							<ul class="dropdown-menu create-statistical-report-property" role="menu">
+																							</ul>
+																						</div>
+																					</td>
+																					<td>
+																						<input type="text" name='values' class="form-control create-statistical-report-values" readonly="true" />
+																					</td>
+																					<td>
+																						<input type="text" name='alias' class="form-control create-statistical-report-alias"/>
+																					</td>
+																				</tr>
+																				
+																			</tbody>
+																		</table>
+
+																		<div style="text-align: center">
+																			<a id="create-statistical-report-add-row" class="btn btn-default pull-left">Add Row</a>
+
+																			<div class="btn-group dropdown">
+																				<a type="button" class="btn btn-default create-statistical-report-chart-type-btn dropdown-toggle" data-toggle="dropdown">Chart Type</a>
+
+																				<ul class="dropdown-menu create-statistical-report-chart-type" role="menu">
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">line</a></li>
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">bar</a></li>
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">radar</a></li>
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">pie</a></li>
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">doughnut</a></li>
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">polarArea</a></li>
+																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">bubble</a></li>
+																				</ul>
+																			</div>
+																		
+																			<a id="create-statistical-report-delete-row" class="btn btn-default pull-right">Delete Row</a>
+																		</div>
+
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-default" data-dismiss="modal" id="create-statistical-report-close">
+																			Close
+																		</button> 
+																		<button type="button" class="btn btn-primary" id="create-statistical-report-submit">
+																			Submit
+																		</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</p>
+												</div>
+
+												<div class="panel-body">
+													<p>
+														<button type="button" class="sidebar-btn btn btn-primary btn-sm btn-block" data-target="#view-statistical-report" data-toggle="modal" id="view-statistical-report-btn" onclick="highLight('#view-statistical-report-btn', '.sidebar-btn');">View Statistical Report</button>
+
+														<div class="modal fade" id="view-statistical-report" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 															<div class="modal-dialog">
 																<div class="modal-content">
 																	<div class="modal-header">
