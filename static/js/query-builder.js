@@ -288,3 +288,12 @@ function getResourceAndObjectPairsQuery(type, name){
 				"RETURN DISTINCT [d.resource, d.object, keys(d)];";
 	return query;
 }
+
+function statisticalReportQuery(report_name, query) {
+	var ret = 'CREATE (r:statisticalReport {system_user_username : "' + window.username + '", ' + 
+				'system_user_hashkey : "' + window.hashkey + '", ' + 
+				'name : "' + report_name + '", ' + 
+				'report_query : "' + query + '"' + 
+				'});';
+	return ret;
+}

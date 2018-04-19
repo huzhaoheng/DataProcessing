@@ -40,18 +40,18 @@ marquee p
 }
 
 
-#statistical-function .modal-dialog {
+#create-statistical-report .modal-dialog {
 	width: 80%;
 	height: 60%;
 	padding: 0;
 }
 
-#statistical-function .modal-content {
+#create-statistical-report .modal-content {
 	height: 80%;
 	border-radius: 0;
 }
 
-#statistical-function .modal-body {
+#create-statistical-report .modal-body {
 	height: 75%;
 }
 
