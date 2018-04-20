@@ -55,6 +55,22 @@ marquee p
 	height: 75%;
 }
 
+
+#view-statistical-report .modal-dialog {
+	width: 80%;
+	height: 40%;
+	padding: 0;
+}
+
+#view-statistical-report .modal-content {
+	height: 80%;
+	border-radius: 0;
+}
+
+#view-statistical-report .modal-body {
+	height: 60%;
+}
+
 /*#chart .modal-dialog {
 	width: 80%;
 	height: 60%;

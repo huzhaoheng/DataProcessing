@@ -98,7 +98,6 @@ function propertyBtnHandler(ele){
 				for(property in properties){
 					var type = properties[property];
 					if (!(["system_user_username", "system_user_hashkey", "internal_id"].includes(property))){
-						/*$(ele).next().append("<li onclick='propertyLiClickHandler(this);'><a href='#'>" + key + "->" + property + "(" + type + ")" + "</a></li>");*/
 						code += "<li onclick='propertyLiClickHandler(this);'><a href='#'>" + key + "->" + property + "(" + type + ")" + "</a></li>";
 					}
 				}				
@@ -178,10 +177,6 @@ function functionLiClickHandler(ele){
 	$(ele).parent().prev().text(selected);
 }
 
-function chartTypeLiClickHandler(ele) {
-	var selected = $(ele).find('a')[0].innerText;
-	$(ele).parent().prev().text(selected);
-}
 
 /*$("#create-statistical-report-submit").on('click', function() {
 	
@@ -396,7 +391,7 @@ $("#create-statistical-report-submit").on('click', function() {
 
 	var query = statisticalFunctionQuery(data);
 
-	var report_query = statisticalReportQuery(report_name, query);
+	var report_query = createStatisticalReportQuery(report_name, query);
 
 	$.getJSON(
 		'/writeOnlyQuery',
@@ -406,50 +401,6 @@ $("#create-statistical-report-submit").on('click', function() {
 			console.log(message);
 		}
 	)
-
-	/*$.getJSON(
-		'/getValue',
-		{arg: JSON.stringify({"query" : query})},
-		function (response){
-			var result = response.elements;
-			var labels = [],
-				data = [];
-
-			result.forEach(each => {
-				labels.push(each[0]);
-				data.push(each[1]);
-			})
-
-			var ctx = document.getElementById("myChart");
-			var myChart = new Chart(ctx, {
-				type: chartType,
-				data: {
-					labels: labels,
-					datasets: [{
-						label: 'Result',
-						data: data,
-						backgroundColor: 'white',
-						borderColor: 'red',
-						borderWidth: 1
-					}]
-				},
-				options: {
-					scales: {
-						yAxes: [{
-							ticks: {
-								beginAtZero:false
-							}
-						}]
-					}
-				}
-			});
-
-			$("#chart-trigger-btn").click();
-
-
-
-		}
-	)*/
 
 	$("#create-statistical-report-close").click();
 
@@ -489,7 +440,7 @@ $("#create-statistical-report-close").on('click', function () {
 							"</td>" + 
 						"</tr>";
 
-	$("#create-statistical-report").find(".create-statistical-report-chart-type-btn").first().text("Chart Type");
+	
 	$("#create-statistical-report-table").find("tbody").first().html(default_code);
 })
 
@@ -497,10 +448,3 @@ $("#create-statistical-report .close").click(function(){
 	$("#create-statistical-report-close").click();
 })
 
-$("#chart-close").on('click', function () {
-	$("#chart").find('.modal-body').first().html("<canvas id='myChart' width='800' height='800'></canvas>");
-})
-
-$("#chart .close").on('click', function () {
-	$("#chart-close").click();
-})

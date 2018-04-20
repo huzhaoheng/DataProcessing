@@ -300,27 +300,17 @@ def getResourceAndObjectPairs():
     return jsonify(elements = ret)
 
 
-# @app.route('/getConnectedObject')
-# def getConnectedObject():
-#     query = json.loads(request.args.get('arg'))['query']
-#     result = graph.cypher.execute(query)
-#     result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
-#     ret = {i : result[i][0] for i in range(len(result))}
-#     return jsonify(elements = ret)
+@app.route('/getStatisticalReportList')
+def getStatisticalReportList():
+    query = json.loads(request.args.get('arg'))['query']
+    result = graph.cypher.execute(query)
+    result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
+    ret = {}
+    for each in result:
+        name, query = each
+        ret[name] = query
 
-# @app.route('/getNodesAndEdges')
-# def getNodesAndEdges():
-#     nodes_query = json.loads(request.args.get('arg'))['nodes_query']
-#     edges_query = json.loads(request.args.get('arg'))['edges_query']
-#     print (nodes_query)
-#     print (edges_query)
-#     nodes, edges = [], []
-#     if nodes_query:
-#         nodes = map(buildNodes, graph.cypher.execute(nodes_query))
-#     if edges_query:
-#         edges = map(buildEdges, graph.cypher.execute(edges_query))
-
-#     return jsonify(elements = {"nodes": list(nodes), "edges": list(edges)})
+    return jsonify(elements = ret)
 
 
 @app.route('/getValue')

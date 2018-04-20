@@ -289,11 +289,18 @@ function getResourceAndObjectPairsQuery(type, name){
 	return query;
 }
 
-function statisticalReportQuery(report_name, query) {
+function createStatisticalReportQuery(report_name, query) {
 	var ret = 'CREATE (r:statisticalReport {system_user_username : "' + window.username + '", ' + 
 				'system_user_hashkey : "' + window.hashkey + '", ' + 
 				'name : "' + report_name + '", ' + 
 				'report_query : "' + query + '"' + 
 				'});';
 	return ret;
+}
+
+function getStatisticalReportListQuery(){
+	var query = 'MATCH (r:statisticalReport {system_user_username : "' + window.username + '", ' + 
+				'system_user_hashkey : "' + window.hashkey + '"}) ' + 
+				'RETURN r.name, r.report_query;';
+	return query;
 }

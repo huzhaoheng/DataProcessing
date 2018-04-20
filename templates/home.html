@@ -239,7 +239,7 @@
 																			×
 																		</button>
 																		<h4 class="modal-title" id="myModalLabel">
-																			Statistical Report
+																			Create Statistical Report
 																		</h4>
 																	</div>
 																	<div class="modal-body">
@@ -312,26 +312,6 @@
 																				
 																			</tbody>
 																		</table>
-
-																		<div style="text-align: center">
-																			<a id="create-statistical-report-add-row" class="btn btn-default pull-left">Add Row</a>
-
-																			<div class="btn-group dropdown">
-																				<a type="button" class="btn btn-default create-statistical-report-chart-type-btn dropdown-toggle" data-toggle="dropdown">Chart Type</a>
-
-																				<ul class="dropdown-menu create-statistical-report-chart-type" role="menu">
-																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">line</a></li>
-																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">bar</a></li>
-																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">radar</a></li>
-																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">pie</a></li>
-																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">doughnut</a></li>
-																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">polarArea</a></li>
-																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">bubble</a></li>
-																				</ul>
-																			</div>
-																		
-																			<a id="create-statistical-report-delete-row" class="btn btn-default pull-right">Delete Row</a>
-																		</div>
 
 																	</div>
 																	<div class="modal-footer">
@@ -360,87 +340,23 @@
 																			×
 																		</button>
 																		<h4 class="modal-title" id="myModalLabel">
-																			Statistical Report
+																			View Statistical Report
 																		</h4>
 																	</div>
 																	<div class="modal-body">
-																		<table class="table table-bordered table-hover" id="create-statistical-report-table">
-																			<thead>
-																				<tr>
-																					<th class="text-center">
-																						#
-																					</th>
-																					<th class="text-center">
-																						Dataset
-																					</th>
-																					<th class="text-center">
-																						Function
-																					</th>
-																					<th class="text-center">
-																						Distinct
-																					</th>
-																					<th class="text-center">
-																						Property
-																					</th>
-																					<th class="text-center">
-																						Values
-																					</th>
-																					<th class="text-center">
-																						Alias
-																					</th>
-																				</tr>
-																			</thead>
-																			<tbody>
-																				<tr id='addr1'>
-																					<td>1</td>
-																					<td>
-																						<div class="btn-group" style="width : 100%">
-																							<button type="button" class="btn btn-block btn-secondary create-statistical-report-dataset-btn" data-toggle="dropdown" onclick="datasetBtnHandler(this);">Dataset</button>
-																							<ul class="dropdown-menu create-statistical-report-dataset" role="menu">					
-																							</ul>
-																						</div>
-																					</td>
-																					<td>
-																						<div class="btn-group" style="width : 100%">
-																							<button type="button" class="btn btn-block btn-secondary create-statistical-report-function-btn" data-toggle="dropdown">Function</button>
-																							<ul class="dropdown-menu create-statistical-report-function" role="menu">
-																								<li onclick='functionLiClickHandler(this);'><a href="#">COUNT</a></li>
-																								<li onclick='functionLiClickHandler(this);'><a href="#">MAX</a></li>
-																								<li onclick='functionLiClickHandler(this);'><a href="#">MIN</a></li>
-																								<li onclick='functionLiClickHandler(this);'><a href="#">AVG</a></li>
-																								<li onclick='functionLiClickHandler(this);'><a href="#">SUM</a></li>
-																								<li onclick='functionLiClickHandler(this);'><a href="#">STDEV</a></li>
-																								<li onclick='functionLiClickHandler(this);'><a href="#">WORD FREQ</a></li>
-																							</ul>
-																						</div>
-																					</td>
-																					<td style="text-align:center;">
-																					</td>
-																					<td>
-																						<div class="btn-group" style="width : 100%">
-																							<button type="button" class="btn btn-block btn-secondary create-statistical-report-property-btn" data-toggle="dropdown" onclick='propertyBtnHandler(this);'>Property</button>
-																							<ul class="dropdown-menu create-statistical-report-property" role="menu">
-																							</ul>
-																						</div>
-																					</td>
-																					<td>
-																						<input type="text" name='values' class="form-control create-statistical-report-values" readonly="true" />
-																					</td>
-																					<td>
-																						<input type="text" name='alias' class="form-control create-statistical-report-alias"/>
-																					</td>
-																				</tr>
-																				
-																			</tbody>
-																		</table>
-
 																		<div style="text-align: center">
-																			<a id="create-statistical-report-add-row" class="btn btn-default pull-left">Add Row</a>
 
 																			<div class="btn-group dropdown">
-																				<a type="button" class="btn btn-default create-statistical-report-chart-type-btn dropdown-toggle" data-toggle="dropdown">Chart Type</a>
+																				<a type="button" class="btn btn-default view-statistical-report-select-report-btn dropdown-toggle" data-toggle="dropdown" onclick="selectReportNameBtnHandler(this);">Report Name</a>
 
-																				<ul class="dropdown-menu create-statistical-report-chart-type" role="menu">
+																				<ul class="dropdown-menu view-statistical-report-select-report" role="menu">
+																				</ul>
+																			</div>
+
+																			<div class="btn-group dropdown">
+																				<a type="button" class="btn btn-default view-statistical-report-chart-type-btn dropdown-toggle" data-toggle="dropdown">Chart Type</a>
+
+																				<ul class="dropdown-menu view-statistical-report-chart-type" role="menu">
 																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">line</a></li>
 																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">bar</a></li>
 																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">radar</a></li>
@@ -450,16 +366,14 @@
 																					<li onclick='chartTypeLiClickHandler(this);'><a href="#">bubble</a></li>
 																				</ul>
 																			</div>
-																		
-																			<a id="create-statistical-report-delete-row" class="btn btn-default pull-right">Delete Row</a>
 																		</div>
 
 																	</div>
 																	<div class="modal-footer">
-																		<button type="button" class="btn btn-default" data-dismiss="modal" id="create-statistical-report-close">
+																		<button type="button" class="btn btn-default" data-dismiss="modal" id="view-statistical-report-close">
 																			Close
 																		</button> 
-																		<button type="button" class="btn btn-primary" id="create-statistical-report-submit">
+																		<button type="button" class="btn btn-primary" id="view-statistical-report-submit">
 																			Submit
 																		</button>
 																	</div>
@@ -825,6 +739,7 @@
 		<script src="../static/js/find-intersection.js"></script>
 		<script src="../static/js/find-union.js"></script>
 		<script src="../static/js/create-statistical-report.js"></script>
+		<script src="../static/js/view-statistical-report.js"></script>
 		<script src="../static/js/data-flow.js"></script>
 
 	</div>
