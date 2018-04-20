@@ -22,41 +22,61 @@ $("#view-statistical-report-submit").on('click', function(){
 		{arg: JSON.stringify({"query" : query})},
 		function (response){
 			var result = response.elements;
-			var labels = [],
-				data = [];
-			result.forEach(each => {
-				labels.push(each[0]);
-				data.push(each[1]);
-			})
-			var ctx = document.getElementById("myChart");
-			var myChart = new Chart(ctx, {
-				type: chartType,
-				data: {
-					labels: labels,
-					datasets: [{
-						label: 'Result',
-						data: data,
-						backgroundColor: 'white',
-						borderColor: 'red',
-						borderWidth: 1
-					}]
-				},
-				options: {
-					scales: {
-						yAxes: [{
-							ticks: {
-								beginAtZero:false
-							}
-						}]
-					}
-				}
-			});
-
+			displayStatisticalReportInChart(result, chartType)
+			displayStatisticalReportInTable(result)
 			$("#view-statistical-report-close").click();
 			$("#chart-trigger-btn").click();
 		}
 	)	
 })
+
+function displayStatisticalReportInChart(result, chartType){
+	var labels = [],
+		data = [];
+	result.forEach(each => {
+		labels.push(each[0]);
+		data.push(each[1]);
+	})
+	var ctx = document.getElementById("myChart");
+	var myChart = new Chart(ctx, {
+		type: chartType,
+		data: {
+			labels: labels,
+			datasets: [{
+				label: 'Result',
+				data: data,
+				backgroundColor: 'white',
+				borderColor: 'red',
+				borderWidth: 1
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero:false
+					}
+				}]
+			}
+		}
+	});
+}
+
+function displayStatisticalReportInTable(result) {
+	curr_num = $("#view-statistical-report-table").find('tbody').first().find('tr').length;
+	var code = "";
+	result.forEach(each => {
+		curr_num += 1;
+		var alias = each[0];
+			value = each[1];
+		code += "<tr id='view-statistical-report-addr" + curr_num + "'>" + 
+					"<td style='text-align: center; vertical-align: middle;'>" + curr_num + "</td>" +
+					"<td style='text-align: center; vertical-align: middle;'>" + alias + "</td>" +
+					"<td style='text-align: center; vertical-align: middle;'>" + value + "</td>" + 
+				"</tr>";
+	})
+	$("#view-statistical-report-table").find('tbody').first().html(code);
+}
 
 $("view-statistical-report .close").on('click', function(){
 	$("#view-statistical-report-close").click();
@@ -72,7 +92,26 @@ $("#view-statistical-report-close").on('click', function() {
 
 $("#chart-close").on('click', function () {
 	$("#view-statistical-report").find(".view-statistical-report-chart-type-btn").first().text("Chart Type");
-	$("#chart").find('.modal-body').first().html("<canvas id='myChart' width='800' height='800'></canvas>");
+	var init_code = "<table class='table table-bordered table-hover' id='view-statistical-report-table'>" + 
+						"<thead>" + 
+							"<tr>" + 
+								"<th class='text-center'>" + 
+									"#" + 
+								"</th>" + 
+								"<th class='text-center'>" + 
+									"Alias" + 
+								"</th>" + 
+								"<th class='text-center'>" + 
+									"Value" + 
+								"</th>" + 
+							"</tr>" + 
+						"</thead>" + 
+						"<tbody></tbody>" + 
+					"</table>" + 
+					"<canvas id='myChart' width='800' height='800'></canvas>";
+
+
+	$("#chart").find('.modal-body').first().html(init_code);
 })
 
 $("#chart .close").on('click', function () {

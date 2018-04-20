@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	$("#create-statistical-report-add-row").click(function(){
 		var curr_num = parseInt($("#create-statistical-report-table").find('tbody').find('tr').last().find('td').eq(0).text());
-		var html_code = "<td>" + (curr_num + 1) + "</td>" + 
+		var html_code = "<td style='text-align: center; vertical-align: middle;'>" + (curr_num + 1) + "</td>" + 
 						"<td>" + 
 							"<div class='btn-group' style='width : 100%'>" + 
 								"<button type='button' class='btn btn-block btn-secondary create-statistical-report-dataset-btn' data-toggle='dropdown' onclick='datasetBtnHandler(this);'>Dataset</button>" + 
@@ -36,14 +36,14 @@ $(document).ready(function(){
 							"<input type='text' name='alias' class='form-control create-statistical-report-alias'/>" + 
 						"</td>";
 
-		$('#create-statistical-report-table').append('<tr id="addr' + (curr_num + 1) + '"></tr>');
-		$('#addr' + (curr_num + 1)).html(html_code);
+		$('#create-statistical-report-table').append('<tr id="create-statistical-report-table-addr' + (curr_num + 1) + '"></tr>');
+		$('#create-statistical-report-table-addr' + (curr_num + 1)).html(html_code);
 	});
 
 	$("#create-statistical-report-delete-row").click(function(){
 		var curr_num = parseInt($("#create-statistical-report-table").find('tbody').find('tr').last().find('td').eq(0).text());
 		if(curr_num > 1){
-			$("#addr"+ curr_num).remove();
+			$("#create-statistical-report-table-addr"+ curr_num).remove();
 		}
 	});
 });
@@ -407,8 +407,8 @@ $("#create-statistical-report-submit").on('click', function() {
 })
 
 $("#create-statistical-report-close").on('click', function () {
-	var default_code = 	"<tr id='addr1'>" + 
-							"<td>1</td>" + 
+	var default_code = 	"<tr id='create-statistical-report-table-addr1'>" + 
+							"<td style='text-align: center; vertical-align: middle;'>1</td>" + 
 							"<td>" + 
 								"<div class='btn-group' style='width : 100%'>" + 
 									"<button type='button' class='btn btn-block btn-secondary create-statistical-report-dataset-btn' data-toggle='dropdown' onclick='datasetBtnHandler(this);'>Dataset</button>" + 
