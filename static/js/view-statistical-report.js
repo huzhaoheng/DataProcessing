@@ -37,8 +37,8 @@ $("#view-statistical-report-submit").on('click', function(){
 		function (response){
 			var result = response.elements;
 			console.log(result);
-			/*displayStatisticalReportInChart(result, chartType)
-			displayStatisticalReportInTable(result)*/
+			displayStatisticalReportInChart(result, chartType)
+			displayStatisticalReportInTable(result)
 			$("#view-statistical-report-close").click();
 			$("#chart-trigger-btn").click();
 		}
@@ -48,10 +48,11 @@ $("#view-statistical-report-submit").on('click', function(){
 function displayStatisticalReportInChart(result, chartType){
 	var labels = [],
 		data = [];
-	result.forEach(each => {
-		labels.push(each[0]);
-		data.push(each[1]);
-	})
+
+	for (key in result){
+		labels.push(key);
+		data.push(result[key])
+	}	
 	var ctx = document.getElementById("myChart");
 	var myChart = new Chart(ctx, {
 		type: chartType,
@@ -80,16 +81,19 @@ function displayStatisticalReportInChart(result, chartType){
 function displayStatisticalReportInTable(result) {
 	curr_num = $("#view-statistical-report-table").find('tbody').first().find('tr').length;
 	var code = "";
-	result.forEach(each => {
+
+
+	for (key in result){
 		curr_num += 1;
-		var alias = each[0];
-			value = each[1];
+		var alias = key;
+			value = result[key];
 		code += "<tr id='view-statistical-report-addr" + curr_num + "'>" + 
 					"<td style='text-align: center; vertical-align: middle;'>" + curr_num + "</td>" +
 					"<td style='text-align: center; vertical-align: middle;'>" + alias + "</td>" +
 					"<td style='text-align: center; vertical-align: middle;'>" + value + "</td>" + 
 				"</tr>";
-	})
+	}
+
 	$("#view-statistical-report-table").find('tbody').first().html(code);
 }
 
