@@ -8,7 +8,6 @@ $( "#view-statistical-report").on('shown.bs.modal', function(){
 		{arg: JSON.stringify({"query" : query})},
 		function (response){
 			report_and_query = response.elements;
-			console.log(report_and_query);
 		}
 	)
 })
@@ -17,6 +16,15 @@ $( "#view-statistical-report").on('shown.bs.modal', function(){
 $("#view-statistical-report-submit").on('click', function(){
 	var chartType = $("#view-statistical-report").find(".view-statistical-report-chart-type-btn").first().text();
 	var report_name = $("#view-statistical-report").find(".view-statistical-report-select-report-btn").first().text();
+	if (chartType == 'Chart Type'){
+		window.alert('Please selecte chart type');
+		return;
+	}
+	if (report_name == 'Report Name'){
+		window.alert('Please selecte report');
+		return;	
+	}
+
 	var query = report_and_query[report_name];
 	$.getJSON(
 		'/getValue',

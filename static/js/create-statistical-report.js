@@ -328,6 +328,8 @@ $("#create-statistical-report-submit").on('click', function() {
 			alias = "row" + num.toString();
 		}
 		else{
+			console.log(alias);
+			console.log(alias.indexOf(' '));
 			if(alias.indexOf(' ') >= 0){
 				window.alert('No space allowed in alias (row #' + num + ')');
 				valid = false;
