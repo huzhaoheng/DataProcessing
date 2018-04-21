@@ -30,7 +30,7 @@ $(document).ready(function(){
 							"</div>" + 
 						"</td>" + 
 						"<td>" + 
-							"<input type='text' name='values' class='form-control create-statistical-report-values' readonly='true'/>" + 
+							"<input type='text' name='values' class='form-control create-statistical-report-values' disabled/>" + 
 						"</td>" + 
 						"<td>" + 
 							"<input type='text' name='alias' class='form-control create-statistical-report-alias'/>" + 
@@ -81,6 +81,8 @@ function datasetLiClickHandler(ele){
 	$(ele).closest('tr').find('td:eq(3)').empty();
 	$(ele).closest('tr').find('.create-statistical-report-property-btn').text("Property");
 	$(ele).closest('tr').find('.create-statistical-report-alias').val("");
+	$(ele).closest('tr').find('.create-statistical-report-values').val("");
+	$(ele).closest('tr').find('.create-statistical-report-values').prop("disabled", true);
 }
 
 function propertyBtnHandler(ele){
@@ -138,7 +140,7 @@ function propertyLiClickHandler(ele){
 
 function functionLiClickHandler(ele){
 	$(ele).closest('tr').find(".create-statistical-report-values").first().val("");
-	$(ele).closest('tr').find(".create-statistical-report-values").first().prop("readonly", true);
+	$(ele).closest('tr').find(".create-statistical-report-values").first().prop("disabled", true);
 
 	$(ele).closest('tr').find('.create-statistical-report-property').first().text('Property');
 
@@ -158,7 +160,7 @@ function functionLiClickHandler(ele){
 			}
 		}
 		$(ele).closest('tr').find('td:eq(3)').empty();
-		$(ele).closest('tr').find(".create-statistical-report-values").first().prop("readonly", false);
+		$(ele).closest('tr').find(".create-statistical-report-values").first().prop("disabled", false);
 	}
 	else{
 		var property = $(ele).closest('tr').find('.create-statistical-report-property-btn').text();
@@ -313,7 +315,8 @@ $("#create-statistical-report-submit").on('click', function() {
 	var data = {},
 		names = [],
 		functions = [],
-		valid = true;
+		valid = true,
+		inputs = [];
 
 	$("#create-statistical-report-table").find('tbody').find('tr').each(function (i, el) {
 		var $tds = $(this).find('td');
@@ -322,6 +325,7 @@ $("#create-statistical-report-submit").on('click', function() {
 		var function_name = $tds.eq(2).find('.create-statistical-report-function-btn').text();
 		var distinct = $tds.eq(3).find('input').prop('checked');
 		var comb = $tds.eq(4).find('.create-statistical-report-property-btn').text();
+		var values_disabled = $tds.eq(5).find('.create-statistical-report-values').first().prop('disabled');
 		var values = $tds.eq(5).find('.create-statistical-report-values').val();
 		var alias = $tds.eq(6).find('.create-statistical-report-alias').val();
 
@@ -364,12 +368,31 @@ $("#create-statistical-report-submit").on('click', function() {
 			return;
 		}
 
+
+		if (!values_disabled){
+			if (values == ""){
+				window.alert('Please specift word(s) for row #' + num);
+				valid = false;
+				return;
+			}
+			var splited = values.split(',');
+			if (splited.length == 1){
+				var input = [values];
+				inputs.push(input);
+			}
+			else{
+				var input = splited;
+				inputs.push(input);
+			}
+		}
+
 		if (distinct){
 			functions.push(function_name + " DISTINCT");	
 		}
 		else{
 			functions.push(function_name);
 		}
+
 		names.push(alias);
 		
 
@@ -408,7 +431,7 @@ $("#create-statistical-report-submit").on('click', function() {
 
 	var data_selection_query = statisticalFunctionDataSelectionQuery(data);
 
-	var create_report_query = createStatisticalReportQuery(report_name, data_selection_query, functions, names);
+	var create_report_query = createStatisticalReportQuery(report_name, data_selection_query, functions, names, inputs);
 
 	console.log(create_report_query);
 
@@ -444,6 +467,7 @@ $("#create-statistical-report-close").on('click', function () {
 										"<li onclick='functionLiClickHandler(this);'><a href='#'>AVG</a></li>" + 
 										"<li onclick='functionLiClickHandler(this);'><a href='#'>SUM</a></li>" + 
 										"<li onclick='functionLiClickHandler(this);'><a href='#'>STDEV</a></li>" + 
+										"<li onclick='functionLiClickHandler(this);'><a href='#'>WORD FREQ</a></li>" + 
 									"</ul>" + 
 								"</div>" + 
 							"</td>" + 
@@ -453,6 +477,9 @@ $("#create-statistical-report-close").on('click', function () {
 									"<button type='button' class='btn btn-block btn-secondary create-statistical-report-property-btn' data-toggle='dropdown' onclick='propertyBtnHandler(this);'>Property</button>" + 
 									"<ul class='dropdown-menu create-statistical-report-property' role='menu'></ul>" + 
 								"</div>" + 
+							"</td>" + 
+							"<td>" + 
+								"<input type='text' name='values' class='form-control create-statistical-report-values' disabled />" + 
 							"</td>" + 
 							"<td>" + 
 								"<input type='text' name='alias' class='form-control create-statistical-report-alias'/>" + 
@@ -466,4 +493,3 @@ $("#create-statistical-report-close").on('click', function () {
 $("#create-statistical-report .close").click(function(){
 	$("#create-statistical-report-close").click();
 })
-

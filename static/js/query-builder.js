@@ -271,20 +271,40 @@ function getResourceAndObjectPairsQuery(type, name){
 	return query;
 }
 
-function createStatisticalReportQuery(report_name, queries, functions, names) {
+/*function createStatisticalReportQuery(report_name, queries, functions, names, inputs) {
+	console.log(inputs);
 	var ret = 'CREATE (r:statisticalReport {system_user_username : "' + window.username + '", ' + 
 				'system_user_hashkey : "' + window.hashkey + '", ' + 
 				'name : "' + report_name + '", ' + 
 				'data_selection_query : ["' + queries.join('","') + '"], ' + 
 				'functions : ["' + functions.join('","') + '"], ' + 
-				'names : ["' + names.join('","') + '"]' + 
+				'names : ["' + names.join('","') + '"], ' + 
+				'inputs : ["' + inputs.join('","') + '"]' + 
 				'});';
+	return ret;
+}*/
+
+function createStatisticalReportQuery(report_name, queries, functions, names, inputs) {
+	console.log(inputs);
+	var ret = 'CREATE (r:statisticalReport {system_user_username : "' + window.username + '", ' + 
+				'system_user_hashkey : "' + window.hashkey + '", ' + 
+				'name : "' + report_name + '", ' + 
+				'data_selection_query : ["' + queries.join('","') + '"], ' + 
+				'functions : ["' + functions.join('","') + '"], ' + 
+				'names : ["' + names.join('","') + '"], ' + 
+				'inputs : "';
+
+	inputs.forEach(input => {
+		ret += "(" + input.join(",") + "),";
+	})
+
+	ret = ret.slice(0, -1) + '"});';
 	return ret;
 }
 
 function getStatisticalReportListQuery(){
 	var query = 'MATCH (r:statisticalReport {system_user_username : "' + window.username + '", ' + 
 				'system_user_hashkey : "' + window.hashkey + '"}) ' + 
-				'RETURN r.name, r.data_selection_query, r.functions, r.names;';
+				'RETURN r.name, r.data_selection_query, r.functions, r.names, r.inputs;';
 	return query;
 }

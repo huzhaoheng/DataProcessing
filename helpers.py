@@ -1,6 +1,8 @@
 from GraphGenerator import GraphGenerator
 from DataLoader import DataLoader
 import numpy as np
+import pandas as pd
+
 
 def getHashKey(nodeRecord):
     data = {"id": str(nodeRecord.d._id)}
@@ -49,23 +51,31 @@ def generateGraphStructure(raw_graph, name):
 
     return ret
 
-def applyStatisticalFunction(data, function):
+def applyStatisticalFunction(data, function, values, name):
     if function == 'COUNT':
-        return len(data)
+        return {name : len(data)}
     elif function == 'COUNT DISTINCT':
-        return len(set(data))
+        return {name : len(set(data))}
     elif function == 'MAX':
-        return max(data)
+        return {name : max(data)}
     elif function == 'MIN':
-        return min(data)
+        return {name : min(data)}
     elif function == 'AVG':
-        return np.average(data)
+        return {name : np.average(data)}
         # return sum(data) / len(data)
     elif function == 'SUM':
-        return sum(data)
+        return {name : sum(data)}
     elif function == 'STDEV':
-        return np.std(data)
+        return {name : np.std(data)}
     elif function == 'WORD FREQ':
-        return None
+        ret = {}
+        long_string = '  '.join(data).lower()
+        values_list = values.split(',')        
+        for value in values_list:
+            phrase = value.rstrip().lstrip().lower()
+            label = name + " : " + value
+            count = max(len(long_string.split(phrase)) - 1, 0)
+            ret[label] = count
+        return ret
     else:
         return None

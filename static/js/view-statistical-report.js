@@ -27,13 +27,15 @@ $("#view-statistical-report-submit").on('click', function(){
 	}
 
 	/*var query = report_and_query[report_name];*/
+	console.log(reports_info);
 	var data_selection_queries = reports_info[report_name][0], 
 		functions = reports_info[report_name][1], 
-		names = reports_info[report_name][2];
+		names = reports_info[report_name][2],
+		values = reports_info[report_name][3];
 
 	$.getJSON(
 		'/getStatisticalReportResult',
-		{arg: JSON.stringify({"queries" : data_selection_queries, "functions" : functions, "names" : names})},
+		{arg: JSON.stringify({"queries" : data_selection_queries, "functions" : functions, "names" : names, "values" : values})},
 		function (response){
 			var result = response.elements;
 			console.log(result);
@@ -52,9 +54,7 @@ function displayStatisticalReportInChart(result, chartType){
 	for (key in result){
 		labels.push(key);
 		data.push(result[key])
-	}	
-	console.log(labels);
-	console.log(data);
+	}
 	var ctx = document.getElementById("myChart");
 	var myChart = new Chart(ctx, {
 		type: chartType,

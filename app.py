@@ -320,8 +320,8 @@ def getStatisticalReportList():
     print (result)
     ret = {}
     for each in result:
-        report_name, data_selection_queries, functions, names = each
-        ret[report_name] = [data_selection_queries, functions, names]
+        report_name, data_selection_queries, functions, names, values = each
+        ret[report_name] = [data_selection_queries, functions, names, values]
 
     return jsonify(elements = ret)
 
@@ -330,16 +330,29 @@ def getStatisticalReportResult():
     queries = json.loads(request.args.get('arg'))['queries']
     functions = json.loads(request.args.get('arg'))['functions']
     names = json.loads(request.args.get('arg'))['names']
+    values = json.loads(request.args.get('arg'))['values']
+
+    temp = values.split("),(")
+    values_list = []
+    for i, each in enumerate(temp):
+        if i == 0:
+            values_list.append(each.lstrip('('))
+        elif i == len(temp) - 1:
+            values_list.append(each.rstrip(')'))
+        else:
+            values_list.append(each)
 
     ret = {}
     for i, name in enumerate(names):
         query = queries[i]
         function = functions[i]
+        inputs = values_list[i]
         result = graph.cypher.execute(query)
         result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
         data = [each[0] for each in result]
-        value = applyStatisticalFunction(data, function)
-        ret[name] = value
+        results = applyStatisticalFunction(data, function, inputs, name)
+        for label, val in results.items():
+            ret[label] = val
 
 
     return jsonify(elements = ret)
