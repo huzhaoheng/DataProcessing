@@ -331,13 +331,7 @@ def getStatisticalReportResult():
     functions = json.loads(request.args.get('arg'))['functions']
     names = json.loads(request.args.get('arg'))['names']
     values = json.loads(request.args.get('arg'))['values']
-
-    print (values)
-
     temp = values.split("),(")
-
-    print (temp)
-
     values_list = []
     for i, each in enumerate(temp):
         print (i, each)
