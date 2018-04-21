@@ -310,8 +310,10 @@ function functionLiClickHandler(ele){
 
 $("#create-statistical-report-submit").on('click', function() {
 	
-	var data = {}
-	var valid = true;
+	var data = {},
+		names = [],
+		functions = [],
+		valid = true;
 
 	$("#create-statistical-report-table").find('tbody').find('tr').each(function (i, el) {
 		var $tds = $(this).find('td');
@@ -323,13 +325,10 @@ $("#create-statistical-report-submit").on('click', function() {
 		var values = $tds.eq(5).find('.create-statistical-report-values').val();
 		var alias = $tds.eq(6).find('.create-statistical-report-alias').val();
 
-
 		if (alias == ""){
 			alias = "row" + num.toString();
 		}
 		else{
-			console.log(alias);
-			console.log(alias.indexOf(' '));
 			if(alias.indexOf(' ') >= 0){
 				window.alert('No space allowed in alias (row #' + num + ')');
 				valid = false;
@@ -365,6 +364,15 @@ $("#create-statistical-report-submit").on('click', function() {
 			return;
 		}
 
+		if (distinct){
+			functions.push(function_name + " DISTINCT");	
+		}
+		else{
+			functions.push(function_name);
+		}
+		names.push(alias);
+		
+
 		var resource = comb.split('->')[0].split(':')[0];
 		var object = comb.split('->')[0].split(':')[1];
 		var property = null;
@@ -398,13 +406,15 @@ $("#create-statistical-report-submit").on('click', function() {
 
 	var report_name = prompt("Name your report");
 
-	var query = statisticalFunctionQuery(data);
+	var data_selection_query = statisticalFunctionDataSelectionQuery(data);
 
-	var report_query = createStatisticalReportQuery(report_name, query);
+	var create_report_query = createStatisticalReportQuery(report_name, data_selection_query, functions, names);
+
+	console.log(create_report_query);
 
 	$.getJSON(
 		'/writeOnlyQuery',
-		{arg: JSON.stringify({"query" : report_query})},
+		{arg: JSON.stringify({"query" : create_report_query})},
 		function (response){
 			var message = response.message;
 			console.log(message);

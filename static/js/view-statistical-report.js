@@ -1,4 +1,5 @@
-var report_and_query = null;
+/*var report_and_query = null;*/
+var reports_info = null
 
 
 $( "#view-statistical-report").on('shown.bs.modal', function(){
@@ -7,7 +8,7 @@ $( "#view-statistical-report").on('shown.bs.modal', function(){
 		'/getStatisticalReportList',
 		{arg: JSON.stringify({"query" : query})},
 		function (response){
-			report_and_query = response.elements;
+			reports_info = response.elements;
 		}
 	)
 })
@@ -25,14 +26,19 @@ $("#view-statistical-report-submit").on('click', function(){
 		return;	
 	}
 
-	var query = report_and_query[report_name];
+	/*var query = report_and_query[report_name];*/
+	var data_selection_queries = reports_info[report_name][0], 
+		functions = reports_info[report_name][1], 
+		names = reports_info[report_name][2];
+
 	$.getJSON(
-		'/getValue',
-		{arg: JSON.stringify({"query" : query})},
+		'/getStatisticalReportResult',
+		{arg: JSON.stringify({"queries" : data_selection_queries, "functions" : functions, "names" : names})},
 		function (response){
 			var result = response.elements;
-			displayStatisticalReportInChart(result, chartType)
-			displayStatisticalReportInTable(result)
+			console.log(result);
+			/*displayStatisticalReportInChart(result, chartType)
+			displayStatisticalReportInTable(result)*/
 			$("#view-statistical-report-close").click();
 			$("#chart-trigger-btn").click();
 		}
@@ -128,7 +134,7 @@ $("#chart .close").on('click', function () {
 })
 
 function selectReportNameBtnHandler(ele){
-	var names = Object.keys(report_and_query);
+	var names = Object.keys(reports_info);
 	var code = "";
 	names.forEach(name => {
 		code += "<li onclick='selectReportNameLiClickHandler(this);'><a href='#'>" + name + "</a></li>";

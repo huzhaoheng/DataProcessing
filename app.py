@@ -300,18 +300,49 @@ def getResourceAndObjectPairs():
     return jsonify(elements = ret)
 
 
+# @app.route('/getStatisticalReportList')
+# def getStatisticalReportList():
+#     query = json.loads(request.args.get('arg'))['query']
+#     result = graph.cypher.execute(query)
+#     result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
+#     ret = {}
+#     for each in result:
+#         name, query = each
+#         ret[name] = query
+
+#     return jsonify(elements = ret)
+
 @app.route('/getStatisticalReportList')
 def getStatisticalReportList():
     query = json.loads(request.args.get('arg'))['query']
     result = graph.cypher.execute(query)
     result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
+    print (result)
     ret = {}
     for each in result:
-        name, query = each
-        ret[name] = query
+        report_name, data_selection_queries, functions, names = each
+        ret[report_name] = [data_selection_queries, functions, names]
 
     return jsonify(elements = ret)
 
+@app.route('/getStatisticalReportResult')
+def getStatisticalReportResult():
+    queries = json.loads(request.args.get('arg'))['queries']
+    functions = json.loads(request.args.get('arg'))['functions']
+    names = json.loads(request.args.get('arg'))['names']
+
+    ret = {}
+    for i, name in enumerate(names):
+        query = queries[i]
+        function = functions[i]
+        result = graph.cypher.execute(query)
+        result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
+        data = [each[0] for each in result]
+        value = applyStatisticalFunction(data, function)
+        ret[name] = value
+
+
+    return jsonify(elements = ret)
 
 @app.route('/getValue')
 def getValue():

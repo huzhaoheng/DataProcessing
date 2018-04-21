@@ -232,10 +232,8 @@ function getDatasetPropertiesQuery(dataset){
 }
 
 
-function statisticalFunctionQuery(data){
-	var query = "";
-
-	var names = []
+function statisticalFunctionDataSelectionQuery(data){
+	var queries = [];
 
 	for (num in data){
 		record = data[num];
@@ -247,36 +245,20 @@ function statisticalFunctionQuery(data){
 		var property = record['property'];
 		var alias = record['alias'];
 
-		names.push(alias);
 
-		query += "MATCH (d:Data)-[r:InDataset]->(s:Dataset) WHERE " + 
+		var query = "MATCH (d:Data)-[r:InDataset]->(s:Dataset) WHERE " + 
 				 "s.system_user_username = '" + window.username + "' AND " + 
 				 "s.system_user_hashkey = '" + window.hashkey + "' AND " + 
 				 "s.name = '"+ dataset + "' AND " +
 				 "d.resource = '" + resource + "' AND " + 
 				 "d.object = '" + object + "' " + 
-				 "WITH ";
+				 "RETURN d."  + property;
 
-		for (var i = 1; i < parseInt(num); i++) {
-			query += data[i.toString()]['alias'] + ", ";
-		}
-
-		if (distinct == true){
-			query += function_name + "(DISTINCT d." + property + ") AS " + alias + " ";
-		} 
-		else{
-			query += function_name + "(d." + property + ") AS " + alias + " ";
-		}
+		queries.push(query);
 	}
 
-	var ret_format = [];
-	names.forEach(name => {
-		ret_format.push("['" + name + "', " + name + "]");
-	})
 
-	query += "RETURN " + ret_format.join(",");
-
-	return query;
+	return queries;
 }
 
 
@@ -289,11 +271,13 @@ function getResourceAndObjectPairsQuery(type, name){
 	return query;
 }
 
-function createStatisticalReportQuery(report_name, query) {
+function createStatisticalReportQuery(report_name, queries, functions, names) {
 	var ret = 'CREATE (r:statisticalReport {system_user_username : "' + window.username + '", ' + 
 				'system_user_hashkey : "' + window.hashkey + '", ' + 
 				'name : "' + report_name + '", ' + 
-				'report_query : "' + query + '"' + 
+				'data_selection_query : ["' + queries.join('","') + '"], ' + 
+				'functions : ["' + functions.join('","') + '"], ' + 
+				'names : ["' + names.join('","') + '"]' + 
 				'});';
 	return ret;
 }
@@ -301,6 +285,6 @@ function createStatisticalReportQuery(report_name, query) {
 function getStatisticalReportListQuery(){
 	var query = 'MATCH (r:statisticalReport {system_user_username : "' + window.username + '", ' + 
 				'system_user_hashkey : "' + window.hashkey + '"}) ' + 
-				'RETURN r.name, r.report_query;';
+				'RETURN r.name, r.data_selection_query, r.functions, r.names;';
 	return query;
 }

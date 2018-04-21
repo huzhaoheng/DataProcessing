@@ -1,5 +1,6 @@
 from GraphGenerator import GraphGenerator
 from DataLoader import DataLoader
+import numpy as np
 
 def getHashKey(nodeRecord):
     data = {"id": str(nodeRecord.d._id)}
@@ -47,3 +48,24 @@ def generateGraphStructure(raw_graph, name):
     ret = {name : {'relation->has' : graph}}
 
     return ret
+
+def applyStatisticalFunction(data, function):
+    if function == 'COUNT':
+        return len(data)
+    elif function == 'COUNT DISTINCT':
+        return len(set(data))
+    elif function == 'MAX':
+        return max(data)
+    elif function == 'MIN':
+        return min(data)
+    elif function == 'AVG':
+        return np.average(data)
+        # return sum(data) / len(data)
+    elif function == 'SUM':
+        return sum(data)
+    elif function == 'STDEV':
+        return np.std(data)
+    elif function == 'WORD FREQ':
+        return None
+    else:
+        return None
