@@ -332,15 +332,26 @@ def getStatisticalReportResult():
     names = json.loads(request.args.get('arg'))['names']
     values = json.loads(request.args.get('arg'))['values']
 
+    print (values)
+
     temp = values.split("),(")
+
+    print (temp)
+
     values_list = []
     for i, each in enumerate(temp):
-        if i == 0:
-            values_list.append(each.lstrip('('))
-        elif i == len(temp) - 1:
-            values_list.append(each.rstrip(')'))
-        else:
+        print (i, each)
+        to_push = None
+        if i != 0 and i != len(temp) - 1:
             values_list.append(each)
+        else:
+            if i == 0 and i == len(temp) - 1:
+                values_list.append(each.lstrip('(').rstrip(')'))
+            elif i == 0:
+                values_list.append(each.lstrip('('))
+            else:
+                values_list.append(each.rstrip(')'))
+        
 
     ret = {}
     for i, name in enumerate(names):
