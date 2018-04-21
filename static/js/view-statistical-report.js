@@ -8,6 +8,7 @@ $( "#view-statistical-report").on('shown.bs.modal', function(){
 		{arg: JSON.stringify({"query" : query})},
 		function (response){
 			report_and_query = response.elements;
+			console.log(report_and_query);
 		}
 	)
 })

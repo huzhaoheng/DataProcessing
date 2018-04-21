@@ -327,6 +327,13 @@ $("#create-statistical-report-submit").on('click', function() {
 		if (alias == ""){
 			alias = "row" + num.toString();
 		}
+		else{
+			if(alias.indexOf(' ') >= 0){
+				window.alert('No space allowed in alias (row #' + num + ')');
+				valid = false;
+				return;
+			}
+		}
 
 		if (distinct == undefined){
 			distinct = false;
