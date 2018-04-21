@@ -53,6 +53,8 @@ function displayStatisticalReportInChart(result, chartType){
 		labels.push(key);
 		data.push(result[key])
 	}	
+	console.log(labels);
+	console.log(data);
 	var ctx = document.getElementById("myChart");
 	var myChart = new Chart(ctx, {
 		type: chartType,
