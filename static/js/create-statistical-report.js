@@ -120,7 +120,7 @@ function propertyLiClickHandler(ele){
 		$(ele).parent().prev().text(selected);
 	}
 	else if(function_name == 'WORD FREQ'){
-		if (type != 'String'){
+		if (type != 'String' || type != 'LISTOFString'){
 			window.alert('Cannot Apply ' + function_name + ' to a ' + type + ' type property');
 			return;
 		}
