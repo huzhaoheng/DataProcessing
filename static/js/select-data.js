@@ -710,7 +710,14 @@ function parseConstrain() {
 					break;
 
 				case 'List':
+					console.log(label_with_type);
+					/*switch(operator){
+						case 'CONTAINS':
+						var condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = " + "))";
+						break;	
+					}*/
 					break;
+
 
 				case 'Boolean':
 					var condition = "(" + alias + "." + label_with_type + " " + operator + " " + value + ")";
