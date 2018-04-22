@@ -711,15 +711,19 @@ function parseConstrain() {
 
 				case 'List':
 					var value_type = label_with_type.split('LISTOF')[1];
+					var condition = null;
 					switch(operator){
 						case 'CONTAINS':
 							switch(value_type){
 								case 'String':
-									var condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = '" + value + "'))";
+									condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = '" + value + "'))";
+									
 								case 'Int':
-									var condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = " + value + "))";
+									condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = " + value + "))";
+									
 								case 'Float':
-									var condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = " + value + "))";	
+									condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = " + value + "))";	
+									
 								default:
 									break;
 							}
@@ -728,6 +732,7 @@ function parseConstrain() {
 						default:
 							break
 					}
+					ret[label_with_type] = condition;
 					break;
 
 
