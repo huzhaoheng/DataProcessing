@@ -31,7 +31,6 @@ def verification():
     response = make_response(redirect_url)
     response.set_cookie('hashkey', hashkey)
     response.set_cookie('username', username)
-    print (parameters)
     if not exists:
         query = "CREATE (u:SystemUser {username : '" + username + "', hashkey : '" + hashkey + "'})"
         graph.cypher.execute(query)
@@ -76,9 +75,9 @@ def getRepositoryParameters():
     result = graph.cypher.execute(query)
     ret = {}
     for each in result:
-        ret = {key:each.r.properties[key] for key in each.r.properties if key not in ['name', 'system_user_username', 'system_user_hashkey']}
+        ret[each.r.properties['name']] = {key:each.r.properties[key] for key in each.r.properties if key not in ['name', 'system_user_username', 'system_user_hashkey']}
         # ret[each.r.properties['name']] = {key:each.r.properties[key] for key in each.r.properties}
-    print (ret)
+
     return jsonify(elements = ret)
 
 
