@@ -433,7 +433,6 @@ $("#create-statistical-report-submit").on('click', function() {
 
 	var create_report_query = createStatisticalReportQuery(report_name, data_selection_query, functions, names, inputs);
 
-	console.log(create_report_query);
 
 	$.getJSON(
 		'/writeOnlyQuery',
