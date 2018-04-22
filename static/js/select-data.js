@@ -710,12 +710,24 @@ function parseConstrain() {
 					break;
 
 				case 'List':
-					console.log(label_with_type);
-					/*switch(operator){
+					var value_type = label_with_type.split('LISTOF')[1];
+					switch(operator){
 						case 'CONTAINS':
-						var condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = " + "))";
-						break;	
-					}*/
+							switch(value_type){
+								case 'String':
+									var condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = '" + value + "'))";
+								case 'Int':
+									var condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = " + value + "))";
+								case 'Float':
+									var condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = " + value + "))";	
+								default:
+									break;
+							}
+							break;
+
+						default:
+							break
+					}
 					break;
 
 
@@ -746,6 +758,8 @@ $("#select-data-submit").click(function () {
 	var res = selectDatatQuery(window.path, window.source, window.name);
 	var query = res[0],
 		names = res[1];
+
+	console.log(res);
 
 	$.getJSON(
 				'/getPath',
