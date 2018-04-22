@@ -22,11 +22,10 @@ def verification():
     print("request received")
     username, data, repository, structure = request.json["username"], json.loads(request.json["data"]), request.json["name"], json.loads(request.json["structure"])
     hashkey = hashlib.md5((username).encode()).hexdigest()
+    parameters = parameterParser(structure)
+    repository_id = generateRepositoryID(repository, username, parameters)
     query = "MATCH (d:SystemUser) WHERE d.username = '" + username + "' RETURN d"
     exists = graph.cypher.execute(query)
-    fp = open("data.txt", "w", encoding = "utf-8")
-    fp.write(json.dumps(data))
-    fp.close()
     # redirect_url = "http://127.0.0.1:1111" + url_for('home', username = username, hashkey = hashkey)
     redirect_url = "http://listen.online:1111" + url_for('home', username = username, hashkey = hashkey)
     response = make_response(redirect_url)
@@ -35,11 +34,18 @@ def verification():
     if not exists:
         query = "CREATE (u:SystemUser {username : '" + username + "', hashkey : '" + hashkey + "'})"
         graph.cypher.execute(query)
-    repository_exist = graph.cypher.execute("MATCH (r:Repository {name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) RETURN r")
+    repository_exist = graph.cypher.execute("MATCH (r:Repository {name : '" + repository + "_" + repository_id + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', repository_id = '" + repository_id + "'}) RETURN r")
     if not repository_exist:
-        query = "CREATE (r:Repository {name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'})"
+        query = "CREATE (r:Repository {name : '" + repository + "_" + repository_id + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', repository_id = '" + repository_id + "'"
+        for k, v in parameters.items():
+            if v:
+                if (type(v) is int) or (type(v) is float):
+                    query += ", " + k + ": " + str(v)
+                else:
+                    query += ", " + k + ": '" + str(v) + "'"
+        query += "})"
         graph.cypher.execute(query)
-        query = "MATCH (a:SystemUser {username:'" + username + "'}), (b:Repository {name:'" + repository + "', system_user_username : '" + username + "'}) CREATE (a)-[r:hasRepository]->(b);"
+        query = "MATCH (a:SystemUser {username:'" + username + "'}), (b:Repository {name:'" + repository + "_" + repository_id + "', system_user_username : '" + username + "'}) CREATE (a)-[r:hasRepository]->(b);"
         graph.cypher.execute(query)
 
     storeData(graph, data, username, hashkey, structure, repository)
@@ -63,6 +69,18 @@ def getRepositoryList():
     
     return jsonify(elements = {"repositoryList" : repositoryList})
 
+@app.route('/getRepositoryParameters')
+def getRepositoryParameters():
+    query = json.loads(request.args.get('arg'))['query']
+    result = graph.cypher.execute(query)
+    ret = {}
+    for each in result:
+        ret = {key:each.r.properties[key] for key in each.r.properties if key not in ['name', 'system_user_username', 'system_user_hashkey']}
+        # ret[each.r.properties['name']] = {key:each.r.properties[key] for key in each.r.properties}
+    print (ret)
+    return jsonify(elements = ret)
+
+
 @app.route('/getRepositoriesData')
 def getRepositoriesData():
     ret = {}
@@ -74,6 +92,8 @@ def getRepositoriesData():
         for each in result:
             data = {key:each.d.properties[key] for key in each.d.properties if key not in hidden_properties}
             ret[repository].append(data)
+
+    # print (ret)
 
     return jsonify(elements = ret)
 

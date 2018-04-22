@@ -2,8 +2,16 @@ function loadRepositoryListQuery(){
 	var query = "MATCH (r:Repository) WHERE " + 
 				"r.system_user_username = '" + window.username + "' AND " + 
 				"r.system_user_hashkey = '" + window.hashkey + "' " +
-				"RETURN r.name;"
-	return query
+				"RETURN r.name;";
+	return query;
+}
+
+function getRepositoryParametersQuery(){
+	var query = "MATCH (r:Repository) WHERE " + 
+				"r.system_user_username = '" + window.username + "' AND " + 
+				"r.system_user_hashkey = '" + window.hashkey + "' " +
+				"RETURN r;";
+	return query;
 }
 
 function loadRepositoriesQuery(repositoryList) {

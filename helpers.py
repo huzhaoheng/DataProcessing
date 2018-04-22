@@ -2,7 +2,7 @@ from GraphGenerator import GraphGenerator
 from DataLoader import DataLoader
 import numpy as np
 import pandas as pd
-
+import hashlib
 
 def getHashKey(nodeRecord):
     data = {"id": str(nodeRecord.d._id)}
@@ -79,3 +79,35 @@ def applyStatisticalFunction(data, function, values, name):
         return ret
     else:
         return None
+
+def parameterParser(structure):
+    ret = {}
+    if type(structure) is dict:
+        if structure["selected"]:
+            curr_name = structure["name"]
+            if structure["inputs"]:
+                for each in structure["inputs"]:
+                    name = each["name"]
+                    value = each["value"]
+                    inputType = each["inputType"]
+                    if inputType == "Int":
+                        ret[curr_name + "." + name] = int(value)
+                    elif inputType == "Float":
+                        ret[curr_name + "." + name] = float(value)
+                    else:
+                        ret[curr_name + "." + name] = value
+            if structure["children"]:
+                children_ret = parameterParser(structure["children"])
+                for k, v in children_ret.items():
+                    ret[curr_name + "." + k]  = v
+        return ret
+    
+    else:
+        for each in structure:
+            for k, v in parameterParser(each).items():
+                ret[k] = v
+        return ret
+
+def generateRepositoryID(repository, username, parameters):
+    s = repository + username + json.dumps(parameters)
+    return hashlib.md5(s.encode()).hexdigest()

@@ -1,90 +1,49 @@
 import json
-from GraphGenerator import GraphGenerator
-from py2neo import Graph, Path, authenticate
-from DataLoader import DataLoader
-import os
-
-authenticate("localhost:7474", "neo4j", "123456")
-neo4jUrl = os.environ.get('NEO4J_URL',"http://localhost:7474/db/data/")
-graph = Graph(neo4jUrl)
-# dic = None
-
-# with open('sample_structure.json') as json_data:
-# 	dic = json.load(json_data)
-
-# def helper(sub_dic):
-# 	name, output, children, selected = sub_dic['name'], sub_dic['output'], sub_dic['children'], sub_dic['selected']
-# 	if selected:
-# 		if not children:
-# 			data_type = None
-# 			# if output['isAList'] == 'true' or output['isAList'] == true:
-# 			if output['type']['kind'] == 'LIST':
-# 				data_type = [output['type']['ofType']['name']]
-# 			else:
-# 				data_type = output['type']['name']
-# 			return True, name, data_type
-
-# 		else:
-# 			ret = {'type': None, 'schema': {}}
-# 			# if output['isAList'] == 'true' or output['isAList'] == true:
-# 			if output['type']['kind'] == 'LIST':
-# 				ret['type'] = [output['type']['ofType']['name']]
-# 			else:
-# 				ret['type'] = output['type']['name']
-# 			for child in children:
-# 				flag, key, value = helper(child)
-# 				if flag:
-# 					ret['schema'][key] = value
-# 			return True, name, ret
-
-# 	return False, None, None
-
-# flag, key, value = helper(dic)
-
-# # result = {key : value}
-# result = {"data" : value}
-# # with open('parsed_structure.json', 'w') as outfile:
-# #     json.dump(result, outfile)
+import hashlib
 
 
-username = 'huzhaoheng'
-hashkey = '123456'
-repository = 'myquery'
-
-query = "MATCH (d:SystemUser) WHERE d.username = '" + username + "' RETURN d"
-exists = graph.cypher.execute(query)
-
-if not exists:
-	query = "CREATE (u:SystemUser {username : '" + username + "', hashkey : '" + hashkey + "'})"
-	graph.cypher.execute(query)
-	repository_exist = graph.cypher.execute("MATCH (r:Repository {name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) RETURN r")
-	if not repository_exist:
-		query = "CREATE (r:Repository {name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'})"
-		graph.cypher.execute(query)
-		query = "MATCH (a:SystemUser {username:'" + username + "'}), (b:Repository {name:'" + repository + "', system_user_username : '" + username + "'}) CREATE (a)-[r:hasRepository]->(b);"
-		graph.cypher.execute(query)
-
-
-parsed_structure = None
-data = None
-
-with open('parsed_structure.json') as json_data:
-	parsed_structure = json.load(json_data)
-
-with open('./Twitter/json_file.json', encoding='utf-8') as json_data:
-	data = json.load(json_data)
-
-with open('sample_structure.json', encoding='utf-8') as json_data:
+structure = None
+with open('sample_structure.json') as json_data:
 	structure = json.load(json_data)
 
-gg = GraphGenerator(username, hashkey, data, structure)
-nodes, edges = gg.generateGraph(parsed_structure)
+def parameterParser(structure):
+	ret = {}
+	if type(structure) is dict:
+		if structure["selected"]:
+			curr_name = structure["name"]
+			if structure["inputs"]:
+				for each in structure["inputs"]:
+					name = each["name"]
+					value = each["value"]
+					inputType = each["inputType"]
+					if inputType == "Int":
+						ret[curr_name + "->" + name] = int(value)
+					elif inputType == "Float":
+						ret[curr_name + "->" + name] = float(value)
+					else:
+						ret[curr_name + "->" + name] = value
+			if structure["children"]:
+				children_ret = parameterParser(structure["children"])
+				for k, v in children_ret.items():
+					ret[curr_name + "->" + k]  = v
+		return ret
+	
+	else:
+		for each in structure:
+			for k, v in parameterParser(each).items():
+				ret[k] = v
+		return ret
 
-with open('nodes.txt', 'w', encoding='utf-8') as outfile:
-	json.dump(nodes, outfile)
 
-with open('edges.txt', 'w', encoding='utf-8') as outfile:
-	json.dump(edges, outfile)
+def generateRepositoryID(repository, username, parameters):
+	s = repository + username + json.dumps(parameters)
+	return hashlib.md5(s.encode()).hexdigest()
 
-loader = DataLoader(graph, nodes, edges, username, hashkey, repository)
-loader.storeData()
+parameters = parameterParser(structure)
+with open('parameters.json', 'w') as fp:
+	json.dump(parameters, fp)
+
+# print (not parameters['query->reddit->search->syntax'])
+
+# i = generateRepositoryID("myquery", "hu61", parameters)
+# print (i)

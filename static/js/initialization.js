@@ -1,5 +1,6 @@
 function initialization(username, hashkey) {
 	setParameters(username, hashkey);
+	getRepositoryParameters();
 	loadRepository();
 	setBrand();
 }

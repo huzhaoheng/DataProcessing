@@ -46,6 +46,7 @@ function loadRepository() {
 						p.appendChild(new_table);
 
 						var li = document.createElement("li");
+						li.setAttribute('id', stripped + '-li');
 						if (repository_index == 0){
 							li.setAttribute('class', 'active');
 							window.source = 'Repository';
@@ -61,6 +62,8 @@ function loadRepository() {
 
 						document.getElementById("nav-tabs").appendChild(li);
 						document.getElementById("tab-content").appendChild(div);
+
+						$("#" + stripped + "-li").hoverTips();
 
 						displayInTable(data, "data", "#" + stripped);
 					}
