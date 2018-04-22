@@ -92,15 +92,15 @@ def parameterParser(structure):
                     value = each["value"]
                     inputType = each["inputType"]
                     if inputType == "Int":
-                        ret[curr_name + "->" + name] = int(value)
+                        ret[curr_name + "_" + name] = int(value)
                     elif inputType == "Float":
-                        ret[curr_name + "->" + name] = float(value)
+                        ret[curr_name + "_" + name] = float(value)
                     else:
-                        ret[curr_name + "->" + name] = value
+                        ret[curr_name + "_" + name] = value
             if structure["children"]:
                 children_ret = parameterParser(structure["children"])
                 for k, v in children_ret.items():
-                    ret[curr_name + "->" + k]  = v
+                    ret[curr_name + "_" + k]  = v
         return ret
     
     else:
