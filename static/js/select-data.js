@@ -716,7 +716,7 @@ function parseConstrain() {
 						case 'CONTAINS':
 							switch(value_type){
 								case 'String':
-									condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = '" + value + "'))";
+									condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE toLower(x) = '" + value + "'))";
 									break;
 								case 'Int':
 									condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = " + value + "))";
