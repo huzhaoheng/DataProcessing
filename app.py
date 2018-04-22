@@ -353,8 +353,15 @@ def getStatisticalReportResult():
         inputs = values_list[i]
         result = graph.cypher.execute(query)
         result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
-        print (result)
-        data = [each[0] for each in result]
+        data = []
+        for each in result:
+            if type(each[0]) is str:
+                data.append(each[0])
+            elif type(each[0]) is list:
+                data += each[0]
+            else:
+                pass
+        # data = [each[0] for each in result]
         results = applyStatisticalFunction(data, function, inputs, name)
         for label, val in results.items():
             ret[label] = val
