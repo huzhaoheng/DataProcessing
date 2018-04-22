@@ -34,9 +34,9 @@ def verification():
     if not exists:
         query = "CREATE (u:SystemUser {username : '" + username + "', hashkey : '" + hashkey + "'})"
         graph.cypher.execute(query)
-    repository_exist = graph.cypher.execute("MATCH (r:Repository {name : '" + repository + "_" + repository_id + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', repository_id = '" + repository_id + "'}) RETURN r")
+    repository_exist = graph.cypher.execute("MATCH (r:Repository {name : '" + repository + "_" + repository_id + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', repository_id : '" + repository_id + "'}) RETURN r")
     if not repository_exist:
-        query = "CREATE (r:Repository {name : '" + repository + "_" + repository_id + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', repository_id = '" + repository_id + "'"
+        query = "CREATE (r:Repository {name : '" + repository + "_" + repository_id + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', repository_id : '" + repository_id + "'"
         for k, v in parameters.items():
             if v:
                 if (type(v) is int) or (type(v) is float):
