@@ -31,6 +31,7 @@ def verification():
     response = make_response(redirect_url)
     response.set_cookie('hashkey', hashkey)
     response.set_cookie('username', username)
+    print (parameters)
     if not exists:
         query = "CREATE (u:SystemUser {username : '" + username + "', hashkey : '" + hashkey + "'})"
         graph.cypher.execute(query)
