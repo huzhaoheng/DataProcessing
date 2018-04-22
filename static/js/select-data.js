@@ -711,20 +711,19 @@ function parseConstrain() {
 
 				case 'List':
 					var value_type = label_with_type.split('LISTOF')[1];
-					console.log(value_type);
 					var condition = null;
 					switch(operator){
 						case 'CONTAINS':
 							switch(value_type){
 								case 'String':
 									condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = '" + value + "'))";
-									
+									break;
 								case 'Int':
 									condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = " + value + "))";
-									
+									break;
 								case 'Float':
 									condition = "(" + "ANY(x IN " + alias + "." + label_with_type + " WHERE x = " + value + "))";	
-									
+									break;
 								default:
 									break;
 							}
@@ -733,6 +732,11 @@ function parseConstrain() {
 						default:
 							break
 					}
+
+					if(logical == 'NOT'){
+						condition = 'NOT' + condition;
+					}
+
 					ret[label_with_type] = condition;
 					break;
 
