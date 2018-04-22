@@ -181,6 +181,7 @@ def getPath():
 @app.route('/writeOnlyQuery')
 def writeOnlyQuery():
     query = json.loads(request.args.get('arg'))['query']
+    print (query)
     ret = None
     try:
         result = graph.cypher.execute(query)
@@ -188,6 +189,7 @@ def writeOnlyQuery():
     except Exception as e:
         ret = e
         
+    print (ret)
     return jsonify(message = {"message" : ret})
 
 
