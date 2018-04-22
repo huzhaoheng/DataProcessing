@@ -6,6 +6,7 @@ function getRepositoryParameters(){
 		function (response){
 			var result = response.elements;
 			window.parameters = result;
+			console.log(result);
 		}
 	)
 }

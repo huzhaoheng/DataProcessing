@@ -45,12 +45,11 @@ def verification():
                 else:
                     query += ", " + k + ": '" + str(v) + "'"
         query += "})"
-        print (query)
         graph.cypher.execute(query)
         query = "MATCH (a:SystemUser {username:'" + username + "'}), (b:Repository {name:'" + repository + "_" + repository_id + "', system_user_username : '" + username + "'}) CREATE (a)-[r:hasRepository]->(b);"
         graph.cypher.execute(query)
 
-    storeData(graph, data, username, hashkey, structure, repository)
+    storeData(graph, data, username, hashkey, structure, repository + "_" + repository_id)
 
     return response
 
