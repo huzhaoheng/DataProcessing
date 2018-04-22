@@ -52,6 +52,7 @@ def generateGraphStructure(raw_graph, name):
     return ret
 
 def applyStatisticalFunction(data, function, values, name):
+    print (data)
     if function == 'COUNT':
         return {name : len(data)}
     elif function == 'COUNT DISTINCT':
