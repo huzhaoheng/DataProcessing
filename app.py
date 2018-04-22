@@ -181,7 +181,9 @@ def getPath():
 @app.route('/writeOnlyQuery')
 def writeOnlyQuery():
     query = json.loads(request.args.get('arg'))['query']
+    print ('-------------------------------')
     print (query)
+    print ('-------------------------------')
     ret = None
     try:
         result = graph.cypher.execute(query)
