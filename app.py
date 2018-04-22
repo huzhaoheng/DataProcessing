@@ -354,6 +354,7 @@ def getStatisticalReportResult():
         inputs = values_list[i]
         result = graph.cypher.execute(query)
         result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
+        print (result)
         data = [each[0] for each in result]
         results = applyStatisticalFunction(data, function, inputs, name)
         for label, val in results.items():
