@@ -77,7 +77,7 @@ def getRepositoryParameters():
     for each in result:
         ret[each.r.properties['name']] = {key:each.r.properties[key] for key in each.r.properties if key not in ['name', 'system_user_username', 'system_user_hashkey']}
         # ret[each.r.properties['name']] = {key:each.r.properties[key] for key in each.r.properties}
-
+    print (ret)
     return jsonify(elements = ret)
 
 
