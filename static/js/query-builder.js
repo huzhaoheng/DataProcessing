@@ -294,7 +294,15 @@ function getResourceAndObjectPairsQuery(type, name){
 
 function createStatisticalReportQuery(report_name, queries, functions, names, inputs) {
 	console.log(inputs);
-	var ret = 'CREATE (r:statisticalReport {system_user_username : "' + window.username + '", ' + 
+	/*var ret = 'CREATE (r:statisticalReport {system_user_username : "' + window.username + '", ' + 
+				'system_user_hashkey : "' + window.hashkey + '", ' + 
+				'name : "' + report_name + '", ' + 
+				'data_selection_query : ["' + queries.join('","') + '"], ' + 
+				'functions : ["' + functions.join('","') + '"], ' + 
+				'names : ["' + names.join('","') + '"], ' + 
+				'inputs : "';*/
+	if (inputs.length > 0){
+		var ret = 'CREATE (r:statisticalReport {system_user_username : "' + window.username + '", ' + 
 				'system_user_hashkey : "' + window.hashkey + '", ' + 
 				'name : "' + report_name + '", ' + 
 				'data_selection_query : ["' + queries.join('","') + '"], ' + 
@@ -302,12 +310,22 @@ function createStatisticalReportQuery(report_name, queries, functions, names, in
 				'names : ["' + names.join('","') + '"], ' + 
 				'inputs : "';
 
-	inputs.forEach(input => {
-		ret += "(" + input.join(",") + "),";
-	})
+		inputs.forEach(input => {
+			ret += "(" + input.join(",") + "),";
+		})
 
-	ret = ret.slice(0, -1) + '"});';
-	return ret;
+		ret = ret.slice(0, -1) + '"});';
+		return ret;
+	}
+	else{
+		var ret = 'CREATE (r:statisticalReport {system_user_username : "' + window.username + '", ' + 
+				'system_user_hashkey : "' + window.hashkey + '", ' + 
+				'name : "' + report_name + '", ' + 
+				'data_selection_query : ["' + queries.join('","') + '"], ' + 
+				'functions : ["' + functions.join('","') + '"], ' + 
+				'names : ["' + names.join('","') + '"]});';
+		return ret;
+	}
 }
 
 function getStatisticalReportListQuery(){
