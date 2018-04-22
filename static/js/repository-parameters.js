@@ -15,6 +15,7 @@ $.fn.extend({
 	hoverTips : function (){
 		var self = $(this);
 		var repository = self.text();
+		console.log(repository);
 		var repository_parameters = window.parameters[repository];
 		console.log(repository_parameters);
 		var content = "";
