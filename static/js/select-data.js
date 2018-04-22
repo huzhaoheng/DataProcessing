@@ -711,6 +711,7 @@ function parseConstrain() {
 
 				case 'List':
 					var value_type = label_with_type.split('LISTOF')[1];
+					console.log(value_type);
 					var condition = null;
 					switch(operator){
 						case 'CONTAINS':
