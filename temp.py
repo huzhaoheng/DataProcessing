@@ -39,11 +39,27 @@ def generateRepositoryID(repository, username, parameters):
 	s = repository + username + json.dumps(parameters)
 	return hashlib.md5(s.encode()).hexdigest()
 
-parameters = parameterParser(structure)
-with open('parameters.json', 'w') as fp:
-	json.dump(parameters, fp)
+# parameters = parameterParser(structure)
+# with open('parameters.json', 'w') as fp:
+# 	json.dump(parameters, fp)
 
 # print (not parameters['query->reddit->search->syntax'])
 
 # i = generateRepositoryID("myquery", "hu61", parameters)
 # print (i)
+
+repository = 'myquery'
+repository_id = '1'
+username = 'hu61'
+hashkey = '123456'
+parameters = {'query' : 'UIUC'}
+
+query = "CREATE (r:Repository {name : '" + repository + "_" + repository_id + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', repository_id : '" + repository_id + "'"
+for k, v in parameters.items():
+	if v:
+		if (type(v) is int) or (type(v) is float):
+			query += ", " + k + ": " + str(v)
+		else:
+			query += ", " + k + ": '" + str(v) + "'"
+query += "})"
+print (query)
