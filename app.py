@@ -355,40 +355,60 @@ def getStatisticalReportResult():
     functions = json.loads(request.args.get('arg'))['functions']
     names = json.loads(request.args.get('arg'))['names']
     values = json.loads(request.args.get('arg'))['values']
-    temp = values.split("),(")
-    values_list = []
-    for i, each in enumerate(temp):
-        to_push = None
-        if i != 0 and i != len(temp) - 1:
-            values_list.append(each)
-        else:
-            if i == 0 and i == len(temp) - 1:
-                values_list.append(each.lstrip('(').rstrip(')'))
-            elif i == 0:
-                values_list.append(each.lstrip('('))
+    ret = {}
+
+    if values:
+        temp = values.split("),(")
+        values_list = []
+        for i, each in enumerate(temp):
+            to_push = None
+            if i != 0 and i != len(temp) - 1:
+                values_list.append(each)
             else:
-                values_list.append(each.rstrip(')'))
+                if i == 0 and i == len(temp) - 1:
+                    values_list.append(each.lstrip('(').rstrip(')'))
+                elif i == 0:
+                    values_list.append(each.lstrip('('))
+                else:
+                    values_list.append(each.rstrip(')'))
         
 
-    ret = {}
-    for i, name in enumerate(names):
-        query = queries[i]
-        function = functions[i]
-        inputs = values_list[i]
-        result = graph.cypher.execute(query)
-        result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
-        data = []
-        for each in result:
-            if type(each[0]) is str:
-                data.append(each[0])
-            elif type(each[0]) is list:
-                data += each[0]
-            else:
-                pass
-        # data = [each[0] for each in result]
-        results = applyStatisticalFunction(data, function, inputs, name)
-        for label, val in results.items():
-            ret[label] = val
+    
+        for i, name in enumerate(names):
+            query = queries[i]
+            function = functions[i]
+            inputs = values_list[i]
+            result = graph.cypher.execute(query)
+            result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
+            data = []
+            for each in result:
+                if type(each[0]) is str:
+                    data.append(each[0])
+                elif type(each[0]) is list:
+                    data += each[0]
+                else:
+                    pass
+            # data = [each[0] for each in result]
+            results = applyStatisticalFunction(data, function, inputs, name)
+            for label, val in results.items():
+                ret[label] = val
+
+    else:
+        for i, name in enumerate(names):
+            query = queries[i]
+            function = functions[i]
+            result = graph.cypher.execute(query)
+            result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
+            data = []
+            for each in result:
+                if type(each[0]) is list:
+                    data += each[0]
+                else:
+                    data.append(each[0])
+            # data = [each[0] for each in result]
+            results = applyStatisticalFunction(data, function, None, name)
+            for label, val in results.items():
+                ret[label] = val
 
 
     return jsonify(elements = ret)
