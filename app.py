@@ -334,7 +334,6 @@ def getStatisticalReportResult():
     temp = values.split("),(")
     values_list = []
     for i, each in enumerate(temp):
-        print (i, each)
         to_push = None
         if i != 0 and i != len(temp) - 1:
             values_list.append(each)
