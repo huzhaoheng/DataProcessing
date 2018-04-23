@@ -357,6 +357,10 @@ def getStatisticalReportResult():
     values = json.loads(request.args.get('arg'))['values']
     ret = {}
 
+    print ('-------------------')
+    print (values)
+    print ('-------------------')
+
     if values:
         temp = values.split("),(")
         values_list = []
@@ -407,6 +411,7 @@ def getStatisticalReportResult():
                     data.append(each[0])
             # data = [each[0] for each in result]
             results = applyStatisticalFunction(data, function, None, name)
+            print (results)
             for label, val in results.items():
                 ret[label] = val
 
