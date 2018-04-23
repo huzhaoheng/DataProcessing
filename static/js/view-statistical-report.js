@@ -56,7 +56,7 @@ function displayStatisticalReportInChart(result, chartType){
 		data.push(result[key])
 	}
 	var ctx = document.getElementById("myChart");
-	var myChart = new Chart(ctx, {
+	/*var myChart = new Chart(ctx, {
 		type: chartType,
 		data: {
 			labels: labels,
@@ -77,7 +77,56 @@ function displayStatisticalReportInChart(result, chartType){
 				}]
 			}
 		}
-	});
+	});*/
+
+	if (chartType == 'bar'){
+		var myChart = new Chart(ctx, {
+			type: chartType,
+			data: {
+				labels: labels,
+				datasets: [{
+					label: 'Result',
+					data: data,
+					backgroundColor: 'red',
+					borderColor: 'red',
+					borderWidth: 1
+				}]
+			},
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:false
+						}
+					}]
+				}
+			}
+		});
+	}
+	else{
+		var myChart = new Chart(ctx, {
+			type: chartType,
+			data: {
+				labels: labels,
+				datasets: [{
+					label: 'Result',
+					data: data,
+					backgroundColor: 'white',
+					borderColor: 'red',
+					borderWidth: 1
+				}]
+			},
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:false
+						}
+					}]
+				}
+			}
+		});
+	}
 }
 
 function displayStatisticalReportInTable(result) {
