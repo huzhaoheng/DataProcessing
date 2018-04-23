@@ -410,7 +410,7 @@ def getStatisticalReportResult():
             for label, val in results.items():
                 ret[label] = val
 
-
+    print (ret)
     return jsonify(elements = ret)
 
 @app.route('/getValue')
