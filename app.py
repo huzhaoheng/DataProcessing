@@ -141,7 +141,6 @@ def getGraphStructure():
     query = json.loads(request.args.get('arg'))['query']
     name = json.loads(request.args.get('arg'))['name']
     result = graph.cypher.execute(query)
-    print (query)
     if not result:
         ret = {}
     else:
@@ -181,9 +180,6 @@ def getPath():
 @app.route('/writeOnlyQuery')
 def writeOnlyQuery():
     query = json.loads(request.args.get('arg'))['query']
-    print ('-------------------------------')
-    print (query)
-    print ('-------------------------------')
     ret = None
     try:
         result = graph.cypher.execute(query)
@@ -191,7 +187,6 @@ def writeOnlyQuery():
     except Exception as e:
         ret = e
         
-    print (ret)
     return jsonify(message = {"message" : ret})
 
 
@@ -341,7 +336,6 @@ def getStatisticalReportList():
     query = json.loads(request.args.get('arg'))['query']
     result = graph.cypher.execute(query)
     result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
-    print (result)
     ret = {}
     for each in result:
         report_name, data_selection_queries, functions, names, values = each
@@ -358,6 +352,7 @@ def getStatisticalReportResult():
     ret = {}
 
     print ('-------------------')
+    print ('values:')
     print (values)
     print ('-------------------')
 
