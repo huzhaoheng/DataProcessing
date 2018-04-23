@@ -3,6 +3,10 @@ import hashlib
 import numpy as np
 from py2neo import Graph, Path, authenticate
 import os
+import pandas
+from py2neo.packages.httpstream import http
+http.socket_timeout = 9999
+
 
 authenticate("localhost:7474", "neo4j", "123456")
 neo4jUrl = os.environ.get('NEO4J_URL',"http://localhost:7474/db/data/")
