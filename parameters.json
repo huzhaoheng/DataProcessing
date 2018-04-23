@@ -1,0 +1,1 @@
+{"query->reddit->search->query": "strike", "query->reddit->search->time": "all", "query->reddit->search->subreddit": "UIUC", "query->reddit->search->restrictSr": "false", "query->reddit->search->sort": "relevance", "query->reddit->search->syntax": null, "query->reddit->search->count": 50}

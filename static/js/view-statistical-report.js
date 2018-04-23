@@ -63,7 +63,7 @@ function displayStatisticalReportInChart(result, chartType){
 			datasets: [{
 				label: 'Result',
 				data: data,
-				backgroundColor: 'white',
+				backgroundColor: 'red',
 				borderColor: 'red',
 				borderWidth: 1
 			}]
