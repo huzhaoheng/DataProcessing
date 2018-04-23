@@ -63,6 +63,7 @@ def applyStatisticalFunction(data, function, values, name):
         return {name : min(data)}
     elif function == 'AVG':
         return {name : np.average(data)}
+        # return {name : np.nanmean(data)}
         # return sum(data) / len(data)
     elif function == 'SUM':
         return {name : sum(data)}
