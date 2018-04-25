@@ -188,7 +188,7 @@ $("#chart .close").on('click', function () {
 	$("#chart-close").click();
 })
 
-function selectReportNameBtnHandler(ele){
+function selectViewReportNameBtnHandler(ele){
 	var names = Object.keys(reports_info);
 	var code = "";
 	names.forEach(name => {

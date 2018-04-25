@@ -407,6 +407,7 @@ def getStatisticalReportResult():
     print (ret)
     return jsonify(elements = ret)
 
+
 @app.route('/getValue')
 def getValue():
     query = json.loads(request.args.get('arg'))['query']

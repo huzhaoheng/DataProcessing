@@ -334,3 +334,12 @@ function getStatisticalReportListQuery(){
 				'RETURN r.name, r.data_selection_query, r.functions, r.names, r.inputs;';
 	return query;
 }
+
+function deleteStatisticalReportQuery(report_name){
+	var query = "MATCH (r:statisticalReport {system_user_username : '" + window.username + "', " + 
+				"system_user_hashkey : '" + window.hashkey + "', " + 
+				"name : '" + report_name + "'}) " + 
+				'DETACH DELETE r;';
+
+	return query;
+}
