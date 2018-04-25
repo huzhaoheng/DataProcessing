@@ -9,6 +9,7 @@ var edge_source_type = null;
 var edge_source_name = null;
 
 var resource_and_object = null;
+var constrains = {};
 
 var init_code = "<tr id='data-flow-filter-table-addr1'>" + 
 					"<td style='text-align: center; vertical-align: middle;'>1</td>" + 
@@ -62,20 +63,6 @@ $( "#data-flow").on('shown.bs.modal', function(){
 		}
 	)
 })
-
-$("#data-flow-submit").on('click', function () {
-	$("#network-popUp").css('z-index', 0);
-	$("#data-flow-close").click();
-})
-
-$("#data-flow-close").on('click', function () {
-	$("#network-popUp").css('z-index', 0);
-})
-
-$("#data-flow .close").on('click', function () {
-	$("#network-popUp").css('z-index', 0);
-})
-
 
 // randomly create some nodes and edges
 /*var data = {
@@ -144,10 +131,11 @@ function drawDataFlow() {
 				},
 				editEdge: {
 					editWithoutDrag : function (data, callback){
+						document.getElementById('data-flow-filter-submit').onclick = applyDataFlowFilter.bind(this, data, callback);
+						document.getElementById('data-flow-filter-close').onclick = cancerDataFlowFilter.bind(this, callback);
 						edge_source_type = data.from.options.label.split(":")[0];
 						edge_source_name = data.from.options.label.split(":")[1];
 						$("#data-flow-filter-trigger-btn").click();
-
 					}
 				}
 			}
@@ -186,8 +174,41 @@ function saveData(data,callback) {
 	callback(data);
 }
 
+function addFilter(data, callback) {
+
+	clearPopUp();
+	callback(data);
+}
+
 function init() {
 	drawDataFlow();
+}
+
+function dataFlowTypeLiClickHandler(ele){
+	var selected = $(ele).find('a')[0].innerText;
+	$(ele).parent().prev().text(selected);
+
+	$("#data-flow-name").parent().find('.data-flow-name-btn').text("Name");
+
+	if (selected == 'Repository'){
+		var code = "";
+		repository_list.forEach(repository => {
+			code += "<li onclick='dataFlowNameLiClickHandler(this);'><a href='#'>" + repository + "</a></li>"
+		})
+		$("#data-flow-name").html(code);
+	}
+	else{
+		var code = "";
+		dataset_list.forEach(dataset => {
+			code += "<li onclick='dataFlowNameLiClickHandler(this);'><a href='#'>" + dataset + "</a></li>"
+		})
+		$("#data-flow-name").html(code);
+	}
+}
+
+function dataFlowNameLiClickHandler(ele){
+	var selected = $(ele).find('a')[0].innerText;
+	$(ele).parent().prev().text(selected);
 }
 
 function dataFlowFilterResourceBtnHandler(ele){
@@ -229,8 +250,6 @@ function dataFlowObjectLiClickHandler(ele){
 	$("#data-flow-filter-table").find('tbody').first().html(init_code);
 }
 
-
-
 function dataFlowFilterPropertyBtnHandler(ele){
 	var resource = $("#data-flow-filter").find(".data-flow-filter-resource-btn").first().text();
 	var object = $("#data-flow-filter").find(".data-flow-filter-object-btn").first().text();
@@ -245,33 +264,6 @@ function dataFlowFilterPropertyBtnHandler(ele){
 		code += "<li onclick='dataFlowFilterPropertyLiClickHandler(this);'><a href='#'>" + property + "</a></li>";
 	}
 	$(ele).parent().find('.data-flow-filter-property').first().html(code);
-}
-
-function dataFlowTypeLiClickHandler(ele){
-	var selected = $(ele).find('a')[0].innerText;
-	$(ele).parent().prev().text(selected);
-
-	$("#data-flow-name").parent().find('.data-flow-name-btn').text("Name");
-
-	if (selected == 'Repository'){
-		var code = "";
-		repository_list.forEach(repository => {
-			code += "<li onclick='dataFlowNameLiClickHandler(this);'><a href='#'>" + repository + "</a></li>"
-		})
-		$("#data-flow-name").html(code);
-	}
-	else{
-		var code = "";
-		dataset_list.forEach(dataset => {
-			code += "<li onclick='dataFlowNameLiClickHandler(this);'><a href='#'>" + dataset + "</a></li>"
-		})
-		$("#data-flow-name").html(code);
-	}
-}
-
-function dataFlowNameLiClickHandler(ele){
-	var selected = $(ele).find('a')[0].innerText;
-	$(ele).parent().prev().text(selected);
 }
 
 function dataFlowFilterPropertyLiClickHandler(ele){
@@ -295,7 +287,7 @@ function dataFlowFilterPropertyLiClickHandler(ele){
 		operators = ['=', '!='];
 	}
 	else if (property_type.startsWith('LISTOF')){
-		operators = [];
+		operators = ['CONTAINS'];
 	}
 	else{
 		operators = ['=', '!=', '<', '>', '<=', '>='];
@@ -377,4 +369,50 @@ $("#data-flow-filter-delete-row").click(function(){
 		if(curr_num > 1){
 			$("#data-flow-filter-table-addr"+ curr_num).remove();
 		}
-	});
+});
+
+$("#data-flow-submit").on('click', function () {
+	dataFlowHandler();
+	$("#network-popUp").css('z-index', 0);
+	$("#data-flow-close").click();
+})
+
+$("#data-flow-close").on('click', function () {
+	$("#network-popUp").css('z-index', 0);
+})
+
+$("#data-flow .close").on('click', function () {
+	$("#network-popUp").css('z-index', 0);
+})
+
+function applyDataFlowFilter(data, callback) {
+	var source_type = edge_source_type;
+	var source_name = edge_source_name;
+	var resource = $("#data-flow-filter").find(".data-flow-filter-resource-btn").first().text();;
+	var object = $("#data-flow-filter").find(".data-flow-filter-object-btn").first().text();
+	
+	$("#data-flow-filter-table").find('tbody').find('tr').each(function (i, el) {
+		var tds = $(this).find('td');
+		var num = tds.eq(0).text();
+		var property = tds.eq(1).find('.data-flow-filter-property-btn').first().text();
+		var boolean = tds.eq(2).find('.data-flow-filter-boolean-btn').first().text();
+		var operator = tds.eq(3).find('.data-flow-filter-operator-btn').first().text();
+		var value = null;
+		if (tds.eq(4).find('.data-flow-filter-value').first().is( "ul" )){
+			console.log('boolean');
+			value = tds.eq(4).find('.data-flow-filter-value-btn').first().text();
+		}
+		else{
+			console.log('not boolean');
+			value = tds.eq(4).find('.data-flow-filter-value').first().val();
+		}
+		var property_type = resource_and_object[resource][object][property];
+		//constrains[]
+	})
+	$("#data-flow-filter-close").click();
+}
+
+function cancerDataFlowFilter(callback) {
+	clearPopUp();
+	callback(null);
+}
