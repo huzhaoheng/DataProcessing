@@ -120,4 +120,36 @@ def getStatisticalReportResult():
     print ("ret:")
     print (ret)
 
-getStatisticalReportResult()
+# getStatisticalReportResult()
+
+def parameterParser(structure):
+    ret = {}
+    if type(structure) is dict:
+        if structure["selected"]:
+            curr_name = structure["name"]
+            if structure["inputs"]:
+                for each in structure["inputs"]:
+                    name = each["name"]
+                    value = each["value"]
+                    inputType = each["inputType"]
+                    if inputType == "Int":
+                        ret[curr_name + "_" + name] = int(value)
+                    elif inputType == "Float":
+                        ret[curr_name + "_" + name] = float(value)
+                    else:
+                        ret[curr_name + "_" + name] = value
+            if structure["children"]:
+                children_ret = parameterParser(structure["children"])
+                for k, v in children_ret.items():
+                    ret[curr_name + "_" + k]  = v
+        return ret
+    
+    else:
+        for each in structure:
+            for k, v in parameterParser(each).items():
+                ret[k] = v
+        return ret
+
+structure = json.load(open('sample_structure.json'))
+ret = parameterParser(structure)
+print (ret)

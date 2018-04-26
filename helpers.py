@@ -23,10 +23,10 @@ def buildEdges(relationRecord):
 
     return {"data": data}
 
-def storeData(graph, data, username, hashkey, structure, repository):
+def storeData(graph, data, username, hashkey, structure, repository, parameter_id):
     gg = GraphGenerator(username, hashkey, data, structure)
     nodes, edges = gg.generateGraph()
-    loader = DataLoader(graph, nodes, edges, username, hashkey, repository)
+    loader = DataLoader(graph, nodes, edges, username, hashkey, repository, parameter_id)
     loader.storeData()
     return {"msg" : "Done"}
 
@@ -110,6 +110,6 @@ def parameterParser(structure):
                 ret[k] = v
         return ret
 
-def generateRepositoryID(repository, username, parameters):
-    s = repository + username + json.dumps(parameters)
+def generateParameterID(parameters):
+    s = json.dumps(parameters)
     return hashlib.md5(s.encode()).hexdigest()

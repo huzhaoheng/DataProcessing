@@ -4,13 +4,14 @@ import json
 import time
 
 class DataLoader(object):
-	def __init__(self, graph, nodes, edges, username, hashkey, repository):
+	def __init__(self, graph, nodes, edges, username, hashkey, repository, parameter_id):
 		self.graph = graph
 		self.nodes = nodes
 		self.edges = edges
 		self.username = username
 		self.hashkey = hashkey
 		self.repository = repository
+		self.parameter_id = parameter_id
 
 
 	def createLabel(self):
@@ -32,6 +33,8 @@ class DataLoader(object):
 			tx.append(query, instance = instance)
 
 		query = "WITH {nodes} as nodes UNWIND nodes.data as i MATCH (a:Data {neo4j_id : i.internal_id, system_user_username : '" + self.username + "'}), (b:Repository {name : '" + self.repository + "', system_user_username :'" + self.username + "'}) CREATE UNIQUE (a)-[:InRepository]->(b);"
+		tx.append(query, nodes = self.nodes)
+		query = "WITH {nodes} as nodes UNWIND nodes.data as i MATCH (a:Data {neo4j_id : i.internal_id, system_user_username : '" + self.username + "'}), (b:SubRepository {parent_repository_name : '" + self.repository + "', system_user_username : '" + self.username + "', parameter_id : '" + self.parameter_id + "'}) CREATE UNIQUE (a)-[:InSubRepository]->(b);"
 		tx.append(query, nodes = self.nodes)
 		tx.commit()
 

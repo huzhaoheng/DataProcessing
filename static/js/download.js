@@ -36,9 +36,9 @@ function downloadDataset(dataset) {
 	)
 }
 
-function downloadRepository(repository) {
+function downloadRepository(repository, parameter_id) {
 	//var queries = loadDatasetsQuery([dataset]);
-	var query = loadRepositoryQuery(repository)
+	var query = query = loadRepositoryQuery(repository, parameter_id);	
 	$.getJSON(
 		'/getDatasetData',
 		{arg: JSON.stringify({"query" : query})},

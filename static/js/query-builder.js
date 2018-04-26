@@ -7,10 +7,10 @@ function loadRepositoryListQuery(){
 }
 
 function getRepositoryParametersQuery(){
-	var query = "MATCH (r:Repository) WHERE " + 
+	var query = "MATCH (r:Repository)-[:hasSubRepository]->(s:SubRepository) WHERE " + 
 				"r.system_user_username = '" + window.username + "' AND " + 
 				"r.system_user_hashkey = '" + window.hashkey + "' " +
-				"RETURN r;";
+				"RETURN s;";
 	return query;
 }
 
@@ -28,13 +28,34 @@ function loadRepositoriesQuery(repositoryList) {
 	return queries;
 }
 
-function loadRepositoryQuery(repository){
+/*function loadRepositoryQuery(repository){
 	var query = "MATCH (d:Data)-[r:InRepository]->(x:Repository) WHERE " + 
 				"x.system_user_username = '" + window.username + "' AND " + 
 				"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
 				"x.name = '" + repository + "' " + 
 				"RETURN d;";
 	return query;
+}*/
+
+function loadRepositoryQuery(repository, parameter_id){
+	if (parameter_id != null){
+		var query = "MATCH (d:Data)-[r:InSubRepository]->(x:SubRepository) WHERE " + 
+				"x.system_user_username = '" + window.username + "' AND " + 
+				"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
+				"x.parent_repository_name = '" + repository + "' AND " + 
+				"x.parameter_id = '" + parameter_id + "' " + 
+				"RETURN d;";
+		return query;	
+	}
+	else{
+		var query = "MATCH (d:Data)-[r:InRepository]->(x:Repository) WHERE " + 
+				"x.system_user_username = '" + window.username + "' AND " + 
+				"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
+				"x.name = '" + repository + "' " + 
+				"RETURN d;";
+		return query;
+	}
+	
 }
 
 function loadDatasetListQuery(){
@@ -212,13 +233,32 @@ function deleteDatasetQuery(datasets) {
 	return query;
 }
 
-function deleteRepositoryQuery(repositories) {
+/*function deleteRepositoryQuery(repositories) {
 	var query = "MATCH (u:SystemUser)-[r:hasRepository]->(s:Repository) WHERE " + 
 				"u.username = '" + window.username + "' AND " + 
 				"u.hashkey = '" + window.hashkey + "' AND " + 
 				"s.name IN " + "['" + repositories.join("','") + "'] " + 
 				"DETACH DELETE s;";
 	return query;
+}*/
+
+function deleteRepositoryQuery(repository, parameter_id) {
+	if (parameter_id != null){
+		var query = "MATCH (x:SubRepository) WHERE " + 
+					"x.system_user_username = '" + window.username + "' AND " + 
+					"x.parameter_id = '" + parameter_id + "' AND " + 
+					"x.parent_repository_name = '" + repository + "' " + 
+					"DETACH DELETE x;";
+		return query;	
+	}
+	else{
+		var query = "MATCH (a:Repository)-[r:hasSubRepository]->(b:SubRepository) WHERE " + 
+					"a.system_user_username = '" + window.username + "' AND " + 
+					"a.name = '" + repository + "' " + 
+					"DETACH DELETE a, b, r;";
+		return query;
+	}
+	
 }
 
 function renameDatasetQuery(dataset, new_name){
@@ -231,11 +271,12 @@ function renameDatasetQuery(dataset, new_name){
 }
 
 function renameRepositoryQuery(repository, new_name){
-	var query = "MATCH (u:SystemUser)-[r:hasRepository]->(s:Repository) WHERE " + 
+	var query = "MATCH (u:SystemUser)-[r:hasRepository]->(s:Repository)-[:hasSubRepository]->(x:SubRepository) WHERE " + 
 				"u.username = '" + window.username + "' AND " + 
 				"u.hashkey = '" + window.hashkey + "' AND " + 
 				"s.name = '" + repository + "' " + 
-				"SET s.name = '" + new_name + "';"
+				"SET s.name = '" + new_name + "', " + 
+				"x.parent_repository_name = '" + new_name + "'";
 	return query;
 }
 

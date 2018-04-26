@@ -38,42 +38,7 @@ function displayInTable(result, type, container = '#table') {
 		});	
 	}
 
-	/*else{
-		var formatted_data = [];
-		for (var i = 0; i < result.length; i++) {
-			formatted_data.push(formatData(result[i]["data"]));
-		}
-		var temp = pivot(formatted_data);
-		var columns = [{checkbox: true, visible: true}];
-		temp[0].forEach(n => {
-			columns.push({field : n, title : n});
-		})
-
-		$(container).bootstrapTable('destroy').bootstrapTable({
-			columns: columns,
-			data: formatted_data,
-			sidePagination: "client",
-			pageNumber: 1,
-			pageSize: 10,
-			pageList: [20, 30, 40], 
-			clickToSelect: true,
-			showToggle:true,
-			cardView: true,
-			pagination: true,
-			search: true,
-			formatLoadingMessage: function () {  
-				return "Loading...";  
-			},
-			formatNoMatches: function () { 
-				return 'No such record';  
-			},  
-			onLoadError: function (data) {  
-				$('#reportTable').bootstrapTable('removeAll');  
-			},
-		});
-	}*/
-
-	else{
+	else if (type == 'repository'){
 		var formatted_data = [];
 		for (var i = 0; i < result.length; i++) {
 			formatted_data.push(formatData(result[i]["data"]));
@@ -142,7 +107,78 @@ function displayInTable(result, type, container = '#table') {
 		});
 	}
 
-	
+	else if (type == 'dataset'){
+		var formatted_data = [];
+		for (var i = 0; i < result.length; i++) {
+			formatted_data.push(formatData(result[i]["data"]));
+		}
+		var temp = pivot(formatted_data);
+		// var columns = [{checkbox: true, visible: true}];
+		var columns = [];
+		temp[0].forEach(n => {
+			columns.push({
+				field : n, 
+				title : n,
+				valign:"middle",
+				align:"center"
+			});
+		})
+
+		columns.push({
+			field: 'Last Update Time', 
+			title: 'Last Update Time',
+			valign:"middle",
+			align:"center",
+			formatter: updateTimeFormatter
+		})
+
+		columns.push({
+			field: 'Parameters', 
+			title: 'Parameters',
+			valign:"middle",
+			align:"center",
+			//formatter: parametersFormatter
+		})
+
+		columns.push({
+			field: 'Button', 
+			title: 'Operations', 
+			valign:"middle",
+			align:"center",
+			events: operateEvents,
+			formatter: operateFormatter
+		})
+
+		$(container).bootstrapTable('destroy').bootstrapTable({
+			columns: columns,
+			data: formatted_data,
+			sidePagination: "client",
+			pageNumber: 1,
+			pageSize: 10,
+			pageList: [20, 30, 40], 
+			clickToSelect: true,
+			showToggle:true,
+			//cardView: true,
+			pagination: true,
+			search: true,
+
+			//showColumns: true,
+
+			formatLoadingMessage: function () {  
+				return "Loading...";  
+			},
+			formatNoMatches: function () { 
+				return 'No such record';  
+			},  
+			onLoadError: function (data) {  
+				$('#reportTable').bootstrapTable('removeAll');  
+			},
+		});
+	}
+
+	else{
+		return;
+	}
 
 	return;
 }
@@ -164,7 +200,19 @@ window.operateEvents = {
 		if (window.source == 'RepositoryList'){
 			name = row['Repository Name'];
 			type = 'Repository';
-			var query = loadRepositoryQuery(name);
+			var parameter_id = null;
+			var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
+			if (btn_text == "Parameters"){
+				parameter_id = null;
+			}
+			else{
+				var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
+				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index).attr('id');
+				parameter_id = selected_li_id.split('-').slice(-1)[0];
+			}
+			
+
+			var query = loadRepositoryQuery(name, parameter_id);
 			$.getJSON(
 				'/getRepositoryData',
 				{arg: JSON.stringify({"query" : query})},
@@ -173,7 +221,6 @@ window.operateEvents = {
 					for (id in result){
 						data.push({'data' : result[id]}); 
 					}
-					console.log(data);
 					putDataInTable(data, type, name);
 					return;
 				}
@@ -208,7 +255,18 @@ window.operateEvents = {
 		if (window.source == 'RepositoryList'){
 			name = row['Repository Name'];
 			type = 'Repository';
-			var query = deleteRepositoryQuery([name]);
+			var parameter_id = null;
+			var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
+			if (btn_text == "Parameters"){
+				parameter_id = null;
+			}
+			else{
+				var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
+				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index).attr('id');
+				parameter_id = selected_li_id.split('-').slice(-1)[0];
+			}
+
+			var query = deleteRepositoryQuery(name, parameter_id);
 			$.getJSON(
 				'/writeOnlyQuery',
 				{arg: JSON.stringify({"query" : query})},
@@ -237,8 +295,7 @@ window.operateEvents = {
 	},
 	'click .rename': function(e, value, row, index) {
 		var name = null,
-			type = null,
-			data = [];
+			type = null;
 		var new_name = window.prompt("Enter a new name");
 		if (new_name == ""){
 			window.alert("Name cannot be empty");
@@ -248,6 +305,7 @@ window.operateEvents = {
 			name = row['Repository Name'];
 			type = 'Repository';
 			var query = renameRepositoryQuery(name, new_name);
+			console.log(query);
 			$.getJSON(
 				'/writeOnlyQuery',
 				{arg: JSON.stringify({"query" : query})},
@@ -278,12 +336,22 @@ window.operateEvents = {
 	},
 	'click .download': function(e, value, row, index) {
 		var name = null,
-			type = null,
-			data = [];
+			type = null;
 		if (window.source == 'RepositoryList'){
 			name = row['Repository Name'];
 			type = 'Repository';
-			downloadRepository(name)
+			var parameter_id = null;
+			var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
+			if (btn_text == "Parameters"){
+				parameter_id = null;
+			}
+			else{
+				var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
+				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index).attr('id');
+				parameter_id = selected_li_id.split('-').slice(-1)[0];
+			}
+
+			downloadRepository(name, parameter_id)
 		}
 		else if (window.source == 'DatasetList'){
 			name = row['Dataset Name'];
@@ -331,7 +399,9 @@ function putDataInTable(data, type, name) {
 	window.source = type;
 	window.name = name;
 
-	$("#" + stripped + "-li").hoverTips();
+	if (type == 'repository'){
+		$("#" + stripped + "-li").hoverTips();	
+	}
 	displayInTable(data, "data", "#" + stripped);
 }
 
@@ -340,10 +410,36 @@ function updateTimeFormatter(value, row, index) {
 }
 
 function parametersFormatter(value, row, index) {
-	ret= 	"<div class='btn-group' style='width : 100%'>" + 
-				"<button type='button' class='btn btn-block btn-default repository-parameters-btn' data-toggle='dropdown' onclick='reporsitoryParametersBtnHandler(this);'>Parameters</button>" + 
-				"<ul class='dropdown-menu repository-parameters' role='menu'>" + 
-				"</ul>" + 
-			"</div>";
+	var name = null,
+		type = null;
+	name = row['Repository Name'];
+	var ret = 	"<div class='btn-group' style='width : 100%'>" + 
+					"<button type='button' class='btn btn-block btn-default repository-parameters-btn' data-toggle='dropdown'" + 
+						'onclick="reporsitoryParametersBtnHandler(' + "'" + name + "'" + ');">Parameters</button>' + 
+					"<ul id='" + name + "-li' class='dropdown-menu repository-parameters' role='menu'>" + 
+					"</ul>" + 
+				"</div>";
 	return ret;
+}
+
+function reporsitoryParametersBtnHandler(repository_name) {
+	var subRepositories = window.parameters[repository_name];
+	var i = 0;
+	var code = "";
+	for (parameter_id in subRepositories){
+		code += "<li id='" + repository_name + "-" + parameter_id + "' onclick='parameterGroupLiClickHandler(this);'><a href='#'>Parameter Group " + i + "</a></li>";
+		//var para = subRepositories[parameter_id];
+		i ++;
+	}
+	$("#" + repository_name + "-li").html(code);
+	for (parameter_id in subRepositories){
+		$("#" + repository_name + "-" + parameter_id).hoverTips();
+	}
+	return;
+}
+
+function parameterGroupLiClickHandler(ele) {
+	var selected = $(ele).find('a')[0].innerText;
+	$(ele).parent().prev().text(selected);
+	return;
 }

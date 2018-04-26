@@ -14,21 +14,17 @@ function getRepositoryParameters(){
 $.fn.extend({
 	hoverTips : function (){
 		var self = $(this);
-		var repository = self.text();
-		console.log(repository);
-		var repository_parameters = window.parameters[repository];
-		console.log(repository_parameters);
+		var repository = self.attr('id').split('-').slice(0, -1).join('-');
+		var parameter_id = self.attr('id').split('-').slice(-1)[0];
+		var repository_parameters = window.parameters[repository][parameter_id];
 		var content = "";
 		for (key in repository_parameters){
 			var value = repository_parameters[key];
 			content += key + " : " + value + "<br/>";
 		}
 
-		var htmlDom = $("<div class='tooltips'>")
+		var htmlDom = $("<div class='tooltips' style='z-index = '9999'>")
 				.addClass("yellow")
-				/*.html("<p class='content'></p>"
-						+ "<p class='triangle-front'></p>"
-						+ "<p class='triangle-back'></p>");*/
 				.html("<p class='content'></p>"
 						+ "<p class='triangle-front'></p>"
 						+ "<p class='triangle-back'></p>");
