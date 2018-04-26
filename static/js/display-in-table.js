@@ -99,6 +99,14 @@ function displayInTable(result, type, container = '#table') {
 		})
 
 		columns.push({
+			field: 'Parameters', 
+			title: 'Parameters',
+			valign:"middle",
+			align:"center",
+			formatter: parametersFormatter
+		})
+
+		columns.push({
 			field: 'Button', 
 			title: 'Operations', 
 			valign:"middle",
@@ -329,4 +337,13 @@ function putDataInTable(data, type, name) {
 
 function updateTimeFormatter(value, row, index) {
 	return "<p>04/26/2018</p>";
+}
+
+function parametersFormatter(value, row, index) {
+	ret= 	"<div class='btn-group' style='width : 100%'>" + 
+				"<button type='button' class='btn btn-block btn-default repository-parameters-btn' data-toggle='dropdown' onclick='reporsitoryParametersBtnHandler(this);'>Parameters</button>" + 
+				"<ul class='dropdown-menu repository-parameters' role='menu'>" + 
+				"</ul>" + 
+			"</div>";
+	return ret;
 }
