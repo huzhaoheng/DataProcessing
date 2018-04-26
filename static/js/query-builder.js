@@ -28,6 +28,15 @@ function loadRepositoriesQuery(repositoryList) {
 	return queries;
 }
 
+function loadRepositoryQuery(repository){
+	var query = "MATCH (d:Data)-[r:InRepository]->(x:Repository) WHERE " + 
+				"x.system_user_username = '" + window.username + "' AND " + 
+				"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
+				"x.name = '" + repository + "' " + 
+				"RETURN d;";
+	return query;
+}
+
 function loadDatasetListQuery(){
 	var query = "MATCH (s:Dataset) WHERE " + 
 				"s.system_user_username = '" + window.username + "' AND " + 
@@ -48,6 +57,15 @@ function loadDatasetsQuery(datasetList) {
 	})
 
 	return queries;
+}
+
+function loadDatasetQuery(dataset){
+	var query = "MATCH (d:Data)-[r:InDataset]->(x:Dataset) WHERE " + 
+				"x.system_user_username = '" + window.username + "' AND " + 
+				"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
+				"x.name = '" + dataset + "' " + 
+				"RETURN d;";
+	return query;
 }
 
 function getGraphStructureQuery(source, name){
@@ -194,11 +212,29 @@ function deleteDatasetQuery(datasets) {
 	return query;
 }
 
+function deleteRepositoryQuery(repositories) {
+	var query = "MATCH (u:SystemUser)-[r:hasRepository]->(s:Repository) WHERE " + 
+				"u.username = '" + window.username + "' AND " + 
+				"u.hashkey = '" + window.hashkey + "' AND " + 
+				"s.name IN " + "['" + repositories.join("','") + "'] " + 
+				"DETACH DELETE s;";
+	return query;
+}
+
 function renameDatasetQuery(dataset, new_name){
 	var query = "MATCH (u:SystemUser)-[r:hasDataset]->(s:Dataset) WHERE " + 
 				"u.username = '" + window.username + "' AND " + 
 				"u.hashkey = '" + window.hashkey + "' AND " + 
 				"s.name = '" + dataset + "' " + 
+				"SET s.name = '" + new_name + "';"
+	return query;
+}
+
+function renameRepositoryQuery(repository, new_name){
+	var query = "MATCH (u:SystemUser)-[r:hasRepository]->(s:Repository) WHERE " + 
+				"u.username = '" + window.username + "' AND " + 
+				"u.hashkey = '" + window.hashkey + "' AND " + 
+				"s.name = '" + repository + "' " + 
 				"SET s.name = '" + new_name + "';"
 	return query;
 }

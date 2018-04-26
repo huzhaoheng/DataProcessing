@@ -97,6 +97,28 @@ def getRepositoriesData():
 
     return jsonify(elements = ret)
 
+@app.route('/getRepositoryData')
+def getRepositoryData():
+    ret = {}
+    query = json.loads(request.args.get('arg'))['query']
+    result = graph.cypher.execute(query)
+    for each in result:
+        data = {key:each.d.properties[key] for key in each.d.properties if key not in hidden_properties}
+        ret[data['neo4j_id']] = data
+
+    return jsonify(elements = ret)
+
+@app.route('/getDatasetData')
+def getDatasetData():
+    ret = {}
+    query = json.loads(request.args.get('arg'))['query']
+    result = graph.cypher.execute(query)
+    for each in result:
+        data = {key:each.d.properties[key] for key in each.d.properties if key not in hidden_properties}
+        ret[data['neo4j_id']] = data
+
+    return jsonify(elements = ret)
+
 @app.route('/getDatasetList')
 def getDatasetList():
     query = json.loads(request.args.get('arg'))['query']

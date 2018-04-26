@@ -1,47 +1,23 @@
-$("#download-dataset-btn").click(function () {
-	var datasets = [];
-
-	if (window.source == 'DatasetList') {
-		var selected_datasets = $("#datasets").bootstrapTable('getSelections');
-		$.map(selected_datasets, function(row) {
-			datasets.push(row['Dataset Name']);
-		});
-	}
-
-	else if (window.source == 'Dataset'){
-		window.name = $("ul#nav-tabs li.active").first().find('a').first().text();
-		datasets = [window.name]; 
-	}
-	
-	if (datasets.length == 0){
-			window.alert("Please select at least one dataset");
-		return;
-	}
-
-	datasets.forEach(dataset => {
-		downloadDataset(dataset);
-	})
-
-	return;
-})
-
 function downloadDataset(dataset) {
-	var queries = loadDatasetsQuery([dataset]);
+	//var queries = loadDatasetsQuery([dataset]);
+	var query = loadDatasetQuery(dataset)
 	$.getJSON(
-		'/getDatasetsData',
-		{arg: JSON.stringify({"queries" : queries})},
+		'/getDatasetData',
+		{arg: JSON.stringify({"query" : query})},
 		function (response){
 			var result = response.elements;
-			var dataList = result[dataset];
+			var dataList = Object.values(result);
+			/*var dataList = result[dataset];*/
 			var csv_data = [];
 			for (var i = 0; i < dataList.length; i++) {
-				/*csv_data.push(formatData(data[i]["data"]));*/
 				csv_data.push(formatData(dataList[i]));
 			}
 			var data, link;
 			var csv = convertArrayOfObjectsToCSV({
 				data: csv_data
 			});
+			console.log(csv);
+			/*return;*/
 			if (csv == null) return;
 			var filename = dataset + '.csv';
 
@@ -60,27 +36,46 @@ function downloadDataset(dataset) {
 	)
 }
 
-/*function formatData(data) {
-	var ret = {}
-	var twitter_date_properties = ['created_at', 'author_created_at'];
-	var reddit_date_properties = [, 'created', 'created_utc', 'comment_created'];
-	var youtube_date_properties = ['publishedAt', 'timeLinked', 'updateAt', 'publishAt', 'recordingDate', 'actualStartTime', 'actualEndTime', 'scheduledStartTime', 'scheduledEndTime'];
-	var date_properties = Array.prototype.concat.apply([], [twitter_date_properties, reddit_date_properties, youtube_date_properties]);
-	for (key in data){
-		var value = data[key];
-		//console.log(key, value);
-		if (date_properties.includes(key)) {
-			ret[key] = (new Date(Number(value) * 1000)).toString();
+function downloadRepository(repository) {
+	//var queries = loadDatasetsQuery([dataset]);
+	var query = loadRepositoryQuery(repository)
+	$.getJSON(
+		'/getDatasetData',
+		{arg: JSON.stringify({"query" : query})},
+		function (response){
+			var result = response.elements;
+			var dataList = Object.values(result);
+			/*var dataList = result[dataset];*/
+			var csv_data = [];
+			for (var i = 0; i < dataList.length; i++) {
+				csv_data.push(formatData(dataList[i]));
+			}
+			var data, link;
+			var csv = convertArrayOfObjectsToCSV({
+				data: csv_data
+			});
+			console.log(csv);
+			/*return;*/
+			if (csv == null) return;
+			var filename = repository + '.csv';
+
+			if (!csv.match(/^data:text\/csv/i)) {
+				csv = 'data:text/csv;charset=utf-8,' + csv;
+			}
+			data = encodeURI(csv);
+
+			link = document.createElement('a');
+			link.setAttribute('href', data);
+			link.setAttribute('download', filename);
+			link.click();
+
+			return;
 		}
-		else{
-			ret[key] = value;
-		}
-	}
-	return ret;
-}*/
+	)
+}
 
 function formatData(data) {
-	var special_properties = ['internal_id', 'system_user_username', 'system_user_hashkey', 'alias', 'neo4j_id', 'resource', 'object', 'Dataset Name'];
+	var special_properties = ['internal_id', 'system_user_username', 'system_user_hashkey', 'alias', 'neo4j_id', 'resource', 'object', 'Dataset Name', 'Repository Name'];
 	var ret = {}
 	for (key in data){
 		var value = data[key];
