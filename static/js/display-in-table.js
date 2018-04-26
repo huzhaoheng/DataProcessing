@@ -20,7 +20,7 @@ function displayInTable(result, type, container = '#table') {
 			pageList: [1, 10, 20, 30, 40], 
 			clickToSelect: true,
 			showToggle:true,
-			cardView: true,
+			//cardView: true,
 			pagination: true,
 			search: true,
 			striped: true,
@@ -74,22 +74,35 @@ function displayInTable(result, type, container = '#table') {
 	}*/
 
 	else{
-		console.log(result);
 		var formatted_data = [];
 		for (var i = 0; i < result.length; i++) {
 			formatted_data.push(formatData(result[i]["data"]));
 		}
 		var temp = pivot(formatted_data);
-		console.log(temp);
 		// var columns = [{checkbox: true, visible: true}];
 		var columns = [];
 		temp[0].forEach(n => {
-			columns.push({field : n, title : n});
+			columns.push({
+				field : n, 
+				title : n,
+				valign:"middle",
+				align:"center"
+			});
+		})
+
+		columns.push({
+			field: 'Last Update Time', 
+			title: 'Last Update Time',
+			valign:"middle",
+			align:"center",
+			formatter: updateTimeFormatter
 		})
 
 		columns.push({
 			field: 'Button', 
 			title: 'Operations', 
+			valign:"middle",
+			align:"center",
 			events: operateEvents,
 			formatter: operateFormatter
 		})
@@ -103,9 +116,12 @@ function displayInTable(result, type, container = '#table') {
 			pageList: [20, 30, 40], 
 			clickToSelect: true,
 			showToggle:true,
-			cardView: true,
+			//cardView: true,
 			pagination: true,
 			search: true,
+
+			//showColumns: true,
+
 			formatLoadingMessage: function () {  
 				return "Loading...";  
 			},
@@ -124,9 +140,6 @@ function displayInTable(result, type, container = '#table') {
 }
 
 function operateFormatter(value, row, index){
-	console.log(value);
-	console.log(row);
-	console.log(index);
 	return [
 		"<button type='button', class='btn btn-default view'>View</button> &nbsp;&nbsp;",
 		"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
@@ -312,4 +325,8 @@ function putDataInTable(data, type, name) {
 
 	$("#" + stripped + "-li").hoverTips();
 	displayInTable(data, "data", "#" + stripped);
+}
+
+function updateTimeFormatter(value, row, index) {
+	return "<p>04/26/2018</p>";
 }
