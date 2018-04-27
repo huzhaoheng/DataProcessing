@@ -73,17 +73,17 @@ class DataLoader(object):
 				sources = [x for x in targets]
 
 		tx = self.graph.cypher.begin()
-		query = "WITH {nodes} as nodes UNWIND nodes.data as i MATCH (a:Data {neo4j_id : i.internal_id, system_user_username : '" + self.username + "'}), (b:Repository) WHERE ID(b) IN [" + ','.join(ret) + "] CREATE UNIQUE (a)-[:InRepository]->(b);"
+		query = "WITH {nodes} as nodes UNWIND nodes.data as i MATCH (a:Data {neo4j_id : i.internal_id, system_user_username : '" + self.username + "'}), (b:Repository) WHERE ID(b) IN [" + ','.join(str(x) for x in ret) + "] CREATE UNIQUE (a)-[:InRepository]->(b);"
 		tx.append(query, nodes = self.nodes)
 		tx.commit()
 		
 		tx = self.graph.cypher.begin()
-		query = "WITH {nodes} as nodes UNWIND nodes.data as i MATCH (a:Data {neo4j_id : i.internal_id, system_user_username : '" + self.username + "'}), (b:SubRepository) WHERE ID(b) IN [" + ','.join(ret) + "] CREATE UNIQUE (a)-[:InSubRepository]->(b);"
+		query = "WITH {nodes} as nodes UNWIND nodes.data as i MATCH (a:Data {neo4j_id : i.internal_id, system_user_username : '" + self.username + "'}), (b:SubRepository) WHERE ID(b) IN [" + ','.join(str(x) for x in ret) + "] CREATE UNIQUE (a)-[:InSubRepository]->(b);"
 		tx.append(query, nodes = self.nodes)
 		tx.commit()
 
 		tx = self.graph.cypher.begin()
-		query = "WITH {nodes} as nodes UNWIND nodes.data as i MATCH (a:Data {neo4j_id : i.internal_id, system_user_username : '" + self.username + "'}), (b:Dataset) WHERE ID(b) IN [" + ','.join(ret) + "] CREATE UNIQUE (a)-[:InDataset]->(b);"
+		query = "WITH {nodes} as nodes UNWIND nodes.data as i MATCH (a:Data {neo4j_id : i.internal_id, system_user_username : '" + self.username + "'}), (b:Dataset) WHERE ID(b) IN [" + ','.join(str(x) for x in ret) + "] CREATE UNIQUE (a)-[:InDataset]->(b);"
 		tx.append(query, nodes = self.nodes)
 		tx.commit()
 
