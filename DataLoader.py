@@ -2,6 +2,7 @@ import os
 from py2neo import Graph, authenticate
 import json
 import time
+import pandas
 
 class DataLoader(object):
 	def __init__(self, graph, nodes, edges, username, hashkey, repository, parameter_id):
