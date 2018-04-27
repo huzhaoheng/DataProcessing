@@ -44,6 +44,9 @@ def verification():
                 else:
                     query += ", " + k + ": '" + str(v) + "'"
         query += "})"
+        print ('------------------------------------------')
+        print (query)
+        print ('------------------------------------------')
         graph.cypher.execute(query)
     else:
         query = "MATCH (a:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'}) RETURN a;"
