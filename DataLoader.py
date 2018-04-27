@@ -32,8 +32,14 @@ class DataLoader(object):
 			query = query[:-1]
 			tx.append(query, instance = instance)
 
+		tx.commit()
+
+		tx = self.graph.cypher.begin()
 		query = "WITH {nodes} as nodes UNWIND nodes.data as i MATCH (a:Data {neo4j_id : i.internal_id, system_user_username : '" + self.username + "'}), (b:Repository {name : '" + self.repository + "', system_user_username :'" + self.username + "'}) CREATE UNIQUE (a)-[:InRepository]->(b);"
 		tx.append(query, nodes = self.nodes)
+		tx.commit()
+		
+		tx = self.graph.cypher.begin()
 		query = "WITH {nodes} as nodes UNWIND nodes.data as i MATCH (a:Data {neo4j_id : i.internal_id, system_user_username : '" + self.username + "'}), (b:SubRepository {parent_repository_name : '" + self.repository + "', system_user_username : '" + self.username + "', parameter_id : '" + self.parameter_id + "'}) CREATE UNIQUE (a)-[:InSubRepository]->(b);"
 		tx.append(query, nodes = self.nodes)
 		tx.commit()
