@@ -109,6 +109,7 @@ function loadRepositoryList() {
 			document.getElementById("nav-tabs").appendChild(li);
 			document.getElementById("tab-content").appendChild(div);
 
+			console.log(preparedData);
 			displayInTable(preparedData, "repository", "#repositories");
 
 			window.source = "RepositoryList";
