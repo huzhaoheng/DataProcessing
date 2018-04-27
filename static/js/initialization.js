@@ -13,6 +13,7 @@ function setParameters(username, hashkey) {
 	window.name = null;
 }
 
+
 function loadDatasetList() {
 	var query = loadDatasetListQuery();
 	$.getJSON(
@@ -76,6 +77,7 @@ function loadRepositoryList() {
 			for (var i = 0; i < repositoryList.length; i ++) {
 				var repository = repositoryList[i];
 				preparedData.push({'data' : {'Repository Name' : repository}});
+
 			}
 
 			$("#nav-tabs").empty();

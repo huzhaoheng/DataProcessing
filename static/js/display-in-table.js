@@ -187,8 +187,9 @@ function operateFormatter(value, row, index){
 	return [
 		"<button type='button', class='btn btn-default view'>View</button> &nbsp;&nbsp;",
 		"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
-		"<button type='button', class='btn btn-default rename'>Rename</button> &nbsp;&nbsp;",
-		"<button type='button', class='btn btn-default download'>Download</button> &nbsp;&nbsp;"
+		//"<button type='button', class='btn btn-default rename'>Rename</button> &nbsp;&nbsp;",
+		"<button type='button', class='btn btn-default download'>Download</button> &nbsp;&nbsp;",
+		"<button type='button', class='btn btn-default save-as-dataset'>Save As Dataset</button> &nbsp;&nbsp;",
 	].join("");
 }
 
@@ -238,7 +239,6 @@ window.operateEvents = {
 					for (id in result){
 						data.push({'data' : result[id]}); 
 					}
-					console.log(data);
 					putDataInTable(data, type, name);
 					return;
 				}
@@ -280,6 +280,7 @@ window.operateEvents = {
 			name = row['Dataset Name'];
 			type = 'Dataset';
 			var query = deleteDatasetQuery([name]);
+			console.log(query);
 			$.getJSON(
 				'/writeOnlyQuery',
 				{arg: JSON.stringify({"query" : query})},
@@ -293,7 +294,7 @@ window.operateEvents = {
 			return;
 		}
 	},
-	'click .rename': function(e, value, row, index) {
+	/*'click .rename': function(e, value, row, index) {
 		var name = null,
 			type = null;
 		var new_name = window.prompt("Enter a new name");
@@ -333,7 +334,7 @@ window.operateEvents = {
 		else{
 			return;
 		}
-	},
+	},*/
 	'click .download': function(e, value, row, index) {
 		var name = null,
 			type = null;
@@ -361,7 +362,36 @@ window.operateEvents = {
 		else{
 			return;
 		}
+	},
+	'click .save-as-dataset': function(e, value, row, index) {
+		var name = null,
+			type = null;
+		if (window.source == 'RepositoryList'){
+			name = row['Repository Name'];
+			type = 'Repository';
+			var parameter_id = null;
+			var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
+			if (btn_text == "Parameters"){
+				parameter_id = null;
+			}
+			else{
+				var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
+				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index).attr('id');
+				parameter_id = selected_li_id.split('-').slice(-1)[0];
+			}
+
+			saveRepositoryToDataset(name, parameter_id);
+		}
+		else if (window.source == 'DatasetList'){
+			name = row['Dataset Name'];
+			type = 'Dataset';
+			saveDatasetToDataset(name);
+		}
+		else{
+			return;
+		}
 	}
+
 }
 
 function putDataInTable(data, type, name) {
@@ -399,9 +429,9 @@ function putDataInTable(data, type, name) {
 	window.source = type;
 	window.name = name;
 
-	if (type == 'repository'){
-		$("#" + stripped + "-li").hoverTips();	
-	}
+	/*if (type == 'repository'){
+		$("#" + stripped + "-li").hoverTips(name, );	
+	}*/
 	displayInTable(data, "data", "#" + stripped);
 }
 
@@ -413,27 +443,29 @@ function parametersFormatter(value, row, index) {
 	var name = null,
 		type = null;
 	name = row['Repository Name'];
+	var stripped = name.replace(/[^0-9a-zA-Z]/gi, '');
 	var ret = 	"<div class='btn-group' style='width : 100%'>" + 
 					"<button type='button' class='btn btn-block btn-default repository-parameters-btn' data-toggle='dropdown'" + 
 						'onclick="reporsitoryParametersBtnHandler(' + "'" + name + "'" + ');">Parameters</button>' + 
-					"<ul id='" + name + "-li' class='dropdown-menu repository-parameters' role='menu'>" + 
+					"<ul id='" + stripped + "-ul' class='dropdown-menu repository-parameters' role='menu'>" + 
 					"</ul>" + 
 				"</div>";
 	return ret;
 }
 
 function reporsitoryParametersBtnHandler(repository_name) {
+	var stripped = repository_name.replace(/[^0-9a-zA-Z]/gi, '');
 	var subRepositories = window.parameters[repository_name];
 	var i = 0;
 	var code = "";
 	for (parameter_id in subRepositories){
-		code += "<li id='" + repository_name + "-" + parameter_id + "' onclick='parameterGroupLiClickHandler(this);'><a href='#'>Parameter Group " + i + "</a></li>";
+		code += "<li id='" + stripped + "-" + parameter_id + "' onclick='parameterGroupLiClickHandler(this);'><a href='#'>Parameter Group " + i + "</a></li>";
 		//var para = subRepositories[parameter_id];
 		i ++;
 	}
-	$("#" + repository_name + "-li").html(code);
+	$("#" + stripped + "-ul").html(code);
 	for (parameter_id in subRepositories){
-		$("#" + repository_name + "-" + parameter_id).hoverTips();
+		$("#" + stripped + "-" + parameter_id).hoverTips(repository_name, parameter_id);
 	}
 	return;
 }
@@ -442,4 +474,43 @@ function parameterGroupLiClickHandler(ele) {
 	var selected = $(ele).find('a')[0].innerText;
 	$(ele).parent().prev().text(selected);
 	return;
+}
+
+function saveRepositoryToDataset(name, parameter_id) {
+	var new_name = window.prompt("Enter a name");
+	if (new_name == ""){
+		window.alert("Name cannot be empty");
+		return;
+	}
+	var query = saveRepositoryToDatasetQuery(name, parameter_id, new_name);
+	console.log(query);
+	$.getJSON(
+		'/writeOnlyQuery',
+		{arg: JSON.stringify({"query" : query})},
+		function (response){
+			loadDatasetList();
+			window.alert('Done');
+			return;
+		}
+	);
+
+}
+
+function saveDatasetToDataset(name, new_name) {
+	// body...
+	var new_name = window.prompt("Enter a name");
+	if (new_name == ""){
+		window.alert("Name cannot be empty");
+		return;
+	}
+	var query = saveDatasetToDatasetQuery(name, new_name);
+	$.getJSON(
+		'/writeOnlyQuery',
+		{arg: JSON.stringify({"query" : query})},
+		function (response){
+			loadDatasetList();
+			window.alert('Done');
+			return;
+		}
+	);
 }

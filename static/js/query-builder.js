@@ -420,3 +420,57 @@ function deleteStatisticalReportQuery(report_name){
 
 	return query;
 }
+
+function saveRepositoryToDatasetQuery(name, parameter_id, new_name){
+	if (parameter_id != null){
+		var query = "MATCH (x:SubRepository) WHERE " + 
+					"x.system_user_username = '" + window.username +"' AND " + 
+					"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
+					"x.parent_repository_name = '" + name + "' AND " + 
+					"x.parameter_id = '"+  parameter_id + "' " + 
+					"WITH x CREATE (x)-[:DataFlow]->(ds:Dataset {name: '" + new_name + "', " + 
+					"system_user_username : '" + window.username + "', " + 
+					"system_user_hashkey : '" + window.hashkey + "'}) " + 
+					"WITH x, ds " + 
+					"MATCH (u:SystemUser {username : '" + window.username + "'}) " + 
+					"CREATE (u)-[:hasDataset]->(ds) " + 
+					"WITH x, ds " + 
+					"MATCH (d:Data)-[:InSubRepository]->(x) CREATE (d)-[:InDataset]->(ds);";
+
+		return query;
+	}
+	else{
+		var query = "MATCH (x:Repository) WHERE " + 
+					"x.system_user_username = '" + window.username +"' AND " + 
+					"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
+					"x.name = '" + name + "' " + 
+					"WITH x CREATE (x)-[:DataFlow]->(ds:Dataset {name: '" + new_name + "', " + 
+					"system_user_username : '" + window.username + "', " + 
+					"system_user_hashkey : '" + window.hashkey + "'}) " + 
+					"WITH x, ds " + 
+					"MATCH (u:SystemUser {username : '" + window.username + "'}) " + 
+					"CREATE (u)-[:hasDataset]->(ds) " + 
+					"WITH x, ds " + 
+					"MATCH (d:Data)-[:InRepository]->(x) CREATE (d)-[:InDataset]->(ds);";
+
+		return query;
+	}
+	
+}
+
+function saveDatasetToDatasetQuery(name, new_name){
+
+	var query = "MATCH (x:Dataset) WHERE " + 
+				"x.system_user_username = '" + window.username +"' AND " + 
+				"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
+				"x.name = '" + name + "' " + 
+				"WITH x CREATE (x)-[:DataFlow]->(ds:Dataset {name: '" + new_name + "', " + 
+				"system_user_username : '" + window.username + "', " + 
+				"system_user_hashkey : '" + window.hashkey + "'}) " + 
+				"WITH x, ds " + 
+				"MATCH (u:SystemUser {username : '" + window.username + "'}) " + 
+				"CREATE (u)-[:hasDataset]->(ds) " + 
+				"WITH x, ds MATCH (d:Data)-[:InDataset]->(x) CREATE (d)-[:InDataset]->(ds);";
+
+	return query;	
+}

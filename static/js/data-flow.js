@@ -41,6 +41,7 @@ var init_code = "<tr id='data-flow-filter-table-addr1'>" +
 				"</tr>";
 
 $( "#data-flow").on('shown.bs.modal', function(){
+	getRepositoryParameters();
 	init();
 
 	var query = loadDatasetListQuery();
@@ -103,7 +104,7 @@ function drawDataFlow() {
 			},
 			manipulation: {
 				addNode: function (data, callback) {
-					$("#network-popUp").css('z-index', 9999);
+					$("#network-popUp").css('z-index', 9998);
 					// filling in the popup DOM elements
 					document.getElementById('operation').innerHTML = "Add Node";
 					document.getElementById('saveButton').onclick = saveData.bind(this, data, callback);
@@ -111,7 +112,7 @@ function drawDataFlow() {
 					document.getElementById('network-popUp').style.display = 'block';
 				},
 				editNode: function (data, callback) {
-					$("#network-popUp").css('z-index', 9999);
+					$("#network-popUp").css('z-index', 9998);
 					// filling in the popup DOM elements
 					document.getElementById('operation').innerHTML = "Edit Node";
 					document.getElementById('saveButton').onclick = saveData.bind(this, data, callback);
@@ -151,6 +152,10 @@ function clearPopUp() {
 
 	$("#data-flow-type").parent().find('.data-flow-type-btn').text("Type");
 	$("#data-flow-name").parent().find('.data-flow-name-btn').text("Name");
+	$("#data-flow-repository-parameter").parent().find('.data-flow-repository-parameter-btn').text("Parameteres");
+
+	$("#data-flow-name").html("");
+	$("#data-flow-repository-parameter").html("");
 }
 
 function cancelEdit(callback) {
@@ -193,20 +198,37 @@ function dataFlowTypeLiClickHandler(ele){
 	if (selected == 'Repository'){
 		var code = "";
 		repository_list.forEach(repository => {
-			code += "<li onclick='dataFlowNameLiClickHandler(this);'><a href='#'>" + repository + "</a></li>"
+			code += "<li onclick='dataFlowRepositoryNameLiClickHandler(this);'><a href='#'>" + repository + "</a></li>"
 		})
 		$("#data-flow-name").html(code);
 	}
 	else{
 		var code = "";
 		dataset_list.forEach(dataset => {
-			code += "<li onclick='dataFlowNameLiClickHandler(this);'><a href='#'>" + dataset + "</a></li>"
+			code += "<li onclick='dataFlowDatasetNameLiClickHandler(this);'><a href='#'>" + dataset + "</a></li>"
 		})
 		$("#data-flow-name").html(code);
 	}
 }
 
-function dataFlowNameLiClickHandler(ele){
+function dataFlowRepositoryNameLiClickHandler(ele){
+	var selected = $(ele).find('a')[0].innerText;
+	$(ele).parent().prev().text(selected);
+	var repository_parameters = window.parameters[selected];
+	var i = 0;
+	var code = "";
+	for (parameter_id in repository_parameters){
+		code += "<li name='" + parameter_id + "' onclick='parameterGroupLiClickHandler(this);'><a href='#'>Parameter Group " + i + "</a></li>";
+		i ++;
+	}
+	$("#data-flow-repository-parameter").html(code);
+	for (parameter_id in repository_parameters){
+		console.log($("#data-flow-repository-parameter").find("li[name='" + parameter_id + "']").first().text());
+		$("#data-flow-repository-parameter").find("li[name='" + parameter_id + "']").first().hoverTips(selected, parameter_id);
+	}
+}
+
+function dataFlowDatasetNameLiClickHandler(ele){
 	var selected = $(ele).find('a')[0].innerText;
 	$(ele).parent().prev().text(selected);
 }
@@ -388,7 +410,7 @@ $("#data-flow .close").on('click', function () {
 function applyDataFlowFilter(data, callback) {
 	var source_type = edge_source_type;
 	var source_name = edge_source_name;
-	var resource = $("#data-flow-filter").find(".data-flow-filter-resource-btn").first().text();;
+	var resource = $("#data-flow-filter").find(".data-flow-filter-resource-btn").first().text();
 	var object = $("#data-flow-filter").find(".data-flow-filter-object-btn").first().text();
 	
 	$("#data-flow-filter-table").find('tbody').find('tr').each(function (i, el) {
@@ -413,6 +435,21 @@ function applyDataFlowFilter(data, callback) {
 }
 
 function cancerDataFlowFilter(callback) {
+	clearFilter();
 	clearPopUp();
 	callback(null);
+}
+
+function clearFilter() {
+	$("#data-flow-filter").find(".data-flow-filter-resource-btn").first().text("Resource");
+	$("#data-flow-filter").find(".data-flow-filter-resource").first().html("");
+
+	$("#data-flow-filter").find(".data-flow-filter-object-btn").first().text("Object");
+	$("#data-flow-filter").find(".data-flow-filter-object").first().html("");
+
+	$("#data-flow-filter-table").find('tbody').first().html(init_code);
+}
+
+function dataFlowHandler() {
+	return;
 }

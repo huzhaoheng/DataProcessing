@@ -150,6 +150,38 @@ def parameterParser(structure):
                 ret[k] = v
         return ret
 
-structure = json.load(open('sample_structure.json'))
-ret = parameterParser(structure)
-print (ret)
+# structure = json.load(open('sample_structure.json'))
+# ret = parameterParser(structure)
+# print (ret)
+
+username = 'huzhaoheng'
+repository = 'my query'
+parameter_id = 'abcde'
+query = "MATCH (a:Repository {name : '" + repository + "', system_user_username :'" + username + "'}), (b:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', parameter_id : '" + parameter_id + "'}) RETURN ID(a), ID(b);"
+result = graph.cypher.execute(query)
+sources = pandas.DataFrame(result.records, columns=result.columns).values.tolist()[0]
+targets = []
+ret = []
+# sources = [15760]
+while True:
+    targets = []
+    tx = graph.cypher.begin()
+    for source in sources:
+        query = "MATCH (n)-[:DataFlow]->(m) WHERE ID(n) = " + str(source) + " RETURN ID(m);"
+        tx.append(query)
+    result = tx.commit()
+
+    for each in result:
+        parsed = pandas.DataFrame(each.records, columns=each.columns).values.tolist()
+        for every in parsed:
+            targets.append(every[0])
+
+    if not targets:
+        break
+    else:
+        ret += targets
+        sources = [each for each in targets]
+
+query = "WITH {nodes} as nodes UNWIND nodes.data as i MATCH (a:Data {neo4j_id : i.internal_id, system_user_username : '" + self.username + "'}), (b:Repository {name : '" + self.repository + "', system_user_username :'" + self.username + "'}) CREATE UNIQUE (a)-[:InRepository]->(b);"
+query = "MATCH (n) WHERE ID(n) IN [" + ','.join(ret) + "] CREATE"
+tx = self.graph.cypher.begin()
