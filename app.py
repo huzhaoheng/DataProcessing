@@ -8,7 +8,7 @@ from helpers import *
 from flask_cors import CORS
 import pandas
 from py2neo.packages.httpstream import http
-from time import gmtime, strftime
+from time import gmtime, strftime, localtime
 http.socket_timeout = 9999
 
 app = Flask(__name__)
@@ -21,7 +21,7 @@ hidden_properties = ['internal_id', 'system_user_username', 'system_user_hashkey
 @app.route('/verification', methods=['GET', 'POST'])
 def verification():
     print("request received")
-    curr_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    curr_time = strftime("%Y-%m-%d %H:%M:%S", localtime())
     username, data, repository, structure = request.json["username"], json.loads(request.json["data"]), request.json["name"], json.loads(request.json["structure"])
     hashkey = hashlib.md5((username).encode()).hexdigest()
     parameters = parameterParser(structure)

@@ -462,6 +462,7 @@ function updateTimeFormatter(value, row, index) {
 			{arg: JSON.stringify({"query" : query})},
 			function (response){
 				var result = response.elements;
+				console.log(result)
 				var update_time = result['update_time'];
 				console.log(update_time);
 				var ret = "<p>" + update_time + "</p>";
