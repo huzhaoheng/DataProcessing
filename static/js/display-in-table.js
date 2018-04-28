@@ -442,7 +442,7 @@ function updateTimeFormatter(value, row, index) {
 		name = row['Repository Name'];
 		type = 'Repository';
 		var parameter_id = null;
-		console.log($(this));
+		/*console.log($(this));
 		console.log(value);
 		console.log(index);
 		var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
@@ -454,7 +454,7 @@ function updateTimeFormatter(value, row, index) {
 			var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
 			var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index).attr('id');
 			parameter_id = selected_li_id.split('-').slice(-1)[0];
-		}
+		}*/
 		var query = getRepositoryUpdateTimeQuery(name, parameter_id);
 		console.log(query);
 		$.getJSON(
