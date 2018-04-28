@@ -22,6 +22,7 @@ hidden_properties = ['internal_id', 'system_user_username', 'system_user_hashkey
 def verification():
     print("request received")
     curr_time = strftime("%Y-%m-%d %H:%M:%S", localtime())
+    print (curr_time)
     username, data, repository, structure = request.json["username"], json.loads(request.json["data"]), request.json["name"], json.loads(request.json["structure"])
     hashkey = hashlib.md5((username).encode()).hexdigest()
     parameters = parameterParser(structure)
@@ -39,6 +40,7 @@ def verification():
     repository_exist = graph.cypher.execute("MATCH (r:Repository {name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) RETURN r")
     if not repository_exist:
         query = "MATCH (a:SystemUser {username:'" + username + "'}) CREATE (a)-[:hasRepository]->(b:Repository {name:'" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'})-[:hasSubRepository]->(c:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
+        print (query)
         for k, v in parameters.items():
             if v:
                 if (type(v) is int) or (type(v) is float):
@@ -75,6 +77,7 @@ def home():
 def getUpdateTime():
     query = json.loads(request.args.get('arg'))['query']
     result = graph.cypher.execute(query)
+    print (result)
     result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()[0][0]
     return jsonify(elements = {"update_time" : result})
 
