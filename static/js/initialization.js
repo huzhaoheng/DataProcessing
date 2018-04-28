@@ -1,6 +1,7 @@
 function initialization(username, hashkey) {
 	setParameters(username, hashkey);
 	getRepositoryParameters();
+	// getUpdateTime();
 	//loadRepository();
 	loadRepositoryList();
 	setBrand();
@@ -136,4 +137,20 @@ function setBrand() {
 		}
 	)
 	return;
+}
+
+function getUpdateTime(){
+	window.update_time = {"Repository" : {}, }
+	var query = getRepositoryUpdateTimeQuery(name, parameter_id);
+	console.log(query);
+	$.getJSON(
+		'/getUpdateTime',
+		{arg: JSON.stringify({"query" : query})},
+		function (response){
+			var result = response.elements;
+			var update_time = result['update_time'];
+			ret = "<p>" + update_time + "</p>";
+			return ret;
+		}
+	);
 }

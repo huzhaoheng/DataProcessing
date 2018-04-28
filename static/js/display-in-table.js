@@ -437,7 +437,13 @@ function putDataInTable(data, type, name) {
 
 function updateTimeFormatter(value, row, index) {
 	var name = null,
-		type = null;
+		type = null,
+		ret = "";
+
+	$.ajaxSetup({
+		async: false
+	});
+
 	if (window.source == 'RepositoryList'){
 		name = row['Repository Name'];
 		type = 'Repository';
@@ -462,11 +468,8 @@ function updateTimeFormatter(value, row, index) {
 			{arg: JSON.stringify({"query" : query})},
 			function (response){
 				var result = response.elements;
-				console.log(result)
 				var update_time = result['update_time'];
-				console.log(update_time);
-				var ret = "<p>" + update_time + "</p>";
-				return ret;
+				ret = "<p>" + update_time + "</p>";
 			}
 		);
 	}
@@ -483,13 +486,17 @@ function updateTimeFormatter(value, row, index) {
 				var update_time = result['update_time'];
 				console.log(update_time);
 				var ret = "<p>" + update_time + "</p>";
-				return ret;
 			}
 		);
 	}
 	else{
-		return "<p></p>";
+		ret = "<p></p>";
 	}
+
+	$.ajaxSetup({
+		async: true
+	});
+	return ret;
 }
 
 function parametersFormatter(value, row, index) {
