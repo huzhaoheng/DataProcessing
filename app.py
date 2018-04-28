@@ -39,8 +39,7 @@ def verification():
         graph.cypher.execute(query)
     repository_exist = graph.cypher.execute("MATCH (r:Repository {name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) RETURN r")
     if not repository_exist:
-        query = "MATCH (a:SystemUser {username:'" + username + "'}) CREATE (a)-[:hasRepository]->(b:Repository {name:'" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'})-[:hasSubRepository]->(c:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
-        print (query)
+        query = "MATCH (a:SystemUser {username:'" + username + "'}) CREATE (a)-[:hasRepository]->(b:Repository {name:'" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', update_time : '" + curr_time + "'})-[:hasSubRepository]->(c:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
         for k, v in parameters.items():
             if v:
                 if (type(v) is int) or (type(v) is float):
@@ -51,7 +50,6 @@ def verification():
         graph.cypher.execute(query)
     else:
         query = "MATCH (a:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'}) RETURN a;"
-        print (query)
         subrepository_exist = graph.cypher.execute(query)
         if not subrepository_exist:
             query = "MATCH (a:Repository {name:'" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) CREATE (a)-[:hasSubRepository]->(b:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
