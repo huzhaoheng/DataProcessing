@@ -443,6 +443,7 @@ function updateTimeFormatter(value, row, index) {
 		type = 'Repository';
 		var parameter_id = null;
 		var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
+		console.log(btn_text);
 		if (btn_text == "Parameters"){
 			parameter_id = null;
 		}
