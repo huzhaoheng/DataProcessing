@@ -463,7 +463,9 @@ function updateTimeFormatter(value, row, index) {
 			function (response){
 				var result = response.elements;
 				var update_time = result['update_time'];
-				return "<p>" + update_time + "</p>";
+				console.log(update_time);
+				var ret = "<p>" + update_time + "</p>";
+				return ret;
 			}
 		);
 	}
@@ -478,7 +480,9 @@ function updateTimeFormatter(value, row, index) {
 			function (response){
 				var result = response.elements;
 				var update_time = result['update_time'];
-				return "<p>" + update_time + "</p>";
+				console.log(update_time);
+				var ret = "<p>" + update_time + "</p>";
+				return ret;
 			}
 		);
 	}
