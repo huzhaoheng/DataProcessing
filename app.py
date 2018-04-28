@@ -8,6 +8,7 @@ from helpers import *
 from flask_cors import CORS
 import pandas
 from py2neo.packages.httpstream import http
+from time import gmtime, strftime
 http.socket_timeout = 9999
 
 app = Flask(__name__)
@@ -20,6 +21,7 @@ hidden_properties = ['internal_id', 'system_user_username', 'system_user_hashkey
 @app.route('/verification', methods=['GET', 'POST'])
 def verification():
     print("request received")
+    curr_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     username, data, repository, structure = request.json["username"], json.loads(request.json["data"]), request.json["name"], json.loads(request.json["structure"])
     hashkey = hashlib.md5((username).encode()).hexdigest()
     parameters = parameterParser(structure)
@@ -36,7 +38,7 @@ def verification():
         graph.cypher.execute(query)
     repository_exist = graph.cypher.execute("MATCH (r:Repository {name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) RETURN r")
     if not repository_exist:
-        query = "MATCH (a:SystemUser {username:'" + username + "'}) CREATE (a)-[:hasRepository]->(b:Repository {name:'" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'})-[:hasSubRepository]->(c:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'"
+        query = "MATCH (a:SystemUser {username:'" + username + "'}) CREATE (a)-[:hasRepository]->(b:Repository {name:'" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'})-[:hasSubRepository]->(c:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time = '" + curr_time + "'"
         for k, v in parameters.items():
             if v:
                 if (type(v) is int) or (type(v) is float):
@@ -49,7 +51,7 @@ def verification():
         query = "MATCH (a:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'}) RETURN a;"
         subrepository_exist = graph.cypher.execute(query)
         if not subrepository_exist:
-            query = "MATCH (a:Repository {name:'" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) CREATE (a)-[:hasSubRepository]->(b:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'"
+            query = "MATCH (a:Repository {name:'" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) CREATE (a)-[:hasSubRepository]->(b:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time = '" + curr_time + "'"
             for k, v in parameters.items():
                 if v:
                     if (type(v) is int) or (type(v) is float):
@@ -69,6 +71,12 @@ def home():
     username, hashkey = request.args.get('username'), request.args.get('hashkey')
     return render_template('home.html', username = username, hashkey = hashkey)
 
+@app.route('/getUpdateTime')
+def getUpdateTime():
+    query = json.loads(request.args.get('arg'))['query']
+    result = graph.cypher.execute(query)
+    result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()[0][0]
+    return jsonify(elements = {"update_time" : result})
 
 @app.route('/getRepositoryList')
 def getRepositoryList():
@@ -93,12 +101,12 @@ def getRepositoryParameters():
         if repository_name not in ret:
             ret[repository_name] = {parameter_id : {}}
             for key in each.s.properties:
-                if key not in ['parameter_id', 'parent_repository_name', 'system_user_username', 'system_user_hashkey']:
+                if key not in ['parameter_id', 'parent_repository_name', 'system_user_username', 'system_user_hashkey', 'update_time']:
                     ret[repository_name][parameter_id][key] = each.s.properties[key]
         else:
             ret[repository_name][parameter_id] = {}
             for key in each.s.properties:
-                if key not in ['parameter_id', 'parent_repository_name', 'system_user_username', 'system_user_hashkey']:
+                if key not in ['parameter_id', 'parent_repository_name', 'system_user_username', 'system_user_hashkey', 'update_time']:
                     ret[repository_name][parameter_id][key] = each.s.properties[key]
     
     return jsonify(elements = ret)

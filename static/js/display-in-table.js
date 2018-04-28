@@ -436,7 +436,51 @@ function putDataInTable(data, type, name) {
 }
 
 function updateTimeFormatter(value, row, index) {
-	return "<p>04/26/2018</p>";
+	var name = null,
+		type = null;
+	if (window.source == 'RepositoryList'){
+		name = row['Repository Name'];
+		type = 'Repository';
+		var parameter_id = null;
+		var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
+		if (btn_text == "Parameters"){
+			parameter_id = null;
+		}
+		else{
+			var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
+			var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index).attr('id');
+			parameter_id = selected_li_id.split('-').slice(-1)[0];
+		}
+		var query = getRepositoryUpdateTimeQuery(name, parameter_id);
+		console.log(query);
+		$.getJSON(
+			'/getUpdateTime',
+			{arg: JSON.stringify({"query" : query})},
+			function (response){
+				var result = response.elements;
+				var update_time = result['update_time'];
+				return "<p>" + update_time + "</p>";
+			}
+		);
+	}
+	else if (window.source == 'DatasetList'){
+		name = row['Dataset Name'];
+		type = 'Dataset';
+		var query = getDatasetUpdateTimeQuery(name);
+		console.log(query);
+		$.getJSON(
+			'/getUpdateTime',
+			{arg: JSON.stringify({"query" : query})},
+			function (response){
+				var result = response.elements;
+				var update_time = result['update_time'];
+				return "<p>" + update_time + "</p>";
+			}
+		);
+	}
+	else{
+		return "<p></p>";
+	}
 }
 
 function parametersFormatter(value, row, index) {
