@@ -442,6 +442,7 @@ function updateTimeFormatter(value, row, index) {
 		name = row['Repository Name'];
 		type = 'Repository';
 		var parameter_id = null;
+		console.log($(this));
 		var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
 		console.log(btn_text);
 		if (btn_text == "Parameters"){
