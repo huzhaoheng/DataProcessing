@@ -189,15 +189,15 @@ function displayInTable(result, type, container = '#table') {
 		var temp = pivot(formatted_data);
 		console.log(temp);
 		// var columns = [{checkbox: true, visible: true}];
-		var columns = [];
-		temp[0].forEach(n => {
+		var columns = [{field : 'Statistical Report Name', title : 'Statistical Report Name', valign : 'middle', align : 'center'}];
+		/*temp[0].forEach(n => {
 			columns.push({
 				field : n, 
 				title : n,
 				valign:"middle",
 				align:"center"
 			});
-		})
+		})*/
 
 		/*columns.push({
 			field: 'Last Update Time', 
