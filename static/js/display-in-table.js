@@ -43,6 +43,7 @@ function displayInTable(result, type, container = '#table') {
 		for (var i = 0; i < result.length; i++) {
 			formatted_data.push(formatData(result[i]["data"]));
 		}
+		console.log(formatted_data);
 		while (formatted_data.length < 10){
 			formatted_data.push(null);
 		}
