@@ -111,11 +111,13 @@ function displayInTable(result, type, container = '#table') {
 	}
 
 	else if (type == 'dataset'){
+		console.log(result);
 		var formatted_data = [];
 		for (var i = 0; i < result.length; i++) {
 			formatted_data.push(formatData(result[i]["data"]));
 		}
 		var temp = pivot(formatted_data);
+		console.log(formatted_data);
 		// var columns = [{checkbox: true, visible: true}];
 		var columns = [];
 		temp[0].forEach(n => {
@@ -180,6 +182,7 @@ function displayInTable(result, type, container = '#table') {
 	}
 
 	else if (type == 'statistical report'){
+		console.log(result);
 		var formatted_data = [];
 		for (var i = 0; i < result.length; i++) {
 			formatted_data.push(formatData(result[i]["data"]));
