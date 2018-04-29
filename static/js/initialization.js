@@ -58,10 +58,11 @@ function loadDatasetList() {
 			document.getElementById("nav-tabs").appendChild(li);
 			document.getElementById("tab-content").appendChild(div);
 
-			displayInTable(preparedData, "dataset", "#datasets");
-
 			window.source = "DatasetList";
 			window.name = null;
+
+			displayInTable(preparedData, "dataset", "#datasets");
+
 		}
 	);
 }
@@ -110,10 +111,11 @@ function loadRepositoryList() {
 			document.getElementById("nav-tabs").appendChild(li);
 			document.getElementById("tab-content").appendChild(div);
 
-			displayInTable(preparedData, "repository", "#repositories");
-
 			window.source = "RepositoryList";
 			window.name = null;
+
+			displayInTable(preparedData, "repository", "#repositories");
+
 		}
 	);
 }

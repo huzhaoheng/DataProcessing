@@ -502,7 +502,7 @@ function getDatasetUpdateTimeQuery(name){
 	var query = "MATCH (x:Dataset) WHERE " + 
 				"x.system_user_username = '" + window.username +"' AND " + 
 				"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
-				"x.name = '" + name + "'" + 
+				"x.name = '" + name + "' " + 
 				"RETURN x.update_time;";
 
 	return query;
