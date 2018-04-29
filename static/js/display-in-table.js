@@ -387,6 +387,20 @@ window.operateEvents = {
 				}
 			);
 		}
+		else if (window.source = "StatisticalReportList"){
+			name = row["Statistical Report Name"];
+			type = 'Statistical Report';
+			var query = deleteStatisticalReportQuery(name);
+
+			$.getJSON(
+				'/writeOnlyQuery',
+				{arg: JSON.stringify({"query" : query})},
+				function (response){
+					var result = response.message;
+					loadStatisticalReport();
+				}
+			)
+		}
 		else{
 			return;
 		}
