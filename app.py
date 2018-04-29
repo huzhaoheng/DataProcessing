@@ -75,11 +75,8 @@ def home():
 @app.route('/getUpdateTime')
 def getUpdateTime():
     query = json.loads(request.args.get('arg'))['query']
-    print (query)
     result = graph.cypher.execute(query)
-    print (result)
     result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()[0][0]
-    print (result)
     return jsonify(elements = {"update_time" : result})
 
 @app.route('/getRepositoryList')
