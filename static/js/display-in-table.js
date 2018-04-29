@@ -236,7 +236,7 @@ function operateFormatter(value, row, index){
 		if (name != null){
 			return [
 				"<button type='button', class='btn btn-default view'>View</button> &nbsp;&nbsp;",
-				"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
+				"<button type='button', class='btn btn-default delete' data-toggle='confirmation' data-btn-ok-label='Continue' data-btn-ok-icon='glyphicon glyphicon-share-alt' data-btn-ok-class='btn-success' data-btn-cancel-label='Stoooop!' data-btn-cancel-icon='glyphicon glyphicon-ban-circle' data-btn-cancel-class='btn-danger' data-title='Is it ok?' data-content='This might be dangerous'>Delete</button> &nbsp;&nbsp;",
 				"<button type='button', class='btn btn-default download'>Download</button> &nbsp;&nbsp;",
 				"<button type='button', class='btn btn-default save-as-dataset'>Save As Dataset</button> &nbsp;&nbsp;",
 			].join("");	
@@ -247,7 +247,7 @@ function operateFormatter(value, row, index){
 		if (name != null){
 			return [
 				"<button type='button', class='btn btn-default view'>View</button> &nbsp;&nbsp;",
-				"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
+				"<button type='button', class='btn btn-default delete' data-toggle='confirmation' data-btn-ok-label='Continue' data-btn-ok-icon='glyphicon glyphicon-share-alt' data-btn-ok-class='btn-success' data-btn-cancel-label='Stoooop!' data-btn-cancel-icon='glyphicon glyphicon-ban-circle' data-btn-cancel-class='btn-danger' data-title='Is it ok?' data-content='This might be dangerous'>Delete</button> &nbsp;&nbsp;",
 				"<button type='button', class='btn btn-default download'>Download</button> &nbsp;&nbsp;",
 				"<button type='button', class='btn btn-default save-as-dataset'>Save As Dataset</button> &nbsp;&nbsp;",
 			].join("");	
@@ -258,7 +258,7 @@ function operateFormatter(value, row, index){
 		if (name != null){
 			return [
 				"<button type='button', class='btn btn-default view'>View In Bar Chart</button> &nbsp;&nbsp;",
-				"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
+				"<button type='button', class='btn btn-default delete' data-toggle='confirmation' data-btn-ok-label='Continue' data-btn-ok-icon='glyphicon glyphicon-share-alt' data-btn-ok-class='btn-success' data-btn-cancel-label='Stoooop!' data-btn-cancel-icon='glyphicon glyphicon-ban-circle' data-btn-cancel-class='btn-danger' data-title='Is it ok?' data-content='This might be dangerous'>Delete</button> &nbsp;&nbsp;",
 			].join("");	
 		}
 	}
