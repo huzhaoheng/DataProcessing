@@ -135,13 +135,13 @@ function displayInTable(result, type, container = '#table') {
 			formatter: updateTimeFormatter
 		})
 
-		columns.push({
+		/*columns.push({
 			field: 'Parameters', 
 			title: 'Parameters',
 			valign:"middle",
 			align:"center",
 			//formatter: parametersFormatter
-		})
+		})*/
 
 		columns.push({
 			field: 'Button', 
@@ -180,7 +180,72 @@ function displayInTable(result, type, container = '#table') {
 	}
 
 	else if (type == 'statistical report'){
-		
+		var formatted_data = [];
+		for (var i = 0; i < result.length; i++) {
+			formatted_data.push(formatData(result[i]["data"]));
+		}
+		var temp = pivot(formatted_data);
+		// var columns = [{checkbox: true, visible: true}];
+		var columns = [];
+		temp[0].forEach(n => {
+			columns.push({
+				field : n, 
+				title : n,
+				valign:"middle",
+				align:"center"
+			});
+		})
+
+		/*columns.push({
+			field: 'Last Update Time', 
+			title: 'Last Update Time',
+			valign:"middle",
+			align:"center",
+			formatter: updateTimeFormatter
+		})
+
+		columns.push({
+			field: 'Parameters', 
+			title: 'Parameters',
+			valign:"middle",
+			align:"center",
+			//formatter: parametersFormatter
+		})*/
+
+		columns.push({
+			field: 'Button', 
+			title: 'Operations', 
+			valign:"middle",
+			align:"center",
+			events: operateEvents,
+			formatter: operateFormatter
+		})
+
+		$(container).bootstrapTable('destroy').bootstrapTable({
+			columns: columns,
+			data: formatted_data,
+			sidePagination: "client",
+			pageNumber: 1,
+			pageSize: 10,
+			pageList: [20, 30, 40], 
+			clickToSelect: true,
+			showToggle:true,
+			//cardView: true,
+			pagination: true,
+			search: true,
+
+			//showColumns: true,
+
+			formatLoadingMessage: function () {  
+				return "Loading...";  
+			},
+			formatNoMatches: function () { 
+				return 'No such record';  
+			},  
+			onLoadError: function (data) {  
+				$('#reportTable').bootstrapTable('removeAll');  
+			},
+		});
 	}
 
 	return;
