@@ -127,6 +127,8 @@ function displayInTable(result, type, container = '#table') {
 			});
 		})
 
+		console.log(columns);
+
 		columns.push({
 			field: 'Last Update Time', 
 			title: 'Last Update Time',
