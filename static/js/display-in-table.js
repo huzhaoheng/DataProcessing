@@ -432,6 +432,10 @@ function putDataInTable(data, type, name) {
 	/*if (type == 'repository'){
 		$("#" + stripped + "-li").hoverTips(name, );	
 	}*/
+
+	window.source = "Data";
+	window.name = null;
+
 	displayInTable(data, "data", "#" + stripped);
 }
 
@@ -443,8 +447,6 @@ function updateTimeFormatter(value, row, index) {
 	$.ajaxSetup({
 		async: false
 	});
-
-	console.log(window.source);
 
 	if (window.source == 'RepositoryList'){
 		name = row['Repository Name'];
@@ -478,14 +480,12 @@ function updateTimeFormatter(value, row, index) {
 		name = row['Dataset Name'];
 		type = 'Dataset';
 		var query = getDatasetUpdateTimeQuery(name);
-		console.log(query);
 		$.getJSON(
 			'/getUpdateTime',
 			{arg: JSON.stringify({"query" : query})},
 			function (response){
 				var result = response.elements;
 				var update_time = result['update_time'];
-				console.log(update_time);
 				ret = "<p>" + update_time + "</p>";
 			}
 		);
@@ -511,6 +511,7 @@ function parametersFormatter(value, row, index) {
 					"<ul id='" + stripped + "-ul' class='dropdown-menu repository-parameters' role='menu'>" + 
 					"</ul>" + 
 				"</div>";
+	console.log(ret);
 	return ret;
 }
 
