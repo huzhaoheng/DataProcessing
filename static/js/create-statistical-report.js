@@ -182,7 +182,7 @@ function functionLiClickHandler(ele){
 	}
 
 	/*$(ele).parent().prev().text(selected);*/
-	$(ele).parent().prev().text(selected);
+	$(ele).parent().parent().find('button').first().text(selected);
 }
 
 
