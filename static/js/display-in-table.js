@@ -179,8 +179,8 @@ function displayInTable(result, type, container = '#table') {
 		});
 	}
 
-	else{
-		return;
+	else if (type == 'statistical report'){
+		
 	}
 
 	return;

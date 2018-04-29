@@ -3,6 +3,7 @@ function initialization(username, hashkey) {
 	getRepositoryParameters();
 	// getUpdateTime();
 	//loadRepository();
+	loadStatisticalReport();
 	loadRepositoryList();
 	setBrand();
 }
@@ -155,4 +156,57 @@ function getUpdateTime(){
 			return ret;
 		}
 	);
+}
+
+function loadStatisticalReport() {
+	var query = getStatisticalReportListQuery();
+	$.getJSON(
+		'/getStatisticalReportList',
+		{arg: JSON.stringify({"query" : query})},
+		function (response){
+			reports_info = response.elements;
+			console.log(reports_info);
+			return;
+			var datasetList = result['datasetList'];
+			var preparedData = [];
+			for (var i = 0; i < datasetList.length; i ++) {
+				var dataset = datasetList[i];
+				preparedData.push({'data' : {'Dataset Name' : dataset}});
+			}
+
+			$("#nav-tabs").empty();
+			$("#tab-content").empty();
+
+			var div = document.createElement("div");
+			div.setAttribute("class", "tab-pane active");
+			div.setAttribute("id", "datasets-div");
+
+			var p = document.createElement("p");
+
+			var new_table = document.createElement("table"); 
+			new_table.setAttribute("data-classes", "table table-hover table-condensed");
+			new_table.setAttribute("id", "datasets");
+
+			div.appendChild(p);
+			p.appendChild(new_table);
+
+			var li = document.createElement("li");
+			li.setAttribute("class", "active");
+						
+			var a = document.createElement("a");
+			a.setAttribute("href", "#datasets-div");
+			a.setAttribute("data-toggle", "tab");
+			a.innerHTML = "Datasets";
+
+			li.appendChild(a);
+
+			document.getElementById("nav-tabs").appendChild(li);
+			document.getElementById("tab-content").appendChild(div);
+
+			window.source = "DatasetList";
+			window.name = null;
+
+			displayInTable(preparedData, "dataset", "#datasets");
+		}
+	)
 }
