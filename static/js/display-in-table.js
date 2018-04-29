@@ -222,7 +222,6 @@ window.operateEvents = {
 				{arg: JSON.stringify({"query" : query})},
 				function (response){
 					var result = response.elements;
-					console.log(result);
 					for (id in result){
 						data.push({'data' : result[id]});
 					}
@@ -470,6 +469,7 @@ function updateTimeFormatter(value, row, index) {
 			parameter_id = selected_li_id.split('-').slice(-1)[0];
 		}*/
 		var query = getRepositoryUpdateTimeQuery(name, parameter_id);
+		console.log(query);
 		$.getJSON(
 			'/getUpdateTime',
 			{arg: JSON.stringify({"query" : query})},
