@@ -1,8 +1,6 @@
 function initialization(username, hashkey) {
 	setParameters(username, hashkey);
 	getRepositoryParameters();
-	// getUpdateTime();
-	//loadRepository();
 	loadStatisticalReport();
 	loadRepositoryList();
 	setBrand();
@@ -160,6 +158,7 @@ function getUpdateTime(){
 
 function loadStatisticalReport() {
 	var query = getStatisticalReportListQuery();
+	console.log(query);
 	$.getJSON(
 		'/getStatisticalReportList',
 		{arg: JSON.stringify({"query" : query})},
