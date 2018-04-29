@@ -199,12 +199,14 @@ function selectViewReportNameBtnHandler(ele){
 
 function selectReportNameLiClickHandler(ele){
 	var selected = $(ele).find('a')[0].innerText;
+	/*$(ele).parent().prev().text(selected);*/
 	$(ele).parent().prev().text(selected);
 	return;
 }
 
 function chartTypeLiClickHandler(ele) {
 	var selected = $(ele).find('a')[0].innerText;
+	/*$(ele).parent().prev().text(selected);*/
 	$(ele).parent().prev().text(selected);
 	return;
 }

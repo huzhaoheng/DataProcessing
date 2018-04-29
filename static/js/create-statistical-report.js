@@ -74,7 +74,8 @@ function datasetBtnHandler(ele){
 
 function datasetLiClickHandler(ele){
 	var selected = $(ele).find('a')[0].innerText;
-	$(ele).parent().prev().text(selected);
+	/*$(ele).parent().prev().text(selected);*/
+	$(ele).parent().parent().find('button').first().text(selected);
 
 	
 	$(ele).closest('tr').find('.create-statistical-report-function-btn').text("Function");
@@ -117,24 +118,28 @@ function propertyLiClickHandler(ele){
 	var type = matches[1];
 
 	if (function_name == 'Function'){
-		$(ele).parent().prev().text(selected);
+		/*$(ele).parent().prev().text(selected);*/
+		$(ele).parent().parent().find('button').first().text(selected);
 	}
 	else if(function_name == 'WORD FREQ'){
 		if (type != 'String' && type != 'LISTOFString'){
 			window.alert('Cannot Apply ' + function_name + ' to a ' + type + ' type property');
 			return;
 		}
-		$(ele).parent().prev().text(selected);
+		/*$(ele).parent().prev().text(selected);*/
+		$(ele).parent().parent().find('button').first().text(selected);
 	}
 	else if (function_name == 'COUNT'){
-		$(ele).parent().prev().text(selected);
+		/*$(ele).parent().prev().text(selected);*/
+		$(ele).parent().parent().find('button').first().text(selected);
 	}
 	else{
 		if (type != 'Int' && type != 'Float'){
 			window.alert('Cannot Apply ' + function_name + ' to a ' + type + ' type property');
 			return;
 		}
-		$(ele).parent().prev().text(selected);
+		/*$(ele).parent().prev().text(selected);*/
+		$(ele).parent().parent().find('button').first().text(selected);
 	}
 }
 
@@ -176,6 +181,7 @@ function functionLiClickHandler(ele){
 		$(ele).closest('tr').find('td:eq(3)').empty();
 	}
 
+	/*$(ele).parent().prev().text(selected);*/
 	$(ele).parent().prev().text(selected);
 }
 
