@@ -511,7 +511,6 @@ function parametersFormatter(value, row, index) {
 					"<ul id='" + stripped + "-ul' class='dropdown-menu repository-parameters' role='menu'>" + 
 					"</ul>" + 
 				"</div>";
-	console.log(ret);
 	return ret;
 }
 
@@ -535,6 +534,7 @@ function reporsitoryParametersBtnHandler(repository_name) {
 function parameterGroupLiClickHandler(ele) {
 	var selected = $(ele).find('a')[0].innerText;
 	$(ele).parent().prev().text(selected);
+	console.log($(ele).parent().prev().text());
 	return;
 }
 
