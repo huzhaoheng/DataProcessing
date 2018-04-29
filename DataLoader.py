@@ -56,7 +56,7 @@ class DataLoader(object):
 		query = "MATCH (a:Repository {name : '" + self.repository + "', system_user_username :'" + self.username + "'}), (b:SubRepository {parent_repository_name : '" + self.repository + "', system_user_username : '" + self.username + "', parameter_id : '" + self.parameter_id + "'}) RETURN ID(a), ID(b);"
 		result = self.graph.cypher.execute(query)
 		sources = pandas.DataFrame(result.records, columns=result.columns).values.tolist()[0]
-		ret = []
+		ret = [n for n in sources]
 		while True:
 			targets = []
 			tx = self.graph.cypher.begin()
