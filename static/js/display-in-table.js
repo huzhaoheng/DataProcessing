@@ -222,6 +222,7 @@ window.operateEvents = {
 				{arg: JSON.stringify({"query" : query})},
 				function (response){
 					var result = response.elements;
+					console.log(result);
 					for (id in result){
 						data.push({'data' : result[id]});
 					}
