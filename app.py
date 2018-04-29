@@ -64,7 +64,7 @@ def verification():
 
         
     storeData(graph, data, username, hashkey, structure, repository, parameter_id)
-
+    print ('here')
     return response
 
 @app.route('/home')
