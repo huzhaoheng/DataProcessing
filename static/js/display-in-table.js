@@ -187,13 +187,26 @@ function displayInTable(result, type, container = '#table') {
 }
 
 function operateFormatter(value, row, index){
-	return [
-		"<button type='button', class='btn btn-default view'>View</button> &nbsp;&nbsp;",
-		"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
-		//"<button type='button', class='btn btn-default rename'>Rename</button> &nbsp;&nbsp;",
-		"<button type='button', class='btn btn-default download'>Download</button> &nbsp;&nbsp;",
-		"<button type='button', class='btn btn-default save-as-dataset'>Save As Dataset</button> &nbsp;&nbsp;",
-	].join("");
+	var name = null;
+	if (window.source == 'RepositoryList'){
+		name = row['Repository Name'];
+	}
+	else if (window.source == "DatasetList"){
+		name = row["Dataset Name"];
+	}
+	if (name != null){
+		return [
+			"<button type='button', class='btn btn-default view'>View</button> &nbsp;&nbsp;",
+			"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
+			//"<button type='button', class='btn btn-default rename'>Rename</button> &nbsp;&nbsp;",
+			"<button type='button', class='btn btn-default download'>Download</button> &nbsp;&nbsp;",
+			"<button type='button', class='btn btn-default save-as-dataset'>Save As Dataset</button> &nbsp;&nbsp;",
+		].join("");	
+	}
+	else{
+		return "";
+	}
+	
 }
 
 window.operateEvents = {
