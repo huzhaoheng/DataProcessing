@@ -422,6 +422,16 @@ function deleteStatisticalReportQuery(report_name){
 }
 
 function saveRepositoryToDatasetQuery(name, parameter_id, new_name){
+	var currentdate = new Date(); 
+	var datetime = currentdate.getFullYear() + "-" + 
+					(currentdate.getMonth()+1) + "-" + 
+					currentdate.getDate() + " " +
+					currentdate.getHours() + ":" + 
+					currentdate.getMinutes() + ":" +
+					currentdate.getSeconds();
+
+	console.log(datetime);
+
 	if (parameter_id != null){
 		var query = "MATCH (x:SubRepository) WHERE " + 
 					"x.system_user_username = '" + window.username +"' AND " + 
@@ -430,7 +440,8 @@ function saveRepositoryToDatasetQuery(name, parameter_id, new_name){
 					"x.parameter_id = '"+  parameter_id + "' " + 
 					"WITH x CREATE (x)-[:DataFlow]->(ds:Dataset {name: '" + new_name + "', " + 
 					"system_user_username : '" + window.username + "', " + 
-					"system_user_hashkey : '" + window.hashkey + "'}) " + 
+					"system_user_hashkey : '" + window.hashkey + "', " + 
+					"update_time : '" + datetime + "'}) " + 
 					"WITH x, ds " + 
 					"MATCH (u:SystemUser {username : '" + window.username + "'}) " + 
 					"CREATE (u)-[:hasDataset]->(ds) " + 
@@ -446,7 +457,8 @@ function saveRepositoryToDatasetQuery(name, parameter_id, new_name){
 					"x.name = '" + name + "' " + 
 					"WITH x CREATE (x)-[:DataFlow]->(ds:Dataset {name: '" + new_name + "', " + 
 					"system_user_username : '" + window.username + "', " + 
-					"system_user_hashkey : '" + window.hashkey + "'}) " + 
+					"system_user_hashkey : '" + window.hashkey + "', " + 
+					"update_time : '" + datetime + "'}) " + 
 					"WITH x, ds " + 
 					"MATCH (u:SystemUser {username : '" + window.username + "'}) " + 
 					"CREATE (u)-[:hasDataset]->(ds) " + 
@@ -459,6 +471,13 @@ function saveRepositoryToDatasetQuery(name, parameter_id, new_name){
 }
 
 function saveDatasetToDatasetQuery(name, new_name){
+	var currentdate = new Date(); 
+	var datetime = currentdate.getFullYear() + "-" + 
+					(currentdate.getMonth()+1) + "-" + 
+					currentdate.getDate() + " " +
+					currentdate.getHours() + ":" + 
+					currentdate.getMinutes() + ":" +
+					currentdate.getSeconds();
 
 	var query = "MATCH (x:Dataset) WHERE " + 
 				"x.system_user_username = '" + window.username +"' AND " + 
@@ -466,7 +485,8 @@ function saveDatasetToDatasetQuery(name, new_name){
 				"x.name = '" + name + "' " + 
 				"WITH x CREATE (x)-[:DataFlow]->(ds:Dataset {name: '" + new_name + "', " + 
 				"system_user_username : '" + window.username + "', " + 
-				"system_user_hashkey : '" + window.hashkey + "'}) " + 
+				"system_user_hashkey : '" + window.hashkey + "', " + 
+				"update_time : '" + datetime + "'}) " + 
 				"WITH x, ds " + 
 				"MATCH (u:SystemUser {username : '" + window.username + "'}) " + 
 				"CREATE (u)-[:hasDataset]->(ds) " + 
