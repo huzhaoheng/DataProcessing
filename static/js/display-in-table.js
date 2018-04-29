@@ -43,7 +43,7 @@ function displayInTable(result, type, container = '#table') {
 		for (var i = 0; i < result.length; i++) {
 			formatted_data.push(formatData(result[i]["data"]));
 		}
-		while (formatter.length < 10){
+		while (formatted_data.length < 10){
 			formatted_data.push(null);
 		}
 		var temp = pivot(formatted_data);
