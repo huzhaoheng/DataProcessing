@@ -181,6 +181,7 @@ function displayInTable(result, type, container = '#table') {
 
 	else if (type == 'statistical report'){
 		var formatted_data = [];
+		console.log(result);
 		for (var i = 0; i < result.length; i++) {
 			formatted_data.push(formatData(result[i]["data"]));
 		}
