@@ -444,6 +444,8 @@ function updateTimeFormatter(value, row, index) {
 		async: false
 	});
 
+	console.log(window.source);
+
 	if (window.source == 'RepositoryList'){
 		name = row['Repository Name'];
 		type = 'Repository';
@@ -462,7 +464,6 @@ function updateTimeFormatter(value, row, index) {
 			parameter_id = selected_li_id.split('-').slice(-1)[0];
 		}*/
 		var query = getRepositoryUpdateTimeQuery(name, parameter_id);
-		console.log(query);
 		$.getJSON(
 			'/getUpdateTime',
 			{arg: JSON.stringify({"query" : query})},
