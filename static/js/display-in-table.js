@@ -346,10 +346,10 @@ window.operateEvents = {
 		}
 	},
 	'click .delete': function(e, value, row, index) {
-		$('.delete').on('confirmed.bs.confirmation', function () {
+		$('[data-toggle=confirmation]').on('confirmed.bs.confirmation', function () {
 			var name = null,
-			type = null,
-			data = [];
+				type = null,
+				data = [];
 			if (window.source == 'RepositoryList'){
 				name = row['Repository Name'];
 				type = 'Repository';
