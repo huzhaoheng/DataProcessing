@@ -11,6 +11,7 @@ function setParameters(username, hashkey) {
 	window.hashkey = hashkey;
 	window.source = 'RepositoryList';
 	window.name = null;
+	window.reports_info = null;
 }
 
 
@@ -163,8 +164,8 @@ function loadStatisticalReport() {
 		'/getStatisticalReportList',
 		{arg: JSON.stringify({"query" : query})},
 		function (response){
-			reports_info = response.elements;
-			var datasetList = Object.keys(reports_info);
+			window.reports_info = response.elements;
+			var datasetList = Object.keys(window.reports_info);
 			var preparedData = [];
 			for (var i = 0; i < datasetList.length; i ++) {
 				var dataset = datasetList[i];

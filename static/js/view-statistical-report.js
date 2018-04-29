@@ -1,5 +1,4 @@
-/*var report_and_query = null;*/
-var reports_info = null
+/*var reports_info = null
 
 
 $( "#view-statistical-report").on('shown.bs.modal', function(){
@@ -26,8 +25,6 @@ $("#view-statistical-report-submit").on('click', function(){
 		return;	
 	}
 
-	/*var query = report_and_query[report_name];*/
-	console.log(reports_info);
 	var data_selection_queries = reports_info[report_name][0], 
 		functions = reports_info[report_name][1], 
 		names = reports_info[report_name][2],
@@ -45,7 +42,7 @@ $("#view-statistical-report-submit").on('click', function(){
 			$("#chart-trigger-btn").click();
 		}
 	)	
-})
+})*/
 
 function displayStatisticalReportInChart(result, chartType){
 	var labels = [],

@@ -255,19 +255,36 @@ function operateFormatter(value, row, index){
 	var name = null;
 	if (window.source == 'RepositoryList'){
 		name = row['Repository Name'];
+		if (name != null){
+			return [
+				"<button type='button', class='btn btn-default view'>View</button> &nbsp;&nbsp;",
+				"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
+				"<button type='button', class='btn btn-default download'>Download</button> &nbsp;&nbsp;",
+				"<button type='button', class='btn btn-default save-as-dataset'>Save As Dataset</button> &nbsp;&nbsp;",
+			].join("");	
+		}
 	}
 	else if (window.source == "DatasetList"){
 		name = row["Dataset Name"];
+		if (name != null){
+			return [
+				"<button type='button', class='btn btn-default view'>View</button> &nbsp;&nbsp;",
+				"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
+				"<button type='button', class='btn btn-default download'>Download</button> &nbsp;&nbsp;",
+				"<button type='button', class='btn btn-default save-as-dataset'>Save As Dataset</button> &nbsp;&nbsp;",
+			].join("");	
+		}
 	}
-	if (name != null){
-		return [
-			"<button type='button', class='btn btn-default view'>View</button> &nbsp;&nbsp;",
-			"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
-			//"<button type='button', class='btn btn-default rename'>Rename</button> &nbsp;&nbsp;",
-			"<button type='button', class='btn btn-default download'>Download</button> &nbsp;&nbsp;",
-			"<button type='button', class='btn btn-default save-as-dataset'>Save As Dataset</button> &nbsp;&nbsp;",
-		].join("");	
+	else if (window.source == "StatisticalReportList"){
+		name = row["Statistical Report Name"];
+		if (name != null){
+			return [
+				"<button type='button', class='btn btn-default view'>View In Bar Chart</button> &nbsp;&nbsp;",
+				"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
+			].join("");	
+		}
 	}
+
 	else{
 		return "";
 	}
@@ -324,6 +341,27 @@ window.operateEvents = {
 					return;
 				}
 			)
+		}
+		else if (window.source == "StatisticalReportList"){
+			name = row["Statistical Report Name"];
+			type = 'Statistical Report';
+			var chartType = 'Chart';
+			var data_selection_queries = window.reports_info[name][0], 
+				functions = window.reports_info[name][1], 
+				names = window.reports_info[name][2],
+				values = window.reports_info[name][3];
+			$.getJSON(
+				'/getStatisticalReportResult',
+				{arg: JSON.stringify({"queries" : data_selection_queries, "functions" : functions, "names" : names, "values" : values})},
+				function (response){
+					var result = response.elements;
+					console.log(result);
+					displayStatisticalReportInChart(result, chartType)
+					displayStatisticalReportInTable(result)
+					$("#view-statistical-report-close").click();
+					$("#chart-trigger-btn").click();
+				}
+			)	
 		}
 		else{
 			return;
