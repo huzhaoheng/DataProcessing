@@ -75,7 +75,7 @@ function downloadRepository(repository, parameter_id) {
 }
 
 function formatData(data) {
-	var special_properties = ['internal_id', 'system_user_username', 'system_user_hashkey', 'alias', 'neo4j_id', 'resource', 'object', 'Dataset Name', 'Repository Name'];
+	var special_properties = ['internal_id', 'system_user_username', 'system_user_hashkey', 'alias', 'neo4j_id', 'resource', 'object', 'Dataset Name', 'Repository Name', 'Statistical Report Name'];
 	var ret = {}
 	for (key in data){
 		var value = data[key];
