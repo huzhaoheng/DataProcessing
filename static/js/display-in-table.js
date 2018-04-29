@@ -533,9 +533,11 @@ function reporsitoryParametersBtnHandler(repository_name) {
 
 function parameterGroupLiClickHandler(ele) {
 	var selected = $(ele).find('a')[0].innerText;
-	$(ele).parent().prev().text(selected);
+	/*$(ele).parent().prev().text(selected);
 	console.log($(ele).parent().prev());
-	console.log($(ele).parent().prev().text());
+	console.log($(ele).parent().prev().text());*/
+	console.log($(ele).closest('button'));
+	$(ele).closest('button').text(selected);
 	return;
 }
 
