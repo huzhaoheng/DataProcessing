@@ -152,8 +152,6 @@ function displayInTable(result, type, container = '#table') {
 			formatter: operateFormatter
 		})
 
-		console.log(columns);
-
 		$(container).bootstrapTable('destroy').bootstrapTable({
 			columns: columns,
 			data: formatted_data,
@@ -183,40 +181,15 @@ function displayInTable(result, type, container = '#table') {
 
 	else if (type == 'statistical report'){
 		var formatted_data = [];
-		console.log(result);
 		for (var i = 0; i < result.length; i++) {
 			formatted_data.push(formatData(result[i]["data"]));
 		}
 		console.log(formatted_data);
 		var temp = pivot(formatted_data);
-		console.log(temp);
 		// var columns = [{checkbox: true, visible: true}];
 		var columns = [
-				{field : 'Statistical Report Name', title : 'Statistical Report Name', valign : 'middle', align : 'center'}];
-		/*temp[0].forEach(n => {
-			columns.push({
-				field : n, 
-				title : n,
-				valign:"middle",
-				align:"center"
-			});
-		})*/
-
-		/*columns.push({
-			field: 'Last Update Time', 
-			title: 'Last Update Time',
-			valign:"middle",
-			align:"center",
-			formatter: updateTimeFormatter
-		})
-
-		columns.push({
-			field: 'Parameters', 
-			title: 'Parameters',
-			valign:"middle",
-			align:"center",
-			//formatter: parametersFormatter
-		})*/
+				{field : 'Statistical Report Name', title : 'Statistical Report Name', valign : 'middle', align : 'center'}
+		];
 
 		columns.push({
 			field: 'Button', 
