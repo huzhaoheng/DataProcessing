@@ -200,17 +200,13 @@ function selectViewReportNameBtnHandler(ele){
 function selectReportNameLiClickHandler(ele){
 	var selected = $(ele).find('a')[0].innerText;
 	/*$(ele).parent().prev().text(selected);*/
-	console.log(selected);
-	console.log($(ele).parent().parent().find('button').first());
-	$(ele).parent().parent().find('button').first().text(selected);
+	$(ele).parent().parent().find('a').first().text(selected);
 	return;
 }
 
 function chartTypeLiClickHandler(ele) {
 	var selected = $(ele).find('a')[0].innerText;
 	/*$(ele).parent().prev().text(selected);*/
-	console.log(selected);
-	console.log($(ele).parent().parent().find('button').first());
-	$(ele).parent().parent().find('button').first().text(selected);
+	$(ele).parent().parent().find('a').first().text(selected);
 	return;
 }
