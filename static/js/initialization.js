@@ -1,7 +1,7 @@
 function initialization(username, hashkey) {
 	setParameters(username, hashkey);
 	getRepositoryParameters();
-	loadStatisticalReport();
+	//loadStatisticalReport();
 	loadRepositoryList();
 	setBrand();
 }
@@ -164,13 +164,11 @@ function loadStatisticalReport() {
 		{arg: JSON.stringify({"query" : query})},
 		function (response){
 			reports_info = response.elements;
-			console.log(reports_info);
-			return;
-			var datasetList = result['datasetList'];
+			var datasetList = Object.keys(reports_info);
 			var preparedData = [];
 			for (var i = 0; i < datasetList.length; i ++) {
 				var dataset = datasetList[i];
-				preparedData.push({'data' : {'Dataset Name' : dataset}});
+				preparedData.push({'data' : {'Statistical Report Name' : dataset}});
 			}
 
 			$("#nav-tabs").empty();
@@ -184,7 +182,7 @@ function loadStatisticalReport() {
 
 			var new_table = document.createElement("table"); 
 			new_table.setAttribute("data-classes", "table table-hover table-condensed");
-			new_table.setAttribute("id", "datasets");
+			new_table.setAttribute("id", "statistical-report");
 
 			div.appendChild(p);
 			p.appendChild(new_table);
@@ -193,19 +191,19 @@ function loadStatisticalReport() {
 			li.setAttribute("class", "active");
 						
 			var a = document.createElement("a");
-			a.setAttribute("href", "#datasets-div");
+			a.setAttribute("href", "#statistical-report-div");
 			a.setAttribute("data-toggle", "tab");
-			a.innerHTML = "Datasets";
+			a.innerHTML = "Statistical Report";
 
 			li.appendChild(a);
 
 			document.getElementById("nav-tabs").appendChild(li);
 			document.getElementById("tab-content").appendChild(div);
 
-			window.source = "DatasetList";
+			window.source = "StatisticalReportList";
 			window.name = null;
 
-			displayInTable(preparedData, "dataset", "#datasets");
+			displayInTable(preparedData, "statistical report", "#statistical-report");
 		}
 	)
 }

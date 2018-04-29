@@ -375,18 +375,6 @@ def getResourceAndObjectPairs():
     return jsonify(elements = ret)
 
 
-# @app.route('/getStatisticalReportList')
-# def getStatisticalReportList():
-#     query = json.loads(request.args.get('arg'))['query']
-#     result = graph.cypher.execute(query)
-#     result = pandas.DataFrame(result.records, columns=result.columns).values.tolist()
-#     ret = {}
-#     for each in result:
-#         name, query = each
-#         ret[name] = query
-
-#     return jsonify(elements = ret)
-
 @app.route('/getStatisticalReportList')
 def getStatisticalReportList():
     query = json.loads(request.args.get('arg'))['query']
