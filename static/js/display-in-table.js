@@ -44,7 +44,7 @@ function displayInTable(result, type, container = '#table') {
 			formatted_data.push(formatData(result[i]["data"]));
 		}
 		while (formatted_data.length < 10){
-			formatted_data.push({Repository Name:null});
+			formatted_data.push({'Repository Name':null});
 		}
 		var temp = pivot(formatted_data);
 		// var columns = [{checkbox: true, visible: true}];
