@@ -75,6 +75,7 @@ class DataLoader(object):
 				ret += targets
 				sources = [x for x in targets]
 
+		print (ret)
 		tx = self.graph.cypher.begin()
 		query = "WITH {nodes} as nodes UNWIND nodes.data as i MATCH (a:Data {neo4j_id : i.internal_id, system_user_username : '" + self.username + "'}), (b:Repository) WHERE ID(b) IN [" + ','.join(str(x) for x in ret) + "] CREATE UNIQUE (a)-[:InRepository]->(b) SET b.update_time = '" + curr_time + "';"
 		print (query)
