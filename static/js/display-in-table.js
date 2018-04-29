@@ -323,7 +323,7 @@ window.operateEvents = {
 		else if (window.source == "StatisticalReportList"){
 			name = row["Statistical Report Name"];
 			type = 'Statistical Report';
-			var chartType = 'Chart';
+			var chartType = 'bar';
 			var data_selection_queries = window.reports_info[name][0], 
 				functions = window.reports_info[name][1], 
 				names = window.reports_info[name][2],
