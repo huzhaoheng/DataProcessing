@@ -184,7 +184,9 @@ function displayInTable(result, type, container = '#table') {
 		for (var i = 0; i < result.length; i++) {
 			formatted_data.push(formatData(result[i]["data"]));
 		}
+		console.log(formatted_data);
 		var temp = pivot(formatted_data);
+		console.log(temp);
 		// var columns = [{checkbox: true, visible: true}];
 		var columns = [];
 		temp[0].forEach(n => {
