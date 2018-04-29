@@ -43,6 +43,9 @@ function displayInTable(result, type, container = '#table') {
 		for (var i = 0; i < result.length; i++) {
 			formatted_data.push(formatData(result[i]["data"]));
 		}
+		while (formatter.length < 10){
+			formatted_data.push(null);
+		}
 		var temp = pivot(formatted_data);
 		// var columns = [{checkbox: true, visible: true}];
 		var columns = [];
@@ -220,7 +223,7 @@ window.operateEvents = {
 				function (response){
 					var result = response.elements;
 					for (id in result){
-						data.push({'data' : result[id]}); 
+						data.push({'data' : result[id]});
 					}
 					putDataInTable(data, type, name);
 					return;
