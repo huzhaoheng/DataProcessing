@@ -486,7 +486,7 @@ function updateTimeFormatter(value, row, index) {
 				var result = response.elements;
 				var update_time = result['update_time'];
 				console.log(update_time);
-				var ret = "<p>" + update_time + "</p>";
+				ret = "<p>" + update_time + "</p>";
 			}
 		);
 	}
