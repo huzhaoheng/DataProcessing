@@ -469,7 +469,6 @@ function updateTimeFormatter(value, row, index) {
 			parameter_id = selected_li_id.split('-').slice(-1)[0];
 		}*/
 		var query = getRepositoryUpdateTimeQuery(name, parameter_id);
-		console.log(query);
 		$.getJSON(
 			'/getUpdateTime',
 			{arg: JSON.stringify({"query" : query})},
@@ -508,14 +507,19 @@ function parametersFormatter(value, row, index) {
 	var name = null,
 		type = null;
 	name = row['Repository Name'];
-	var stripped = name.replace(/[^0-9a-zA-Z]/gi, '');
-	var ret = 	"<div class='btn-group' style='width : 100%'>" + 
-					"<button type='button' class='btn btn-block btn-default repository-parameters-btn' data-toggle='dropdown'" + 
-						'onclick="reporsitoryParametersBtnHandler(' + "'" + name + "'" + ');">Parameters</button>' + 
-					"<ul id='" + stripped + "-ul' class='dropdown-menu repository-parameters' role='menu'>" + 
-					"</ul>" + 
-				"</div>";
-	return ret;
+	if (name != null){
+		var stripped = name.replace(/[^0-9a-zA-Z]/gi, '');
+		var ret = 	"<div class='btn-group' style='width : 100%'>" + 
+						"<button type='button' class='btn btn-block btn-default repository-parameters-btn' data-toggle='dropdown'" + 
+							'onclick="reporsitoryParametersBtnHandler(' + "'" + name + "'" + ');">Parameters</button>' + 
+						"<ul id='" + stripped + "-ul' class='dropdown-menu repository-parameters' role='menu'>" + 
+						"</ul>" + 
+					"</div>";
+		return ret;
+	}
+	else{
+		return "";
+	}
 }
 
 function reporsitoryParametersBtnHandler(repository_name) {
