@@ -346,6 +346,7 @@ window.operateEvents = {
 		}
 	},
 	'click .delete': function(e, value, row, index) {
+		console.log(e);
 		var name = null,
 			type = null,
 			data = [];
