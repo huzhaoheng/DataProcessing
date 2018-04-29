@@ -536,10 +536,7 @@ function parameterGroupLiClickHandler(ele) {
 	/*$(ele).parent().prev().text(selected);
 	console.log($(ele).parent().prev());
 	console.log($(ele).parent().prev().text());*/
-	console.log($(this));
-	console.log($(ele));
-	console.log($(ele).parent().parent().find('button').first());
-	$(ele).parent().prev().text(selected);
+	$(ele).parent().parent().find('button').first().text(selected);
 	return;
 }
 
