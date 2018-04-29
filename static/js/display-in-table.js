@@ -127,8 +127,6 @@ function displayInTable(result, type, container = '#table') {
 			});
 		})
 
-		console.log(columns);
-
 		columns.push({
 			field: 'Last Update Time', 
 			title: 'Last Update Time',
@@ -153,6 +151,8 @@ function displayInTable(result, type, container = '#table') {
 			events: operateEvents,
 			formatter: operateFormatter
 		})
+
+		console.log(columns);
 
 		$(container).bootstrapTable('destroy').bootstrapTable({
 			columns: columns,
@@ -191,7 +191,8 @@ function displayInTable(result, type, container = '#table') {
 		var temp = pivot(formatted_data);
 		console.log(temp);
 		// var columns = [{checkbox: true, visible: true}];
-		var columns = [{field : 'Statistical Report Name', title : 'Statistical Report Name', valign : 'middle', align : 'center'}];
+		var columns = [
+				{field : 'Statistical Report Name', title : 'Statistical Report Name', valign : 'middle', align : 'center'}];
 		/*temp[0].forEach(n => {
 			columns.push({
 				field : n, 
