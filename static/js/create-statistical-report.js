@@ -446,6 +446,7 @@ $("#create-statistical-report-submit").on('click', function() {
 		function (response){
 			var message = response.message;
 			console.log(message);
+			loadStatisticalReport();
 		}
 	)
 

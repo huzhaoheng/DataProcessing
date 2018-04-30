@@ -21,7 +21,7 @@ hidden_properties = ['internal_id', 'system_user_username', 'system_user_hashkey
 @app.route('/verification', methods=['GET', 'POST'])
 def verification():
     print("request received")
-    curr_time = strftime("%Y-%m-%d %H:%M:%S", localtime())
+    curr_time = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime())
     print (curr_time)
     username, data, repository, structure = request.json["username"], json.loads(request.json["data"]), request.json["name"], json.loads(request.json["structure"])
     hashkey = hashlib.md5((username).encode()).hexdigest()

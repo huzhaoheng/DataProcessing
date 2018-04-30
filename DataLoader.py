@@ -51,7 +51,7 @@ class DataLoader(object):
 		self.graph.cypher.execute(query, edges = self.edges)
 
 	def updateDataFlow(self):
-		curr_time = strftime("%Y-%m-%d %H:%M:%S", localtime())
+		curr_time = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime())
 		print (curr_time)
 		query = "MATCH (a:Repository {name : '" + self.repository + "', system_user_username :'" + self.username + "'}), (b:SubRepository {parent_repository_name : '" + self.repository + "', system_user_username : '" + self.username + "', parameter_id : '" + self.parameter_id + "'}) RETURN ID(a), ID(b);"
 		result = self.graph.cypher.execute(query)
