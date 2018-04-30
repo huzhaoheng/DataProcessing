@@ -673,6 +673,7 @@ function saveRepositoryToDataset(name, parameter_id) {
 		{arg: JSON.stringify({"query" : query})},
 		function (response){
 			$("#datasets-panel").click();
+			console.log("hereeee");
 			/*loadDatasetList();*/
 			window.alert('Done');
 			return;
