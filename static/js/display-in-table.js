@@ -672,8 +672,7 @@ function saveRepositoryToDataset(name, parameter_id) {
 		'/writeOnlyQuery',
 		{arg: JSON.stringify({"query" : query})},
 		function (response){
-			$("#datasets-panel").click();
-			console.log("hereeee");
+			$("#datasets-custom").click();
 			/*loadDatasetList();*/
 			window.alert('Done');
 			return;
@@ -694,7 +693,7 @@ function saveDatasetToDataset(name, new_name) {
 		'/writeOnlyQuery',
 		{arg: JSON.stringify({"query" : query})},
 		function (response){
-			$("#datasets-panel").click();
+			$("#datasets-custom").click();
 			/*loadDatasetList();*/
 			window.alert('Done');
 			return;
