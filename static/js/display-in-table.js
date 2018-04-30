@@ -366,6 +366,7 @@ window.operateEvents = {
 				}
 
 				var query = deleteRepositoryQuery(name, parameter_id);
+				console.log(query);
 				$.getJSON(
 					'/writeOnlyQuery',
 					{arg: JSON.stringify({"query" : query})},
@@ -621,7 +622,7 @@ function parametersFormatter(value, row, index) {
 		var stripped = name.replace(/[^0-9a-zA-Z]/gi, '');
 		var ret = 	"<div class='btn-group' style='width : 100%'>" + 
 						"<button type='button' class='btn btn-block btn-default repository-parameters-btn' data-toggle='dropdown'" + 
-							'onclick="reporsitoryParametersBtnHandler(' + "'" + name + "'" + ');">Parameters</button>' + 
+							'onclick="reporsitoryParametersBtnHandler(' + "'" + name + "'" + ');">Query Parameters</button>' + 
 						"<ul id='" + stripped + "-ul' class='dropdown-menu repository-parameters' role='menu'>" + 
 						"</ul>" + 
 					"</div>";
@@ -638,7 +639,7 @@ function reporsitoryParametersBtnHandler(repository_name) {
 	var i = 0;
 	var code = "";
 	for (parameter_id in subRepositories){
-		code += "<li id='" + stripped + "-" + parameter_id + "' onclick='parameterGroupLiClickHandler(this);'><a href='#'>Parameter Group " + i + "</a></li>";
+		code += "<li id='" + stripped + "-" + parameter_id + "' onclick='parameterGroupLiClickHandler(this);'><a href='#'>Parameter Group " + (i + 1) + "</a></li>";
 		//var para = subRepositories[parameter_id];
 		i ++;
 	}
