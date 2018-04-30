@@ -372,7 +372,8 @@ window.operateEvents = {
 				'/writeOnlyQuery',
 				{arg: JSON.stringify({"query" : query})},
 				function (response){
-					loadRepositoryList();
+					/*loadRepositoryList();*/
+					location.reload();
 					return;
 				}
 			);
