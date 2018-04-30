@@ -87,12 +87,13 @@ def getDataSize():
     query = json.loads(request.args.get('arg'))['query']
     result = graph.cypher.execute(query)
     ret = {'data size' : 0}
-    dic = {}
-    for each in result:
-        data = {key:each.d.properties[key] for key in each.d.properties if key not in hidden_properties}
-        dic[data['neo4j_id']] = data
-    ret['data size'] = sys.getsizeof(dic)
-
+    if result:
+        dic = {}
+        for each in result:
+            data = {key:each.d.properties[key] for key in each.d.properties if key not in hidden_properties}
+            dic[data['neo4j_id']] = data
+        ret['data size'] = sys.getsizeof(dic)
+    
     return jsonify(elements = ret)
 
 @app.route('/getRepositoryList')
