@@ -529,6 +529,7 @@ window.operateEvents = {
 
 			$("#add-to-dataset-selection-submit").on('click', function(){
 				var target = $("#dataset_name_dropdown_btn").text();
+				console.log(target);
 				if (target == 'Dataset'){
 					window.alert('Please select a dataset');
 					return;
@@ -545,6 +546,7 @@ window.operateEvents = {
 
 			$("#add-to-dataset-selection-submit").on('click', function(){
 				var target = $("#dataset_name_dropdown_btn").text();
+				console.log(target);
 				if (target == 'Dataset'){
 					window.alert('Please select a dataset');
 					return;
