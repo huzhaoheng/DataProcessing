@@ -67,8 +67,8 @@ function displayInTable(result, type, container = '#table') {
 		})
 
 		columns.push({
-			field: 'Parameters', 
-			title: 'Parameters',
+			field: 'Query Parameters', 
+			title: 'Query Parameters',
 			valign:"middle",
 			align:"center",
 			formatter: parametersFormatter
@@ -280,7 +280,7 @@ window.operateEvents = {
 			type = 'Repository';
 			var parameter_id = null;
 			var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
-			if (btn_text == "Parameters"){
+			if (btn_text == "Query Parameters"){
 				parameter_id = null;
 			}
 			else{
@@ -355,12 +355,15 @@ window.operateEvents = {
 			type = 'Repository';
 			var parameter_id = null;
 			var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
-			if (btn_text == "Parameters"){
+			console.log(btn_text);
+			if (btn_text == "Query Parameters"){
 				parameter_id = null;
 			}
 			else{
 				var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
+				console.log(selected_index);
 				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index).attr('id');
+				console.log(selected_li_id);
 				parameter_id = selected_li_id.split('-').slice(-1)[0];
 			}
 			var query = deleteRepositoryQuery(name, parameter_id);
@@ -454,7 +457,7 @@ window.operateEvents = {
 			type = 'Repository';
 			var parameter_id = null;
 			var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
-			if (btn_text == "Parameters"){
+			if (btn_text == "Query Parameters"){
 				parameter_id = null;
 			}
 			else{
@@ -482,7 +485,7 @@ window.operateEvents = {
 			type = 'Repository';
 			var parameter_id = null;
 			var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
-			if (btn_text == "Parameters"){
+			if (btn_text == "Query Parameters"){
 				parameter_id = null;
 			}
 			else{
