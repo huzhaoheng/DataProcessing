@@ -67,6 +67,14 @@ function displayInTable(result, type, container = '#table') {
 		})
 
 		columns.push({
+			field: 'Data Size', 
+			title: 'Data Size',
+			valign:"middle",
+			align:"center",
+			formatter: dataSizeFormatter
+		})
+
+		columns.push({
 			field: 'Query Parameters', 
 			title: 'Query Parameters',
 			valign:"middle",
@@ -133,6 +141,14 @@ function displayInTable(result, type, container = '#table') {
 			valign:"middle",
 			align:"center",
 			formatter: updateTimeFormatter
+		})
+
+		columns.push({
+			field: 'Data Size', 
+			title: 'Data Size',
+			valign:"middle",
+			align:"center",
+			formatter: dataSizeFormatter
 		})
 
 		/*columns.push({
@@ -662,6 +678,54 @@ function updateTimeFormatter(value, row, index) {
 				var result = response.elements;
 				var update_time = result['update_time'];
 				ret = "<p>" + update_time + "</p>";
+			}
+		);
+	}
+	else{
+		ret = "<p></p>";
+	}
+
+	$.ajaxSetup({
+		async: true
+	});
+	return ret;
+}
+
+function dataSizeFormatter(value, row, index){
+	var name = null,
+		type = null,
+		ret = "";
+
+	$.ajaxSetup({
+		async: false
+	});
+
+	if (window.source == 'RepositoryList'){
+		name = row['Repository Name'];
+		type = 'Repository';
+		var parameter_id = null;
+		var query = loadRepositoryQuery(name, parameter_id);
+		$.getJSON(
+			'/getDataSize',
+			{arg: JSON.stringify({"query" : query})},
+			function (response){
+				var result = response.elements;
+				var data_size = result['data size'];
+				ret = "<p>" + data_size + "</p>";
+			}
+		);
+	}
+	else if (window.source == 'DatasetList'){
+		name = row['Dataset Name'];
+		type = 'Dataset';
+		var query = loadDatasetQuery(name);
+		$.getJSON(
+			'/getDataSize',
+			{arg: JSON.stringify({"query" : query})},
+			function (response){
+				var result = response.elements;
+				var data_size = result['data size'];
+				ret = "<p>" + data_size + "</p>";
 			}
 		);
 	}

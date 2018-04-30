@@ -9,6 +9,7 @@ from flask_cors import CORS
 import pandas
 from py2neo.packages.httpstream import http
 from time import gmtime, strftime, localtime
+import sys
 http.socket_timeout = 9999
 
 app = Flask(__name__)
@@ -80,6 +81,19 @@ def getUpdateTime():
     else:
         result = ""
     return jsonify(elements = {"update_time" : result})
+
+@app.route('/getDataSize')
+def getDataSize():
+    query = json.loads(request.args.get('arg'))['query']
+    result = graph.cypher.execute(query)
+    ret = {'data size' : 0}
+    dic = {}
+    for each in result:
+        data = {key:each.d.properties[key] for key in each.d.properties if key not in hidden_properties}
+        dic[data['neo4j_id']] = data
+    ret['data size'] = sys.getsizeof(dic)
+
+    return jsonify(elements = ret)
 
 @app.route('/getRepositoryList')
 def getRepositoryList():
