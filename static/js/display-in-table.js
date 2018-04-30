@@ -285,7 +285,7 @@ window.operateEvents = {
 			}
 			else{
 				var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
-				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index).attr('id');
+				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index - 1).attr('id');
 				parameter_id = selected_li_id.split('-').slice(-1)[0];
 			}
 			
@@ -362,7 +362,7 @@ window.operateEvents = {
 			else{
 				var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
 				console.log(selected_index);
-				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index).attr('id');
+				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index - 1).attr('id');
 				console.log(selected_li_id);
 				parameter_id = selected_li_id.split('-').slice(-1)[0];
 			}
@@ -462,7 +462,7 @@ window.operateEvents = {
 			}
 			else{
 				var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
-				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index).attr('id');
+				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index - 1).attr('id');
 				parameter_id = selected_li_id.split('-').slice(-1)[0];
 			}
 
@@ -490,7 +490,7 @@ window.operateEvents = {
 			}
 			else{
 				var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
-				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index).attr('id');
+				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index - 1).attr('id');
 				parameter_id = selected_li_id.split('-').slice(-1)[0];
 			}
 
