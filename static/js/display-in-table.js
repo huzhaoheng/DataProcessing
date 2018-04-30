@@ -771,6 +771,39 @@ function parameterGroupLiClickHandler(ele) {
 	var parameter_id = $(ele).attr('id').split('-').slice(-1)[0];
 	console.log(name);
 	console.log(parameter_id);
+
+	$.ajaxSetup({
+		async: false
+	});
+
+	var query = loadRepositoryQuery(name, parameter_id);
+	$.getJSON(
+		'/getDataSize',
+		{arg: JSON.stringify({"query" : query})},
+		function (response){
+			var result = response.elements;
+			var data_size = result['data size'];
+			var code = "<p>" + data_size + "</p>";
+			$(ele).closest('tr').find('td').eq(2).html(code);
+		}
+	);
+
+	var query = getRepositoryUpdateTimeQuery(name, parameter_id);
+	$.getJSON(
+		'/getUpdateTime',
+		{arg: JSON.stringify({"query" : query})},
+		function (response){
+			var result = response.elements;
+			var update_time = result['update_time'];
+			var code = "<p>" + update_time + "</p>";
+			$(ele).closest('tr').find('td').eq(1).html(code);
+		}
+	);
+
+	$.ajaxSetup({
+		async: true
+	});
+
 	/*$(ele).parent().prev().text(selected);
 	console.log($(ele).parent().prev());
 	console.log($(ele).parent().prev().text());*/
