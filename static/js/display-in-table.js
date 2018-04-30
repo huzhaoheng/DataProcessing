@@ -239,6 +239,7 @@ function operateFormatter(value, row, index){
 				"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
 				"<button type='button', class='btn btn-default download'>Download</button> &nbsp;&nbsp;",
 				"<button type='button', class='btn btn-default save-as-dataset'>Save As Dataset</button> &nbsp;&nbsp;",
+				"<button type='button', class='btn btn-default add-to-dataset'>Add to Dataset</button> &nbsp;&nbsp;",
 			].join("");	
 		}
 	}
@@ -250,6 +251,7 @@ function operateFormatter(value, row, index){
 				"<button type='button', class='btn btn-default delete'>Delete</button> &nbsp;&nbsp;",
 				"<button type='button', class='btn btn-default download'>Download</button> &nbsp;&nbsp;",
 				"<button type='button', class='btn btn-default save-as-dataset'>Save As Dataset</button> &nbsp;&nbsp;",
+				"<button type='button', class='btn btn-default add-to-dataset'>Add to Dataset</button> &nbsp;&nbsp;",
 			].join("");	
 		}
 	}
@@ -506,6 +508,56 @@ window.operateEvents = {
 			return;
 		}
 	}
+	'click .add-to-dataset': function(e, value, row, index) {
+		var name = null,
+			type = null;
+		if (window.source == 'RepositoryList'){
+			name = row['Repository Name'];
+			type = 'Repository';
+			var parameter_id = null;
+			var btn_text = $(this).closest('tr').first().find('td').eq(2).find('button').first().text();
+			if (btn_text == "Query Parameters"){
+				parameter_id = null;
+			}
+			else{
+				var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
+				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index - 1).attr('id');
+				parameter_id = selected_li_id.split('-').slice(-1)[0];
+			}
+
+			$("#add-to-dataset-selection-trigger-btn").click();
+
+			$("#add-to-dataset-selection-submit").on('click', function(){
+				var target = $("#dataset_name_dropdown_btn").text();
+				if (target == 'Dataset'){
+					window.alert('Please select a dataset');
+					return;
+				}	
+				addRepositoryToDataset(name, parameter_id, target);
+				$("#add-to-dataset-selection-close").click();
+			})
+
+		}
+		else if (window.source == 'DatasetList'){
+			name = row['Dataset Name'];
+			type = 'Dataset';
+			$("#add-to-dataset-selection-trigger-btn").click();
+
+			$("#add-to-dataset-selection-submit").on('click', function(){
+				var target = $("#dataset_name_dropdown_btn").text();
+				if (target == 'Dataset'){
+					window.alert('Please select a dataset');
+					return;
+				}
+				addDatasetToDataset(name, target);
+				$("#add-to-dataset-selection-close").click();
+			})
+			
+		}
+		else{
+			return;
+		}
+	}
 
 }
 
@@ -681,6 +733,22 @@ function saveRepositoryToDataset(name, parameter_id) {
 
 }
 
+function addRepositoryToDataset(name, parameter_id, target) {
+	var query = addRepositoryToDatasetQuery(name, parameter_id, target);
+	console.log(query);
+	$.getJSON(
+		'/writeOnlyQuery',
+		{arg: JSON.stringify({"query" : query})},
+		function (response){
+			$("#datasets-custom").click();
+			/*loadDatasetList();*/
+			window.alert('Done');
+			return;
+		}
+	);
+
+}
+
 function saveDatasetToDataset(name, new_name) {
 	// body...
 	var new_name = window.prompt("Enter a name");
@@ -689,6 +757,21 @@ function saveDatasetToDataset(name, new_name) {
 		return;
 	}
 	var query = saveDatasetToDatasetQuery(name, new_name);
+	$.getJSON(
+		'/writeOnlyQuery',
+		{arg: JSON.stringify({"query" : query})},
+		function (response){
+			$("#datasets-custom").click();
+			/*loadDatasetList();*/
+			window.alert('Done');
+			return;
+		}
+	);
+}
+
+function addDatasetToDataset(name, target){
+	var query = addDatasetToDatasetQuery(name, target);
+	console.log(query);
 	$.getJSON(
 		'/writeOnlyQuery',
 		{arg: JSON.stringify({"query" : query})},

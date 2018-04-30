@@ -422,7 +422,7 @@ function deleteStatisticalReportQuery(report_name){
 }
 
 function saveRepositoryToDatasetQuery(name, parameter_id, new_name){
-	var currentdate = new Date(); 
+	/*var currentdate = new Date(); 
 	var datetime = currentdate.getFullYear() + "-" + 
 					(currentdate.getMonth()+1) + "-" + 
 					currentdate.getDate() + " " +
@@ -430,7 +430,8 @@ function saveRepositoryToDatasetQuery(name, parameter_id, new_name){
 					currentdate.getMinutes() + ":" +
 					currentdate.getSeconds();
 
-	console.log(datetime);
+	console.log(datetime);*/
+	var datetime = new Date().toGMTString();
 
 	if (parameter_id != null){
 		var query = "MATCH (x:SubRepository) WHERE " + 
@@ -470,14 +471,52 @@ function saveRepositoryToDatasetQuery(name, parameter_id, new_name){
 	
 }
 
+function addRepositoryToDatasetQuery(name, parameter_id, target){
+	var datetime = new Date().toGMTString();
+
+	if (parameter_id != null){
+		var query = "MATCH (x:SubRepository), (y:Dataset) WHERE " + 
+					"x.system_user_username = '" + window.username +"' AND " + 
+					"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
+					"x.parent_repository_name = '" + name + "' AND " + 
+					"x.parameter_id = '"+  parameter_id + "' AND " +
+					"y.system_user_username = '" + window.username +"' AND " + 
+					"y.system_user_hashkey = '" + window.hashkey + "' AND " + 
+					"y.name = '" + target + "' " +
+					"WITH x, y CREATE (x)-[:DataFlow]->(y) " + 
+					"WITH x, y SET y.update_time = '" + datetime + "' " + 
+					"WITH x, y " + 
+					"MATCH (d:Data)-[:InSubRepository]->(x) CREATE (d)-[:InDataset]->(y);";
+
+		return query;
+	}
+	else{
+		var query = "MATCH (x:Repository), (y:Dataset) WHERE " + 
+					"x.system_user_username = '" + window.username +"' AND " + 
+					"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
+					"x.name = '" + name + "' " + 
+					"y.system_user_username = '" + window.username +"' AND " + 
+					"y.system_user_hashkey = '" + window.hashkey + "' AND " + 
+					"y.name = '" + target + "' " +
+					"WITH x, y CREATE (x)-[:DataFlow]->(y) " + 
+					"WITH x, y SET y.update_time = '" + datetime + "' " + 
+					"WITH x, y " + 
+					"MATCH (d:Data)-[:InRepository]->(x) CREATE (d)-[:InDataset]->(y);";
+
+		return query;
+	}
+}
+
 function saveDatasetToDatasetQuery(name, new_name){
-	var currentdate = new Date(); 
+	/*var currentdate = new Date(); 
 	var datetime = currentdate.getFullYear() + "-" + 
 					(currentdate.getMonth()+1) + "-" + 
 					currentdate.getDate() + " " +
 					currentdate.getHours() + ":" + 
 					currentdate.getMinutes() + ":" +
-					currentdate.getSeconds();
+					currentdate.getSeconds();*/
+
+	var datetime = new Date().toGMTString();
 
 	var query = "MATCH (x:Dataset) WHERE " + 
 				"x.system_user_username = '" + window.username +"' AND " + 
@@ -492,7 +531,33 @@ function saveDatasetToDatasetQuery(name, new_name){
 				"CREATE (u)-[:hasDataset]->(ds) " + 
 				"WITH x, ds MATCH (d:Data)-[:InDataset]->(x) CREATE (d)-[:InDataset]->(ds);";
 
-	return query;	
+	return query;
+}
+
+function addDatasetToDatasetQuery(name, target){
+	/*var currentdate = new Date(); 
+	var datetime = currentdate.getFullYear() + "-" + 
+					(currentdate.getMonth()+1) + "-" + 
+					currentdate.getDate() + " " +
+					currentdate.getHours() + ":" + 
+					currentdate.getMinutes() + ":" +
+					currentdate.getSeconds();*/
+
+	var datetime = new Date().toGMTString();
+
+	var query = "MATCH (a:Dataset), (b:Dataset) WHERE " + 
+				"a.system_user_username = '" + window.username +"' AND " + 
+				"a.system_user_hashkey = '" + window.hashkey + "' AND " + 
+				"a.name = '" + name + "' AND " + 
+				"b.system_user_username = '" + window.username +"' AND " + 
+				"b.system_user_hashkey = '" + window.hashkey + "' AND " + 
+				"b.name = '" + target + "' " + 
+				"WITH a, b CREATE UNIQUE (a)-[:DataFlow]->(b) " + 
+				"WITH a, b " + 
+				"SET b.update_time = '" + datetime + "' " + 
+				"WITH a, b MATCH (d:Data)-[:InDataset]->(a) CREATE (d)-[:InDataset]->(b);";
+
+	return query;
 }
 
 function getRepositoryUpdateTimeQuery(name, parameter_id){

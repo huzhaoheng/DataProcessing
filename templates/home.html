@@ -793,6 +793,57 @@
 			</div>
 			
 		</div>
+
+		<button type="button" class="btn btn-default btn-sm btn-block" data-toggle="modal" data-target="#add-to-dataset-selection" id="add-to-dataset-selection-trigger-btn" style="display: none;">Select Dataset</button>
+		<div class="modal fade" id="add-to-dataset-selection" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							×
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							Select Dataset
+						</h4>
+					</div>
+
+					<div class="modal-body">
+
+						<form id="add-to-dataset-selection-form" role="form">
+
+							<div class="form-group">
+
+								<label class="col-sm-4 control-label">Dataset</label>
+								<div class="dropdown col-sm-2", style="padding: 0;">
+									<button class="btn btn-block btn-secondary dropdown-toggle" type="button" id="dataset_name_dropdown_btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dataset</button>
+									<div class="dropdown-menu" aria-labelledby="dataset_name_dropdown_btn" style="min-width: 0; width: 100%;">
+										<!-- <p class="dropdown-item">IS</p>
+										<p class="dropdown-item">NOT</p> -->
+									</div>
+								</div>
+
+							</div>
+
+						</form>
+
+						
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal" id="add-to-dataset-selection-close">
+							Close
+						</button> 
+						<button type="button" class="btn btn-primary" id="add-to-dataset-selection-submit">
+							Submit
+						</button>
+					</div>
+
+				</div>
+				
+			</div>
+			
+		</div>
 	
 
 	</body>
@@ -828,6 +879,7 @@
 		<script src="../static/js/delete-statistical-report.js"></script>
 		<script src="../static/js/data-flow.js"></script>
 		<script src="../static/js/repository-parameters.js"></script>
+		<script src="../static/js/add-data-to-dataset.js"></script>
 
 
 
