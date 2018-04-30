@@ -508,6 +508,7 @@ window.operateEvents = {
 				parameter_id = null;
 			}
 			else{
+				console.log(btn_text);
 				var selected_index = parseInt(btn_text.split(' ').slice(-1)[0]);
 				console.log(selected_index);
 				var selected_li_id = $(this).closest('tr').first().find('td').eq(2).find("li").eq(selected_index - 1).attr('id');
