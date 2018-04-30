@@ -67,8 +67,8 @@ function displayInTable(result, type, container = '#table') {
 		})
 
 		columns.push({
-			field: 'Data Size', 
-			title: 'Data Size',
+			field: 'Data Size (Bytes)', 
+			title: 'Data Size (Bytes)',
 			valign:"middle",
 			align:"center",
 			formatter: dataSizeFormatter
