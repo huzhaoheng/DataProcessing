@@ -767,6 +767,10 @@ function reporsitoryParametersBtnHandler(repository_name) {
 
 function parameterGroupLiClickHandler(ele) {
 	var selected = $(ele).find('a')[0].innerText;
+	var name = $(ele).closest('tr').find('td').eq(0).text();
+	var parameter_id = $(ele).attr('id').split('-').slice(-1)[0];
+	console.log(name);
+	console.log(parameter_id);
 	/*$(ele).parent().prev().text(selected);
 	console.log($(ele).parent().prev());
 	console.log($(ele).parent().prev().text());*/
