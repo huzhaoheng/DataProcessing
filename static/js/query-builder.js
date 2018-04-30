@@ -494,7 +494,7 @@ function addRepositoryToDatasetQuery(name, parameter_id, target){
 		var query = "MATCH (x:Repository), (y:Dataset) WHERE " + 
 					"x.system_user_username = '" + window.username +"' AND " + 
 					"x.system_user_hashkey = '" + window.hashkey + "' AND " + 
-					"x.name = '" + name + "' " + 
+					"x.name = '" + name + "' AND " + 
 					"y.system_user_username = '" + window.username +"' AND " + 
 					"y.system_user_hashkey = '" + window.hashkey + "' AND " + 
 					"y.name = '" + target + "' " +
