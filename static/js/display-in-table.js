@@ -507,7 +507,7 @@ window.operateEvents = {
 		else{
 			return;
 		}
-	}
+	},
 	'click .add-to-dataset': function(e, value, row, index) {
 		var name = null,
 			type = null;
