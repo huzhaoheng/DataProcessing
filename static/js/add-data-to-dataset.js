@@ -8,7 +8,7 @@ $( "#add-to-dataset-selection").on('shown.bs.modal', function(){
 			var datasetList = result['datasetList'];
 			var code = "";
 			datasetList.forEach(dataset => {
-				code += "<p class='dropdown-item' onclick=datasetNameClickHandler(this);>" + dataset + "</p>"
+				code += "<li onclick=datasetNameClickHandler(this);><a href='#'>" + dataset + "</a></li>"
 			})
 			$("#add-to-dataset-selection-form").find(".dropdown-menu").first().html(code);
 		}
@@ -16,7 +16,7 @@ $( "#add-to-dataset-selection").on('shown.bs.modal', function(){
 })
 
 function datasetNameClickHandler(ele){
-	var dataset = $(ele).text();
+	var dataset = $(ele).find('a').first().text();
 	console.log(dataset);
 	$("#dataset_name_dropdown_btn").text(dataset);
 }
