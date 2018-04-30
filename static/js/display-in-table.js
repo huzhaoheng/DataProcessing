@@ -525,9 +525,12 @@ window.operateEvents = {
 				parameter_id = selected_li_id.split('-').slice(-1)[0];
 			}
 
+			$("#add-to-dataset-selection-trigger-btn").attr('source_type', 'repository');
+			$("#add-to-dataset-selection-trigger-btn").attr('name', name);
+			$("#add-to-dataset-selection-trigger-btn").attr('parameter_id', parameter_id);
 			$("#add-to-dataset-selection-trigger-btn").click();
 
-			$("#add-to-dataset-selection-submit").on('click', function(){
+			/*$("#add-to-dataset-selection-submit").on('click', function(){
 				var target = $("#dataset_name_dropdown_btn").text();
 				console.log(target);
 				if (target == 'Dataset'){
@@ -536,15 +539,18 @@ window.operateEvents = {
 				}	
 				addRepositoryToDataset(name, parameter_id, target);
 				$("#add-to-dataset-selection-close").click();
-			})
+			})*/
 
 		}
 		else if (window.source == 'DatasetList'){
 			name = row['Dataset Name'];
 			type = 'Dataset';
+			$("#add-to-dataset-selection-trigger-btn").attr('source_type', 'dataset');
+			$("#add-to-dataset-selection-trigger-btn").attr('name', name);
+			$("#add-to-dataset-selection-trigger-btn").attr('parameter_id', '');
 			$("#add-to-dataset-selection-trigger-btn").click();
 
-			$("#add-to-dataset-selection-submit").on('click', function(){
+			/*$("#add-to-dataset-selection-submit").on('click', function(){
 				var target = $("#dataset_name_dropdown_btn").text();
 				console.log(target);
 				if (target == 'Dataset'){
@@ -553,7 +559,7 @@ window.operateEvents = {
 				}
 				addDatasetToDataset(name, target);
 				$("#add-to-dataset-selection-close").click();
-			})
+			})*/
 			
 		}
 		else{

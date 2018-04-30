@@ -21,18 +21,22 @@ function datasetNameClickHandler(ele){
 	$("#dataset_name_dropdown_btn").text(dataset);
 }
 
-/*$("#add-to-dataset-selection-submit").on('click', function(){
-	if (window.source == 'RepositoryList'){
+$("#add-to-dataset-selection-submit").on('click', function(){
+	var target = $("#dataset_name_dropdown_btn").text();
+	var source_type = $("#add-to-dataset-selection-trigger-btn").attr('source_type');
+	var name = $("#add-to-dataset-selection-trigger-btn").attr('name');
+	var parameter_id = $("#add-to-dataset-selection-trigger-btn").attr('parameter_id');
+	if (source_type == 'repository'){
 		addRepositoryToDataset(name, parameter_id, target);
 	}
-	else if (window.source == 'DatasetList'){
+	else if (source_type == 'dataset'){
 		addDatasetToDataset(name, target);
 	}
 	else{
 		true;
 	}
 	$("#add-to-dataset-selection-close").click();
-})*/
+})
 
 $("#add-to-dataset-selection-close").on('click', function(){
 	$("#dataset_name_dropdown_btn").text("Dataset");
