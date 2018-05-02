@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!-- Generated with Popoto.js Configurator 1.0 -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>Popoto Search</title>
+    <link rel="stylesheet" href="css/popoto.min.css">
+    <style>
+        #popoto-graph:fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-moz-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-ms-fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="ppt-body">
+<header class="ppt-header">
+</header>
+<section class="ppt-section-main">
+    <div class="ppt-section-header" style="height: 150px; line-height: 45px;">
+        <span class="ppt-header-span">Neo4j movie graph -</span> Predefined constraints modifiable with inputs
+
+        <form>
+            <label>
+                <input id="constraint" type="text" style="width: 500px;" value="$identifier.born > 1967">
+            </label>
+            <input id="filter-button" type="button" value="Use this filter">
+            <br>
+            <label>
+                <input id="constraint2" type="text" style="width: 500px;" value="$identifier.name IN [&quot;Patricia Clarkson&quot;, &quot;Sam Rockwell&quot;, &quot;Gary Sinise&quot;, &quot;Michael Clarke Duncan&quot;, &quot;Bonnie Hunt&quot;, &quot;David Morse&quot;, &quot;Tom Hanks&quot;, &quot;James Cromwell&quot;]">
+            </label>
+            <input id="filter-button2" type="button" value="Use this filter">
+        </form>
+    </div>
+    <div class="ppt-container-graph">
+        <nav id="popoto-taxonomy" class="ppt-taxo-nav">
+            <!-- Label/taxonomy filter will be generated here -->
+        </nav>
+        <div id="popoto-graph" class="ppt-div-graph">
+            <!-- Graph will be generated here -->
+        </div>
+    </div>
+    <div id="popoto-query" class="ppt-container-query">
+        <!-- Query viewer will be generated here -->
+    </div>
+    <div id="popoto-cypher" class="ppt-container-cypher">
+        <!-- Cypher query viewer will be generated here -->
+    </div>
+    <div class="ppt-section-header">
+        <!-- The total results count is updated with a listener defined in script -->
+        RESULTS <span id="result-total-count" class="ppt-count"></span>
+    </div>
+    <div id="popoto-results" class="ppt-container-results">
+        <!-- Results will be generated here -->
+    </div>
+</section>
+<script src="js/jquery-2.1.0.min.js" charset="utf-8"></script>
+<script src="js/d3.v3.min.js" charset="utf-8"></script>
+<script src="js/popoto.min.js" charset="utf-8"></script>
+<script>
+
+var personPredefinedConstraints = ["$identifier.system_user_username = 'huzhaoheng'"];
+
+d3.select("#filter-button").on("click", function (d) {
+    var constraint = d3.select("#constraint")[0][0].value;
+
+    /*personPredefinedConstraints = [constraint];*/
+    personPredefinedConstraints.push(constraint);
+
+    // Recreate taxonomies panel
+    d3.select("#" + popoto.taxonomy.containerId).selectAll("ul").data([]).exit().remove();
+    popoto.taxonomy.createTaxonomyPanel();
+
+    popoto.tools.reset();
+});
+
+d3.select("#filter-button2").on("click", function (d) {
+    var constraint = d3.select("#constraint2")[0][0].value;
+
+    /*personPredefinedConstraints = [constraint];*/
+    personPredefinedConstraints.push(constraint);
+
+    // Recreate taxonomies panel
+    d3.select("#" + popoto.taxonomy.containerId).selectAll("ul").data([]).exit().remove();
+    popoto.taxonomy.createTaxonomyPanel();
+
+    popoto.tools.reset();
+});
+
+// URL used to access Neo4j REST API to execute queries.
+popoto.rest.CYPHER_URL = "http://127.0.0.1:7474/db/data/transaction/commit";
+popoto.rest.AUTHORIZATION = "Basic bmVvNGo6MTIzNDU2";
+popoto.provider.nodeProviders = {
+    "redditLink":{
+        returnAttributes:["system_user_username", "over_18_Boolean", "subreddit_id_String", "num_comments_Int", "permalink_String", "subreddit_name_prefixed_String", "system_user_hashkey", "title_String", "score_Int", "author_name_String", "created_String", "internal_id", "name_String", "ups_Int", "selftext_String", "object", "id_String", "neo4j_id", "url_String", "resource", "thumbnail_String"],
+        constraintAttribute:"system_user_username",
+    },
+    "label_b":{
+        returnAttributes:["update_time"],
+        constraintAttribute:"update_time",
+    },
+    "Dataset":{
+        returnAttributes:["name", "system_user_hashkey", "system_user_username"],
+        constraintAttribute:"name",
+    },
+    "tweet":{
+        returnAttributes:["system_user_username", "text_String", "retweet_count_Int", "system_user_hashkey", "object", "id_String", "created_at_String", "neo4j_id", "in_reply_to_screen_name_String", "resource", "internal_id", "in_reply_to_user_id_str_String", "in_reply_to_status_id_str_String"],
+        constraintAttribute:"neo4j_id",
+        "getTextValue": function (node) {
+            var text;
+            if (node.type === popoto.graph.node.NodeTypes.VALUE) {
+                text = "" + node.attributes["text_String"];
+            } else {
+                if (node.value === undefined) {
+                    text = node.label;
+                } else {
+                    text = "" + node.value.attributes["text_String"];
+                }
+            }
+            // Text is truncated to avoid node overflow
+            return text.substring(0, 12);
+        },
+    },
+    "subreddit":{
+        returnAttributes:["system_user_hashkey", "system_user_username", "display_name_String", "created_String", "title_String", "over18_Boolean", "internal_id", "subreddit_type_String", "subscribers_Int", "public_description_String", "resource", "object", "neo4j_id", "url_String", "description_String", "header_img_String", "header_title_String"],
+        constraintAttribute:"system_user_hashkey",
+    },
+    "Repository":{
+        returnAttributes:["system_user_username", "system_user_hashkey", "name"],
+        constraintAttribute:"system_user_username",
+    },
+    "statisticalReport":{
+        returnAttributes:["system_user_hashkey", "system_user_username", "functions", "names", "name", "data_selection_query", "inputs"],
+        constraintAttribute:"system_user_hashkey",
+    },
+    "searchSubredditNames":{
+        returnAttributes:["system_user_username", "object", "resource", "searchSubredditNames_LISTOFString", "system_user_hashkey", "neo4j_id", "internal_id"],
+        constraintAttribute:"system_user_username",
+    },
+    "redditComment":{
+        returnAttributes:["over_18_Boolean", "subreddit_id_String", "system_user_username", "subreddit_name_prefixed_String", "num_comments_Int", "author_name_String", "score_Int", "system_user_hashkey", "internal_id", "subreddit_display_name_String", "subreddit_type_String", "ups_Int", "parent_id_String", "link_permalink_String", "id_String", "name_String", "controversiality_Int", "object", "body_String", "created_utc_String", "resource", "neo4j_id", "downs_Int", "link_url_String"],
+        constraintAttribute:"over_18_Boolean",
+    },
+    "twtUser":{
+        returnAttributes:["internal_id", "favourites_count_Int", "system_user_hashkey", "system_user_username", "time_zone_String", "statuses_count_Int", "followers_count_Int", "friends_count_Int", "listed_count_Int", "name_String", "author_created_at_String", "object", "screen_name_String", "author_id_String", "tweets_count_Int", "description_String", "location_String", "resource", "neo4j_id", "profile_image_url_String", "url_String"],
+        constraintAttribute:"neo4j_id",
+        "getTextValue": function (node) {
+            var text;
+            if (node.type === popoto.graph.node.NodeTypes.VALUE) {
+                text = "" + node.attributes["name_String"];
+            } else {
+                if (node.value === undefined) {
+                    text = node.label;
+                } else {
+                    text = "" + node.value.attributes["name_String"];
+                }
+            }
+            // Text is truncated to avoid node overflow
+            return text.substring(0, 12);
+        },
+
+        "getPredefinedConstraints": function (node) {
+            return personPredefinedConstraints;
+        },
+    },
+    "SystemUser":{
+        returnAttributes:["username", "hashkey"],
+        constraintAttribute:"username",
+    },
+    "SubRepository":{
+        returnAttributes:["system_user_hashkey", "system_user_username", "parameter_id", "queryword", "parent_repository_name", "para2", "para1", "para3"],
+        constraintAttribute:"system_user_hashkey",
+    },
+};
+
+popoto.query.RESULTS_PAGE_SIZE = 100;
+
+popoto.result.onTotalResultCount(function (count) {
+    d3.select("#result-total-count").text(function (d) {
+        return "(" + count + ")";
+    })
+});
+popoto.logger.LEVEL = popoto.logger.LogLevels.INFO;
+popoto.start("redditLink");
+</script>
+</body>
+</html>
