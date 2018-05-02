@@ -181,7 +181,7 @@
 
     </style>
 </head>
-<body style="background: #2E3138; margin: 22px;" onload="initialization({username}, {hashkey});">
+<body style="background: #2E3138; margin: 22px;" onload="initialization('{{username}}', '{{hashkey}}');">
 
 <header style="text-align: center;">
     <img src="image/configurator.png">
@@ -1691,7 +1691,7 @@
         newWindow.document.close();
     }
 
-    function initialization(username, hashkey) {
+    /*function initialization(username, hashkey) {
     	console.log(username);
     	console.log(hashkey);
 
@@ -1709,8 +1709,11 @@
 
         window.username = username;
         window.hashkey = hashkey;
-    }
+    }*/
 
 </script>
 </body>
+
+<div><script src="../static/js/initialization.js"></script></div>
+
 </html>
