@@ -536,15 +536,13 @@
 
 </div>
 
-<script src="js/jquery-2.1.0.min.js" charset="utf-8"></script>
-<script src="js/d3.v3.min.js" charset="utf-8"></script>
-<script src="js/popoto.min.js" charset="utf-8"></script>
-<script src="js/highlight.pack.js" charset="utf-8"></script>
-<script src="js/jquery-ui.min.js" charset="utf-8"></script>
-<!-- Used only on www.popotojs.com website, this reference can be safely removed -->
-<script src="js/analytics.js"></script>
+<script src="../templates/js/jquery-2.1.0.min.js" charset="utf-8"></script>
+<script src="../templates/js/d3.v3.min.js" charset="utf-8"></script>
+<script src="../templates/js/popoto.min.js" charset="utf-8"></script>
+<script src="../templates/js/highlight.pack.js" charset="utf-8"></script>
+<script src="../templates/js/jquery-ui.min.js" charset="utf-8"></script>
 <script>
-
+	console.log(window.location.pathname);
     //TODO temp code for cypher highlighting
     hljs.registerLanguage("cypher", cypher);
     hljs.initHighlightingOnLoad();
