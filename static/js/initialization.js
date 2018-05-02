@@ -1,13 +1,9 @@
 function initialization(username, hashkey) {
-	console.log(window.location.pathname);
-	console.log(username);
-	console.log(hashkey);
-
     $('#host').val('127.0.0.1');
-    $('#host').prop("readonly",true);
+    //$('#host').prop("readonly",true);
 
     $('#port').val('7474');
-    $('#port').prop("readonly",true);
+    //$('#port').prop("readonly",true);
 
     $('#user').val('neo4j');
     $('#user').prop("readonly",true);
