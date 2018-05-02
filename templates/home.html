@@ -768,7 +768,7 @@
             var password = config.server.credentials.password;
             if (password == "") {
                 // use default value
-                password = "neo4j";
+                password = "123456";
             }
             console.log(user, password);
             authorization = "Basic " + btoa(user + ":" + password);
