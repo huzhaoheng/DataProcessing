@@ -3,17 +3,17 @@ function initialization(username, hashkey) {
 	console.log(username);
 	console.log(hashkey);
 
-    $('$host').val('127.0.0.1');
-    $('$host').prop("readonly",true);
+    $('#host').val('127.0.0.1');
+    $('#host').prop("readonly",true);
 
-    $('$port').val('7474');
-    $('$port').prop("readonly",true);
+    $('#port').val('7474');
+    $('#port').prop("readonly",true);
 
-    $('$user').val('neo4j');
-    $('$user').prop("readonly",true);
+    $('#user').val('neo4j');
+    $('#user').prop("readonly",true);
 
-    $('$password').val('123456');
-    $('$password').prop("readonly",true);
+    $('#password').val('123456');
+    $('#password').prop("readonly",true);
 
     window.username = username;
     window.hashkey = hashkey;
@@ -141,7 +141,7 @@ function loadRepositoryList() {
 	);
 }
 
-$('[data-toggle="confirmation"]').confirmation();
+/*$('[data-toggle="confirmation"]').confirmation();*/
 
 function setBrand() {
 	var query = getResourcesListQuery();
