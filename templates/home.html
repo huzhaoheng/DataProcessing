@@ -818,6 +818,7 @@
 
         restGET(url, authorization)
                 .done(function (data, textStatus, jqXHR) {
+                	console.log(data);
                     var status = $("#status")
                             .empty()
                             .append("<div>GET URL: <span>" + url + "</span></div>")
@@ -1134,34 +1135,6 @@
 
         headerTR.append("th").text("Node preview");
 
-
-        //========================================== Parent Label
-//        var trParentLabel = table.append("tr");
-//
-//        trParentLabel.append("td")
-//                .attr("class", "colFirst")
-//                .append("label")
-//                .attr("for", function (d) {
-//                    return "parentLabel-" + d.id;
-//                }).text("Parent label:");
-//        trParentLabel.append("td")
-//                .append("select")
-//                .attr("id", function (d) {
-//                    return "parentLabel-" + d.id;
-//                })
-//                .selectAll("option")
-//                .data(config.labels, function (d) {
-//                    return d.id;
-//                })
-//                .enter()
-//                .append("option")
-//                .attr("value", function (d) {
-//                    return d.name;
-//                })
-//                .text(function (d) {
-//                    return d.name;
-//                });
-
         //========================================== Constraint Attribute
         var trConstraintAttr = table.append("tr");
 
@@ -1333,14 +1306,6 @@
             });
 
             // ----------- return attributes tooltips TODO
-//            $("#returnAttrs-" + i).tooltip({
-//                items: "span",
-//                position: {
-//                    my: "left top",
-//                    at: "right+5 top-5"
-//                },
-//                content: "List of attributes returned for the nodes, they will be added in the Cypher query"
-//            });
 
             // ----------- attribute in graph
             $("#attrInGraph-" + i).selectmenu({
