@@ -543,7 +543,6 @@
 <script src="../static/js/jquery-ui.min.js" charset="utf-8"></script>
 <script src="../static/js/initialization.js"></script>
 <script>
-	console.log(window.location.pathname);
     //TODO temp code for cypher highlighting
     hljs.registerLanguage("cypher", cypher);
     hljs.initHighlightingOnLoad();
@@ -818,7 +817,6 @@
 
         restGET(url, authorization)
                 .done(function (data, textStatus, jqXHR) {
-                	console.log(data);
                     var status = $("#status")
                             .empty()
                             .append("<div>GET URL: <span>" + url + "</span></div>")
@@ -830,6 +828,7 @@
                     }
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
+                	console.log(errorThrown);
                     var status = $("#status")
                             .empty()
                             .append("<div>GET URL: <span>" + url + "</span></div>")
