@@ -779,8 +779,7 @@
 
     function restGET(url, authorization) {
         return $.ajax({
-            /*type: "GET",*/
-            type: "POST",
+            type: "GET",
             timeout: 15000,
             beforeSend: function (request) {
                 if (authorization) {
