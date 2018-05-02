@@ -809,13 +809,13 @@
      * Test server using config and update the status panel
      */
     function testServer() {
-    	console.log("testing server");
         $("#status").empty().append("<img src='../static/image/ajax-loader.gif'>");
         $("#accordion").accordion("refresh");
 
         var url = buildURL() + "/db/data/";
         var authorization = buildAuthorization();
-
+        console.log(url);
+        console.log(authorization);
         restGET(url, authorization)
                 .done(function (data, textStatus, jqXHR) {
                     var status = $("#status")
