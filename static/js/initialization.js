@@ -1,4 +1,5 @@
 function initialization(username, hashkey) {
+	console.log(window.location.pathname);
 	console.log(username);
 	console.log(hashkey);
 
