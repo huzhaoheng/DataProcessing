@@ -380,7 +380,7 @@
                             <label for="password">Password:</label>
                         </td>
                         <td>
-                            <input id="password" name="password" type="password" placeholder="neo4j" title="Password of the user to access REST API">
+                            <input id="password" name="password" type="password" placeholder="123456" title="Password of the user to access REST API">
                         </td>
                     </tr>
                 </table>
@@ -770,7 +770,6 @@
                 // use default value
                 password = "123456";
             }
-            console.log(user, password);
             authorization = "Basic " + btoa(user + ":" + password);
         }
 
@@ -778,8 +777,6 @@
     }
 
     function restGET(url, authorization) {
-    	console.log(url);
-    	console.log(authorization);
         return $.ajax({
             type: "GET",
             timeout: 15000,
@@ -816,8 +813,6 @@
 
         var url = buildURL() + "/db/data/";
         var authorization = buildAuthorization();
-        console.log(url);
-        console.log(authorization);
         restGET(url, authorization)
                 .done(function (data, textStatus, jqXHR) {
                     var status = $("#status")
