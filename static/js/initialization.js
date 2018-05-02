@@ -6,10 +6,10 @@ function initialization(username, hashkey) {
     //$('#port').prop("readonly",true);
 
     $('#user').val('neo4j');
-    $('#user').prop("readonly",true);
+    //$('#user').prop("readonly",true);
 
     $('#password').val('123456');
-    $('#password').prop("readonly",true);
+    //$('#password').prop("readonly",true);
 
     window.username = username;
     window.hashkey = hashkey;
