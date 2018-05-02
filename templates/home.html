@@ -543,6 +543,7 @@
 <script src="../static/js/jquery-ui.min.js" charset="utf-8"></script>
 <script src="../static/js/initialization.js"></script>
 <script>
+	console.log(window.location.pathname);
     //TODO temp code for cypher highlighting
     hljs.registerLanguage("cypher", cypher);
     hljs.initHighlightingOnLoad();
@@ -1688,26 +1689,6 @@
         newWindow.document.write(page);
         newWindow.document.close();
     }
-
-    /*function initialization(username, hashkey) {
-    	console.log(username);
-    	console.log(hashkey);
-
-        $('$host').val('127.0.0.1');
-        $('$host').prop("readonly",true);
-
-        $('$port').val('7474');
-        $('$port').prop("readonly",true);
-
-        $('$user').val('neo4j');
-        $('$user').prop("readonly",true);
-
-        $('$password').val('123456');
-        $('$password').prop("readonly",true);
-
-        window.username = username;
-        window.hashkey = hashkey;
-    }*/
 
 </script>
 </body>
