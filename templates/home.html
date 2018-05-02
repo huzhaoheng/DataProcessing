@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <title></title>
 
-    <link rel="stylesheet" href="../templates/css/jquery/jquery-ui.min.css">
-    <link rel="stylesheet" href="../templates/css/jquery/jquery-ui.structure.min.css">
-    <link rel="stylesheet" href="../templates/css/jquery/jquery-ui.theme.min.css">
-    <link rel="stylesheet" href="../templates/css/hljs/hybrid.css">
-    <link rel="stylesheet" href="../templates/css/popoto.min.css">
+    <link rel="stylesheet" href="../static/css/jquery/jquery-ui.min.css">
+    <link rel="stylesheet" href="../static/css/jquery/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="../static/css/jquery/jquery-ui.theme.min.css">
+    <link rel="stylesheet" href="../static/css/hljs/hybrid.css">
+    <link rel="stylesheet" href="../static/css/popoto.min.css">
     <style>
 
         /*Remove blue outline on Jquery UI elements*/
@@ -536,11 +536,12 @@
 
 </div>
 
-<script src="../templates/js/jquery-2.1.0.min.js" charset="utf-8"></script>
-<script src="../templates/js/d3.v3.min.js" charset="utf-8"></script>
-<script src="../templates/js/popoto.min.js" charset="utf-8"></script>
-<script src="../templates/js/highlight.pack.js" charset="utf-8"></script>
-<script src="../templates/js/jquery-ui.min.js" charset="utf-8"></script>
+<script src="../static/js/jquery-2.1.0.min.js" charset="utf-8"></script>
+<script src="../static/js/d3.v3.min.js" charset="utf-8"></script>
+<script src="../static/js/popoto.min.js" charset="utf-8"></script>
+<script src="../static/js/highlight.pack.js" charset="utf-8"></script>
+<script src="../static/js/jquery-ui.min.js" charset="utf-8"></script>
+<script src="../static/js/initialization.js"></script>
 <script>
 	console.log(window.location.pathname);
     //TODO temp code for cypher highlighting
@@ -1385,7 +1386,7 @@
                 "<head>\n" +
                 "    <meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"UTF-8\">\n" +
                 "    <title>Popoto Search</title>\n" +
-                "    <link rel=\"stylesheet\" href=\"css/popoto.min.css\">\n" +
+                "    <link rel=\"stylesheet\" href=\"../static/css/popoto.min.css\">\n" +
                 "    <style>\n" + 
                 "       #popoto-graph:fullscreen {\n" + 
                 "           width: 100%;\n" + 
@@ -1474,9 +1475,9 @@
 
         page +=
                 "</section>\n" +
-                "<script src=\"js/jquery-2.1.0.min.js\" charset=\"utf-8\"></scr" + "ipt>\n" +
-                "<script src=\"js/d3.v3.min.js\" charset=\"utf-8\"></scr" + "ipt>\n" +
-                "<script src=\"js/popoto.min.js\" charset=\"utf-8\"></scr" + "ipt>\n" +
+                "<script src=\"../static/js/jquery-2.1.0.min.js\" charset=\"utf-8\"></scr" + "ipt>\n" +
+                "<script src=\"../static/js/d3.v3.min.js\" charset=\"utf-8\"></scr" + "ipt>\n" +
+                "<script src=\"../static/js/popoto.min.js\" charset=\"utf-8\"></scr" + "ipt>\n" +
                 "<script>\n" +
 
                     "var personPredefinedConstraints = [\"$identifier.system_user_username = '" + username + "'\"];\n" + 
@@ -1711,7 +1712,5 @@
 
 </script>
 </body>
-
-<div><script src="../static/js/initialization.js"></script></div>
 
 </html>
