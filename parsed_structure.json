@@ -1,134 +1,41 @@
 {
-	"data": {
-		"type": "Query",
-		"schema": {
-			"twitter": {
-				"type": "twitterQuery",
-				"schema": {
-					"queryTweet": {
-						"type": ["tweet"],
-						"schema": {
-							"id": "String",
-							"created_at": "String",
-							"text": "String",
-							"retweet_count": "Int",
-							"in_reply_to_user_id_str": "String",
-							"in_reply_to_status_id_str": "String",
-							"in_reply_to_screen_name": "String",
-							"user": {
-								"type": "twtUser",
-								"schema": {
-									"author_id": "String",
-									"screen_name": "String",
-									"name": "String",
-									"description": "String",
-									"author_created_at": "String",
-									"profile_image_url": "String",
-									"url": "String",
-									"location": "String",
-									"tweets_count": "Int",
-									"followers_count": "Int",
-									"friends_count": "Int",
-									"listed_count" : "Int",
-									"favourites_count": "Int",
-									"statuses_count": "Int",
-									"time_zone": "String"
-								}
-							}
-						}
-					},
-
-					"queryUser": {
-						"type": ["twtUser"],
-						"schema": {
-							"author_id": "String",
-							"screen_name": "String",
-							"description": "String",
-							"author_created_at": "String",
-							"profile_image_url": "String",
-							"location": "String",
-							"tweets_count": "Int",
-							"followers_count": "Int",
-							"friends_count": "Int",
-							"favourites_count": "Int",
-							"statuses_count": "Int",
-							"time_zone": "String"
-						}
-					}
-				}
-			},
-
-			"reddit": {
-				"type": "redditQuery",
-				"schema": {
-					"searchSubreddits": {
-						"type": ["subreddit"],
-						"schema": {
-							"header_img": "String",
-                    		"header_title": "String",
-                    		"over18": "Boolean",
-                    		"public_description": "String",
-                    		"created": "String",
-                    		"description": "String",
-                    		"display_name": "String",
-                    		"subscribers": "Int",
-                    		"subreddit_type": "String",
-                    		"title": "String",
-                    		"url": "String"
-						}
-					},
-
-					"search": {
-						"type": ["redditLink"],
-						"schema": {
-							"id": "String",
-							"author_name": "String",
-							"created": "String",
-							"name": "String",
-							"num_reports": "Int",
-							"num_comments": "Int",
-							"over_18": "Boolean",
-							"permalink": "String",
-							"score": "Int",
-							"selftext": "String",
-							"subreddit_id": "String",
-							"subreddit_name_prefixed": "String",
-							"thumbnail": "String",
-							"title": "String",
-							"url": "String",
-							"ups": "Int"
-						}
-					},
-
-					"searchSubredditNames": ["String"],
-
-					"getNewComments" : {
-						"type" : ["redditComment"],
-						"schema" : {
-							"author_name": "String",
-							"body": "String",
-							"created_utc": "String",
-							"controversiality": "Int",
-							"downs": "Int",
-							"id": "String",
-							"link_url": "String",
-							"link_permalink": "String",
-							"likes": "Int",
-							"name": "String",
-							"num_reports": "Int",
-							"num_comments": "Int",
-							"over_18": "Boolean",
-							"parent_id": "String",
-							"score": "Int",
-							"subreddit_id": "String",
-							"subreddit_display_name": "String",
-							"subreddit_name_prefixed": "String",
-							"subreddit_type": "String",
-							"ups": "Int"
-						}
-					}
-				}
-			}
-		}
-	}
+	"system_user_username": "huzhaoheng",
+	"system_user_hashkey": "123456",
+	"query_name": "twitter query",
+	"parameter_id": "parameter group 1",
+	"name": "query",
+	"children": [{
+		"system_user_username": "huzhaoheng",
+		"system_user_hashkey": "123456",
+		"query_name": "twitter query",
+		"parameter_id": "parameter group 1",
+		"name": "twitter",
+		"children": [{
+			"system_user_username": "huzhaoheng",
+			"system_user_hashkey": "123456",
+			"query_name": "twitter query",
+			"parameter_id": "parameter group 1",
+			"name": "queryUser",
+			"children": [{
+				"system_user_username": "huzhaoheng",
+				"system_user_hashkey": "123456",
+				"query_name": "twitter query",
+				"parameter_id": "parameter group 1",
+				"name": "friends",
+				"children": [],
+				"object_name": "twtUser"
+			}, {
+				"system_user_username": "huzhaoheng",
+				"system_user_hashkey": "123456",
+				"query_name": "twitter query",
+				"parameter_id": "parameter group 1",
+				"name": "followers",
+				"children": [],
+				"object_name": "twtUser"
+			}],
+			"object_name": "twtUser"
+		}],
+		"object_name": ""
+	}],
+	"object_name": ""
 }
