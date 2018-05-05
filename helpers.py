@@ -5,6 +5,55 @@ import pandas as pd
 import hashlib
 import json
 
+
+def createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id):
+    query_parameter_structure = parseQueryParameterStructure(username, hashkey, structure, query_name, parameter_id)
+    query = "MATCH (a:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'}) WITH a CREATE (a)"
+    children = query_parameter_structure['children']
+    createQueryParameterStructureHelper(username, hashkey, children, query_name, parameter_id, query)
+
+
+def createQueryParameterStructureHelper(username, hashkey, structures, query_name, parameter_id, query):
+    if not structures:
+        query += ';'
+        return [query]
+    else:
+        ret = []
+        for each in structures:
+            new_query = query + "-[:Has" + each['instance_type'] + "]->(:QueryObject {name : '" + each['object_name'] + "', query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'})"
+            ret += createQueryParameterStructureHelper(username, hashkey, each['children'], query_name, parameter_id, new_query)
+        return ret
+
+
+def parseQueryParameterStructure(username, hashkey, structure, query_name, parameter_id):
+    name, output, children, selected = structure['name'], structure['output'], structure['children'], structure['selected']
+    if selected:
+        if not children:
+            return None
+        else:    
+            ret = {
+                    'system_user_username' : username, 
+                    'system_user_hashkey' : hashkey, 
+                    'query_name' : query_name,
+                    'parameter_id' : parameter_id,
+                    'object_name' : name,
+                    'children' : []
+                }
+                
+            try:
+                ret['instance_type'] = output['type']['ofType']['name']
+            except Exception as e:
+                ret['instance_type'] = ''
+
+            for child in children:
+                child_structure = parseQueryParameterStructure(username, hashkey, child, query_name, parameter_id)
+                if child_structure:
+                    ret['children'].append(child_structure)
+            return ret
+    else:
+        return None
+
+
 def getHashKey(nodeRecord):
     data = {"id": str(nodeRecord.d._id)}
     data.update(nodeRecord.d.properties)

@@ -23,14 +23,16 @@ hidden_properties = ['internal_id', 'system_user_username', 'system_user_hashkey
 def verification():
     print("request received")
     curr_time = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime())
-    print (curr_time)
-    username, data, repository, structure = request.json["username"], json.loads(request.json["data"]), request.json["name"], json.loads(request.json["structure"])
+    username, data, query_name, structure = request.json["username"], json.loads(request.json["data"]), request.json["name"], json.loads(request.json["structure"])
+    with open('sample_structure.json', 'w') as fp:
+        json.dump(structure, fp)
+    with open('data.txt', 'w') as fp:
+        json.dump(data, fp)
     hashkey = hashlib.md5((username).encode()).hexdigest()
     parameters = parameterParser(structure)
     parameter_id = generateParameterID(parameters)
     query = "MATCH (d:SystemUser) WHERE d.username = '" + username + "' RETURN d"
     exists = graph.cypher.execute(query)
-    # redirect_url = "http://127.0.0.1:1111" + url_for('home', username = username, hashkey = hashkey)
     redirect_url = "http://listen.online:1111" + url_for('home', username = username, hashkey = hashkey)
     response = make_response(redirect_url)
     response.set_cookie('hashkey', hashkey)
@@ -38,9 +40,9 @@ def verification():
     if not exists:
         query = "CREATE (u:SystemUser {username : '" + username + "', hashkey : '" + hashkey + "'})"
         graph.cypher.execute(query)
-    repository_exist = graph.cypher.execute("MATCH (r:Repository {name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) RETURN r")
-    if not repository_exist:
-        query = "MATCH (a:SystemUser {username:'" + username + "'}) CREATE (a)-[:hasRepository]->(b:Repository {name:'" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', update_time : '" + curr_time + "'})-[:hasSubRepository]->(c:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
+    query_name_exist = graph.cypher.execute("MATCH (q:Query {name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) RETURN q")
+    if not query_name_exist:
+        query = "MATCH (a:SystemUser {username:'" + username + "'}) CREATE (a)-[:hasQuery]->(b:Query {name:'" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', update_time : '" + curr_time + "'})-[:hasParameter]->(c:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
         for k, v in parameters.items():
             if v:
                 if (type(v) is int) or (type(v) is float):
@@ -49,11 +51,12 @@ def verification():
                     query += ", " + k + ": '" + str(v) + "'"
         query += "})"
         graph.cypher.execute(query)
+        createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
     else:
-        query = "MATCH (a:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'}) RETURN a;"
-        subrepository_exist = graph.cypher.execute(query)
-        if not subrepository_exist:
-            query = "MATCH (a:Repository {name:'" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) CREATE (a)-[:hasSubRepository]->(b:SubRepository {parent_repository_name : '" + repository + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
+        query = "MATCH (a:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'}) RETURN a;"
+        query_parameter_exist = graph.cypher.execute(query)
+        if not query_parameter_exist:
+            query = "MATCH (a:Query {name:'" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) CREATE (a)-[:hasParameter]->(b:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
             for k, v in parameters.items():
                 if v:
                     if (type(v) is int) or (type(v) is float):
@@ -61,10 +64,10 @@ def verification():
                     else:
                         query += ", " + k + ": '" + str(v) + "'"
             query += "})"
-            graph.cypher.execute(query)    
-
+            graph.cypher.execute(query)
+            createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
         
-    storeData(graph, data, username, hashkey, structure, repository, parameter_id)
+    # storeData(graph, data, username, hashkey, structure, query_name, parameter_id)
     return response
 
 @app.route('/home')

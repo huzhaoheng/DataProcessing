@@ -1,0 +1,29 @@
+{
+	"system_user_username": "huzhaoheng",
+	"system_user_hashkey": "123456",
+	"query_name": "twitter query",
+	"parameter_id": "parameter group 1",
+	"object_name": "query",
+	"children": [{
+		"system_user_username": "huzhaoheng",
+		"system_user_hashkey": "123456",
+		"query_name": "twitter query",
+		"parameter_id": "parameter group 1",
+		"object_name": "reddit",
+		"children": [{
+			"system_user_username": "huzhaoheng",
+			"system_user_hashkey": "123456",
+			"query_name": "twitter query",
+			"parameter_id": "parameter group 1",
+			"object_name": "search",
+			"children": [{
+				"system_user_username": "huzhaoheng",
+				"system_user_hashkey": "123456",
+				"query_name": "twitter query",
+				"parameter_id": "parameter group 1",
+				"object_name": "replies",
+				"children": []
+			}]
+		}]
+	}]
+}
