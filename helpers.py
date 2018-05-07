@@ -54,7 +54,7 @@ def parseQueryParameterStructure(username, hashkey, structure, query_name, param
 
 
 def storeData(graph, data, username, hashkey, structure, query_name, parameter_id):
-    loader = DataLoader(graph, data, username, hashkey, query_name, parameter_id)
+    loader = DataLoader(graph, data, username, hashkey, structure, query_name, parameter_id)
     loader.storeData()
     return {"msg" : "Done"}
 
