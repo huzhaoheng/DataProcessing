@@ -210,12 +210,12 @@ def storeData(graph, data, username, hashkey, structure, query_name, parameter_i
     return {"msg" : "Done"}
 
 
-data = json.load(open('data.json'))
+# data = json.load(open('data.json'))
 username = 'hu61'
 hashkey = 'b87df872aad4d56866f33699d4177631'
-structure = json.load(open('sample_structure.json'))
-query_name = 'twitter query'
-parameter_id = 'parameter group 1'
+# structure = json.load(open('sample_structure.json'))
+# query_name = 'twitter query'
+# parameter_id = 'parameter group 1'
 
 
 # createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
@@ -273,6 +273,7 @@ def getDataStructure():
 ret = {}
 query = "match p = (a:Data)-[*]->(b:Data) where not (:Data {system_user_username : '" + username + "'})-[]->(a {system_user_username : '" + username + "'}) and not (b)-[]->(:Data) with a, b match another = (:SystemUser)-[*]->(a)-[*]->(b) return another;"
 res = graph.cypher.execute(query)
+print (res)
 for each in res:
     curr = ret
     path = each.another
