@@ -1,0 +1,118 @@
+{
+	"data": {
+		"twitter": {
+			"queryUser": [{
+				"followers": [{
+					"description": "Electronic Musician, Composer, Host for @HouseOfStatic, Performances, Directing. Engineer & Security Enthusiast. DMs not Monitored. https://t.co/3GKeVPbq9w",
+					"friends_count": 28887,
+					"screen_name": "circuitstatic",
+					"name": "Circuit Static"
+				}, {
+					"description": "Former ad tech nerd; Still crazy about data, mobile, visualization and privacy. Now Product Engineering, Zocdoc. Tweets/opinions are my own.",
+					"friends_count": 1808,
+					"screen_name": "jnu_io",
+					"name": "Jason Uechi"
+				}, {
+					"description": "",
+					"friends_count": 95,
+					"screen_name": "eugene1832",
+					"name": "Ari Kalfus"
+				}],
+				"name": "Whitney Merrill",
+				"friends_count": 1735,
+				"description": "Privacy/infosec lawyer & tech geek at @EA w/ masters in CS from UIUC. Fighting for privacy, digital civil liberties & the users. Formerly @FTC. views=own",
+				"friends": [{
+					"description": "",
+					"friends_count": 0,
+					"screen_name": "",
+					"name": "@"
+				}, {
+					"description": "Bears, Beets, Battlestar Galactica",
+					"friends_count": 164,
+					"screen_name": "raqlol",
+					"name": "raqlol\ud83e\udd84\ud83e\udd84\ud83e\udd84\ud83e\udd84\ud83e\udd84"
+				}, {
+					"description": "Yes, really.",
+					"friends_count": 190,
+					"screen_name": "0hrely",
+					"name": "ely \ud83d\udc7b"
+				}],
+				"screen_name": "wbm312"
+			}, {
+				"followers": [{
+					"description": "",
+					"friends_count": 59,
+					"screen_name": "CeliaMateusPed1",
+					"name": "Celia Mateus  Pedro"
+				}, {
+					"description": "Husband, Father, Son, and Uncle. Slow learner of lots of stuff. Following people way smarter than myself.",
+					"friends_count": 146,
+					"screen_name": "Kylestevie1",
+					"name": "Kyle Stevie"
+				}, {
+					"description": "Hatch takes experienced software devs, trains them up into Blockchain Devs and helps to place them into workplace. Our curriculum is free to qualified devs.",
+					"friends_count": 220,
+					"screen_name": "HershyatHatch",
+					"name": "Hershy"
+				}],
+				"name": "Andrew Miller",
+				"friends_count": 1141,
+				"description": "Assistant Prof @ UIUC. Decentralized Systems Lab. https://t.co/PLcLgjg6je Zcash Foundation. Vegetarian until further notice",
+				"friends": [{
+					"description": "This is the Twitter account of the merged Carpentries - Software Carpentry and Data Carpentry.",
+					"friends_count": 24,
+					"screen_name": "thecarpentries",
+					"name": "The Carpentries"
+				}, {
+					"description": "Feed of new posts to /r/ZEC",
+					"friends_count": 11,
+					"screen_name": "reddit_zec",
+					"name": "/r/ZEC on Reddit"
+				}, {
+					"description": "Professor and Willett Faculty Scholar, Department of Computer Science, University of Illinois at Urbana-Champaign https://t.co/lWLX4RTcha",
+					"friends_count": 2955,
+					"screen_name": "taoxiease",
+					"name": "Tao Xie"
+				}],
+				"screen_name": "socrates1024"
+			}, {
+				"followers": [{
+					"description": "Humanity Has No Borders Or Conditions \n#WorldPeace\n\n\u2661 Humanitarian \u2661 Activist \u2661 Anti Narcissist \u2661 \n\n#FreePalestine \ud83c\uddf5\ud83c\uddf8\n#SaveKashmirSyriaBurma\n#EndTheOccupation",
+					"friends_count": 1670,
+					"screen_name": "lady_pinx",
+					"name": "Sonia \u2661"
+				}, {
+					"description": "WWP Candidate. former PSL (6 years). For a united Leninist Party. \n\nhttps://t.co/amiJOKeeGu\nhttps://t.co/MUUwt6RQxV https://t.co/7ZT1EVmxaq",
+					"friends_count": 1783,
+					"screen_name": "ryanstraysd",
+					"name": "Salty Cummie\ud83c\udf36"
+				}, {
+					"description": "All I talk about is bugs // \ud83c\uddf5\ud83c\uddf0\ud83c\udff3\ufe0f\u200d\ud83c\udf08 // BLM // #UIUC19",
+					"friends_count": 358,
+					"screen_name": "deysali",
+					"name": "Syed Ali"
+				}],
+				"name": "SJP UIUC",
+				"friends_count": 623,
+				"description": "The Students for Justice in Palestine, University of Illinois chapter, work to promote freedom, human rights, and self-determination for the Palestinian people.",
+				"friends": [{
+					"description": "We are the new chapter for the Young Democratic Socialists of America at the University of Illinois at Chicago #UICYDS",
+					"friends_count": 533,
+					"screen_name": "UIC_YDSA",
+					"name": "UIC YDSA\ud83c\udf39"
+				}, {
+					"description": "#centralamericantwitter // uiuc // \ud83c\udded\ud83c\uddf3\ud83c\uddec\ud83c\uddf9\ud83c\uddf8\ud83c\uddfb\ud83c\udde7\ud83c\uddff\ud83c\udde8\ud83c\uddf7\ud83c\uddf5\ud83c\udde6",
+					"friends_count": 57,
+					"screen_name": "CAUSAdeUIUC",
+					"name": "CAUSA de UIUC \ud83c\udf0e"
+				}, {
+					"description": "Champaign-Urbana Democratic Socialists of America. Help us turn Central Illinois the left kind of Red! Organizing with @UIUCYDSA #trysocialism",
+					"friends_count": 3002,
+					"screen_name": "ChambanaDSA",
+					"name": "Champaign-Urbana DSA\ud83c\udf39"
+				}],
+				"screen_name": "SJPUIUC"
+			}]
+		}
+	}
+}

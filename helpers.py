@@ -53,10 +53,8 @@ def parseQueryParameterStructure(username, hashkey, structure, query_name, param
         return None
 
 
-def storeData(graph, data, username, hashkey, structure, repository, parameter_id):
-    gg = GraphGenerator(username, hashkey, data, structure)
-    nodes, edges = gg.generateGraph()
-    loader = DataLoader(graph, nodes, edges, username, hashkey, repository, parameter_id)
+def storeData(graph, data, username, hashkey, structure, query_name, parameter_id):
+    loader = DataLoader(graph, data, username, hashkey, query_name, parameter_id)
     loader.storeData()
     return {"msg" : "Done"}
 
@@ -81,6 +79,7 @@ def generateGraphStructure(raw_graph, name):
     ret = {name : {'relation->has' : graph}}
 
     return ret
+
 
 def applyStatisticalFunction(data, function, values, name):
     if function == 'COUNT':
@@ -112,6 +111,7 @@ def applyStatisticalFunction(data, function, values, name):
     else:
         return None
 
+
 def parameterParser(structure):
     ret = {}
     if type(structure) is dict:
@@ -139,6 +139,7 @@ def parameterParser(structure):
             for k, v in parameterParser(each).items():
                 ret[k] = v
         return ret
+
 
 def generateParameterID(parameters):
     s = json.dumps(parameters)
