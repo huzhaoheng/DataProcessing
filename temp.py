@@ -272,6 +272,7 @@ def getDataStructure():
 
 ret = {}
 query = "match p = (a:Data)-[*]->(b:Data) where not (:Data {system_user_username : '" + username + "'})-[]->(a {system_user_username : '" + username + "'}) and not (b)-[]->(:Data) with a, b match another = (:SystemUser)-[*]->(a)-[*]->(b) return another;"
+print (query)
 res = graph.cypher.execute(query)
 print (res)
 for each in res:
