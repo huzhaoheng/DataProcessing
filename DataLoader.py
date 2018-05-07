@@ -8,6 +8,7 @@ import hashlib
 
 class DataLoader(object):
 	def __init__(self, graph, data, username, hashkey, structure, query_name, parameter_id):
+		print (data)
 		self.graph = graph
 		self.data = data
 		self.username = username
