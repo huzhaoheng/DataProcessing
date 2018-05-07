@@ -8,21 +8,20 @@ import json
 
 def createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id):
     query_parameter_structure = parseQueryParameterStructure(username, hashkey, structure, query_name, parameter_id)
-    query = "MATCH (a:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'}) WITH a CREATE (a)"
+    prev_path = "(a:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'})"
     children = query_parameter_structure['children']
-    createQueryParameterStructureHelper(username, hashkey, children, query_name, parameter_id, query)
+    createQueryParameterStructureHelper(graph, username, hashkey, children, query_name, parameter_id, prev_path)
+    
 
+def createQueryParameterStructureHelper(graph, username, hashkey, structures, query_name, parameter_id, prev_path):
+    if len(structures) == 0:
+        return
 
-def createQueryParameterStructureHelper(username, hashkey, structures, query_name, parameter_id, query):
-    if not structures:
-        query += ';'
-        return [query]
-    else:
-        ret = []
-        for each in structures:
-            new_query = query + "-[:Has" + each['instance_type'] + "]->(:QueryObject {name : '" + each['object_name'] + "', query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'})"
-            ret += createQueryParameterStructureHelper(username, hashkey, each['children'], query_name, parameter_id, new_query)
-        return ret
+    for each in structures:
+        query = "match p=" + prev_path + " with last(nodes(p)) as x create (x)-[:Has" + each['name'] + "]->(:QueryObject {name : '" + each['name'] + "', object : '" + each['object_name'] + "', query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'});"
+        graph.cypher.execute(query)
+        new_prev_path = prev_path + "-[:Has" + each['name'] + "]->(:QueryObject {name : '" + each['name'] + "', object : '" + each['object_name'] + "', query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'})"
+        createQueryParameterStructureHelper(graph, username, hashkey, each['children'], query_name, parameter_id, new_prev_path)
 
 
 def parseQueryParameterStructure(username, hashkey, structure, query_name, parameter_id):
@@ -36,14 +35,14 @@ def parseQueryParameterStructure(username, hashkey, structure, query_name, param
                     'system_user_hashkey' : hashkey, 
                     'query_name' : query_name,
                     'parameter_id' : parameter_id,
-                    'object_name' : name,
+                    'name' : name,
                     'children' : []
                 }
-                
+
             try:
-                ret['instance_type'] = output['type']['ofType']['name']
+                ret['object_name'] = output['type']['ofType']['name']
             except Exception as e:
-                ret['instance_type'] = ''
+                ret['object_name'] = ''
 
             for child in children:
                 child_structure = parseQueryParameterStructure(username, hashkey, child, query_name, parameter_id)
@@ -54,28 +53,8 @@ def parseQueryParameterStructure(username, hashkey, structure, query_name, param
         return None
 
 
-def getHashKey(nodeRecord):
-    data = {"id": str(nodeRecord.d._id)}
-    data.update(nodeRecord.d.properties)
-    return data
-
-def buildNodes(nodeRecord):
-    data = {"id": str(nodeRecord.d._id), "label": next(iter(nodeRecord.d.labels))}
-    data.update(nodeRecord.d.properties)
-    ret = {"data": data}
-    return ret
-
-def buildEdges(relationRecord):
-    data = {"source": str(relationRecord.r.start_node._id), 
-            "target": str(relationRecord.r.end_node._id),
-            "relationship": relationRecord.r.rel['type']}
-
-    return {"data": data}
-
-def storeData(graph, data, username, hashkey, structure, repository, parameter_id):
-    gg = GraphGenerator(username, hashkey, data, structure)
-    nodes, edges = gg.generateGraph()
-    loader = DataLoader(graph, nodes, edges, username, hashkey, repository, parameter_id)
+def storeData(graph, data, username, hashkey, structure, query_name, parameter_id):
+    loader = DataLoader(graph, data, username, hashkey, query_name, parameter_id)
     loader.storeData()
     return {"msg" : "Done"}
 
@@ -100,6 +79,7 @@ def generateGraphStructure(raw_graph, name):
     ret = {name : {'relation->has' : graph}}
 
     return ret
+
 
 def applyStatisticalFunction(data, function, values, name):
     if function == 'COUNT':
@@ -131,6 +111,7 @@ def applyStatisticalFunction(data, function, values, name):
     else:
         return None
 
+
 def parameterParser(structure):
     ret = {}
     if type(structure) is dict:
@@ -158,6 +139,7 @@ def parameterParser(structure):
             for k, v in parameterParser(each).items():
                 ret[k] = v
         return ret
+
 
 def generateParameterID(parameters):
     s = json.dumps(parameters)

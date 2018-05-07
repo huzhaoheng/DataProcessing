@@ -2,6 +2,9 @@ import json
 import hashlib
 import numpy as np
 from py2neo import Graph, Path, authenticate
+from py2neo import Node
+from GraphGenerator import GraphGenerator
+from DataLoader import DataLoader
 import os
 import pandas
 from py2neo.packages.httpstream import http
@@ -156,21 +159,20 @@ def parameterParser(structure):
 
 def createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id):
     query_parameter_structure = parseQueryParameterStructure(username, hashkey, structure, query_name, parameter_id)
-    query = "MATCH (a:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'}) WITH a CREATE (a)"
+    prev_path = "(a:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'})"
     children = query_parameter_structure['children']
-    queries = createQueryParameterStructureHelper(username, hashkey, children, query_name, parameter_id, query)
-    return queries
+    createQueryParameterStructureHelper(graph, username, hashkey, children, query_name, parameter_id, prev_path)
+    
+def createQueryParameterStructureHelper(graph, username, hashkey, structures, query_name, parameter_id, prev_path):
+    if len(structures) == 0:
+        return
 
-def createQueryParameterStructureHelper(username, hashkey, structures, query_name, parameter_id, query):
-    if not structures:
-        query += ';'
-        return [query]
-    else:
-        ret = []
-        for each in structures:
-            new_query = query + "-[:Has" + each['instance_type'] + "]->(:QueryObject {name : '" + each['object_name'] + "', query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'})"
-            ret += createQueryParameterStructureHelper(username, hashkey, each['children'], query_name, parameter_id, new_query)
-        return ret
+    for each in structures:
+        query = "match p=" + prev_path + " with last(nodes(p)) as x create (x)-[:Has" + each['name'] + "]->(:QueryObject {name : '" + each['name'] + "', object : '" + each['object_name'] + "', query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'});"
+        graph.cypher.execute(query)
+        new_prev_path = prev_path + "-[:Has" + each['name'] + "]->(:QueryObject {name : '" + each['name'] + "', object : '" + each['object_name'] + "', query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'})"
+        createQueryParameterStructureHelper(graph, username, hashkey, each['children'], query_name, parameter_id, new_prev_path)
+
 
 
 def parseQueryParameterStructure(username, hashkey, structure, query_name, parameter_id):
@@ -184,14 +186,14 @@ def parseQueryParameterStructure(username, hashkey, structure, query_name, param
                     'system_user_hashkey' : hashkey, 
                     'query_name' : query_name,
                     'parameter_id' : parameter_id,
-                    'object_name' : name,
+                    'name' : name,
                     'children' : []
                 }
 
             try:
-                ret['instance_type'] = output['type']['ofType']['name']
+                ret['object_name'] = output['type']['ofType']['name']
             except Exception as e:
-                ret['instance_type'] = ''
+                ret['object_name'] = ''
 
             for child in children:
                 child_structure = parseQueryParameterStructure(username, hashkey, child, query_name, parameter_id)
@@ -201,12 +203,122 @@ def parseQueryParameterStructure(username, hashkey, structure, query_name, param
     else:
         return None
 
+
+def storeData(graph, data, username, hashkey, structure, query_name, parameter_id):
+    loader = DataLoader(graph, data, username, hashkey, structure, query_name, parameter_id)
+    loader.storeData()
+    return {"msg" : "Done"}
+
+
+data = json.load(open('data.json'))
 username = 'huzhaoheng'
 hashkey = '123456'
 structure = json.load(open('sample_structure.json'))
 query_name = 'twitter query'
 parameter_id = 'parameter group 1'
 
-res = createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
+
+# createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
+# storeData(graph, data, username, hashkey, structure, query_name, parameter_id)
+
+
+def getDataStructure():
+    ret = {}
+    query = "MATCH p=(:SystemUser {username : '" + username + "'})-[*]->(x:QueryObject) WITH p, x MATCH (x)-[:hasData]->(d) RETURN p, d;"
+    res = graph.cypher.execute(query)
+    for each in res:
+        node = dict(each.d.get_properties())
+        path = each.p
+        label_path = []
+        query_parameter = None
+        for i, segment in enumerate(path):
+            start_node, end_node = dict(segment.start_node.get_properties()), dict(segment.end_node.get_properties())
+            if i == 0:
+                start_label, end_label = start_node['username'], end_node['name']
+                label_path = [start_label, end_label]
+
+            elif i == 1:
+                label_path.append(end_node['parameter_id'])
+                # label_path.append("query parameter")
+                query_parameter = end_node
+
+            else:
+                label_path.append(end_node['name'])
+
+        curr = ret
+        for i, label in enumerate(label_path):
+            if label not in curr:
+                curr[label] = {'children' : {}, 'data' : {}}
+            else:
+                pass
+
+            if i == len(label_path) - 1:
+                curr[label]['data'][node['neo4j_id']] = node
+            elif i == 2:
+                curr[label]['data'] = query_parameter
+            else:
+                pass
+
+            curr = curr[label]['children']
+
+    return ret
+
+    # print ("==================================")
+    
+
+
+# with open('paths.json', 'w') as fp:
+#     json.dump(getDataStructure(), fp)
+
+ret = {}
+query = "match p = (a:Data)-[*]->(b:Data) where not (:Data {system_user_username : '" + username + "'})-[]->(a {system_user_username : '" + username + "'}) and not (b)-[]->(:Data) with a, b match another = (:SystemUser)-[*]->(a)-[*]->(b) return another;"
+res = graph.cypher.execute(query)
 for each in res:
-    print (each)
+    curr = ret
+    path = each.another
+    for i, segment in enumerate(path):
+        start_node, end_node = dict(segment.start_node.get_properties()), dict(segment.end_node.get_properties())
+        if i == 0:
+            if start_node['username'] not in curr:
+                curr[start_node['username']] = {}
+            curr = curr[start_node['username']]
+
+        elif i == 1:
+            if start_node['name'] not in curr:
+                curr[start_node['name']] = {}
+            curr = curr[start_node['name']]
+        
+        elif i == 2:
+            if start_node['parameter_id'] not in curr:
+                curr[start_node['parameter_id']] = {}
+            curr = curr[start_node['parameter_id']]
+        
+        else:
+            if list(segment.start_node.labels)[0] == 'QueryObject':
+                if list(segment.end_node.labels)[0] == 'QueryObject':
+                    if start_node['name'] not in curr:
+                        curr[start_node['name']] = {}
+                    curr = curr[start_node['name']]
+                else:
+                    if start_node['name'] not in curr:
+                        curr[start_node['name']] = {'hasData' : {}}
+                    curr = curr[start_node['name']]['hasData']
+
+            else:
+                rel_name = segment.properties['name']
+                if start_node['neo4j_id'] not in curr:
+                    curr[start_node['neo4j_id']] = start_node
+
+                if rel_name not in curr[start_node['neo4j_id']]:
+                    curr[start_node['neo4j_id']][rel_name] = {}
+
+                curr = curr[start_node['neo4j_id']][rel_name]
+
+                if i == len(path) - 1:
+                    if end_node['neo4j_id'] not in curr:
+                        curr[end_node['neo4j_id']] = end_node
+            
+
+
+with open('temp.json', 'w') as fp:
+    json.dump(ret, fp)

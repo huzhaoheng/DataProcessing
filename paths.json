@@ -1,0 +1,316 @@
+{
+	"huzhaoheng": {
+		"children": {
+			"twitter query": {
+				"children": {
+					"parameter group 1": {
+						"children": {
+							"twitter": {
+								"children": {
+									"queryUser": {
+										"children": {
+											"friends": {
+												"children": {},
+												"data": {
+													"5840c106bcbe9c1597ed20a4905db666": {
+														"friends_count": 57,
+														"neo4j_id": "5840c106bcbe9c1597ed20a4905db666",
+														"name_type": "str",
+														"screen_name": "CAUSAdeUIUC",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "CAUSA de UIUC \ud83c\udf0e",
+														"description": "#centralamericantwitter // uiuc // \ud83c\udded\ud83c\uddf3\ud83c\uddec\ud83c\uddf9\ud83c\uddf8\ud83c\uddfb\ud83c\udde7\ud83c\uddff\ud83c\udde8\ud83c\uddf7\ud83c\uddf5\ud83c\udde6",
+														"friends_count_type": "int",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"27d34fc2f4052043c1acdad83c71a3d0": {
+														"friends_count": 3002,
+														"neo4j_id": "27d34fc2f4052043c1acdad83c71a3d0",
+														"name_type": "str",
+														"screen_name": "ChambanaDSA",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "Champaign-Urbana DSA\ud83c\udf39",
+														"description": "Champaign-Urbana Democratic Socialists of America. Help us turn Central Illinois the left kind of Red! Organizing with @UIUCYDSA #trysocialism",
+														"friends_count_type": "int",
+														"system_user_hashkey": "123456",
+														"system_user_username": "huzhaoheng"
+													},
+													"52a285c26df179f31502f3a31a79f73a": {
+														"friends_count": 533,
+														"neo4j_id": "52a285c26df179f31502f3a31a79f73a",
+														"name_type": "str",
+														"screen_name": "UIC_YDSA",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "UIC YDSA\ud83c\udf39",
+														"description": "We are the new chapter for the Young Democratic Socialists of America at the University of Illinois at Chicago #UICYDS",
+														"friends_count_type": "int",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"f428618345510dc818cea80d3ece6fd9": {
+														"friends_count": 11,
+														"neo4j_id": "f428618345510dc818cea80d3ece6fd9",
+														"name_type": "str",
+														"screen_name": "reddit_zec",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "/r/ZEC on Reddit",
+														"friends_count_type": "int",
+														"description": "Feed of new posts to /r/ZEC",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"f74c7cabb88088435567394a03bbf650": {
+														"friends_count": 24,
+														"neo4j_id": "f74c7cabb88088435567394a03bbf650",
+														"name_type": "str",
+														"screen_name": "thecarpentries",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "The Carpentries",
+														"description": "This is the Twitter account of the merged Carpentries - Software Carpentry and Data Carpentry.",
+														"friends_count_type": "int",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"0c52b744f2c47280e759b431792caf1e": {
+														"friends_count": 2955,
+														"neo4j_id": "0c52b744f2c47280e759b431792caf1e",
+														"name_type": "str",
+														"screen_name": "taoxiease",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "Tao Xie",
+														"friends_count_type": "int",
+														"description": "Professor and Willett Faculty Scholar, Department of Computer Science, University of Illinois at Urbana-Champaign https://t.co/lWLX4RTcha",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"f32d09038df46db112382ed09894a9a3": {
+														"friends_count": 0,
+														"neo4j_id": "f32d09038df46db112382ed09894a9a3",
+														"name_type": "str",
+														"screen_name": "",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "@",
+														"description": "",
+														"friends_count_type": "int",
+														"system_user_hashkey": "123456",
+														"system_user_username": "huzhaoheng"
+													},
+													"fa77f75ddea918797b730ab23634b5d9": {
+														"friends_count": 190,
+														"neo4j_id": "fa77f75ddea918797b730ab23634b5d9",
+														"screen_name": "0hrely",
+														"name_type": "str",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "ely \ud83d\udc7b",
+														"description": "Yes, really.",
+														"friends_count_type": "int",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"9d78b72bb5b1255ae33566f3f844f7fb": {
+														"friends_count": 164,
+														"neo4j_id": "9d78b72bb5b1255ae33566f3f844f7fb",
+														"name_type": "str",
+														"screen_name": "raqlol",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "raqlol\ud83e\udd84\ud83e\udd84\ud83e\udd84\ud83e\udd84\ud83e\udd84",
+														"description": "Bears, Beets, Battlestar Galactica",
+														"friends_count_type": "int",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													}
+												}
+											},
+											"followers": {
+												"children": {},
+												"data": {
+													"064d5e4e004cc44753d47fbabe52bf5e": {
+														"friends_count": 358,
+														"neo4j_id": "064d5e4e004cc44753d47fbabe52bf5e",
+														"name_type": "str",
+														"screen_name": "deysali",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "Syed Ali",
+														"friends_count_type": "int",
+														"description": "All I talk about is bugs // \ud83c\uddf5\ud83c\uddf0\ud83c\udff3\ufe0f\u200d\ud83c\udf08 // BLM // #UIUC19",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"d0236ef477f01c83bf3d4d5b47f18973": {
+														"friends_count": 220,
+														"neo4j_id": "d0236ef477f01c83bf3d4d5b47f18973",
+														"name_type": "str",
+														"screen_name": "HershyatHatch",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "Hershy",
+														"friends_count_type": "int",
+														"description": "Hatch takes experienced software devs, trains them up into Blockchain Devs and helps to place them into workplace. Our curriculum is free to qualified devs.",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"78a9b29585627bbf2e7af912586c28f7": {
+														"friends_count": 146,
+														"neo4j_id": "78a9b29585627bbf2e7af912586c28f7",
+														"name_type": "str",
+														"screen_name": "Kylestevie1",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "Kyle Stevie",
+														"friends_count_type": "int",
+														"description": "Husband, Father, Son, and Uncle. Slow learner of lots of stuff. Following people way smarter than myself.",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"4dbec5475cdc0d60465b74f8dd929134": {
+														"friends_count": 1783,
+														"neo4j_id": "4dbec5475cdc0d60465b74f8dd929134",
+														"name_type": "str",
+														"screen_name": "ryanstraysd",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "Salty Cummie\ud83c\udf36",
+														"description": "WWP Candidate. former PSL (6 years). For a united Leninist Party. \n\nhttps://t.co/amiJOKeeGu\nhttps://t.co/MUUwt6RQxV https://t.co/7ZT1EVmxaq",
+														"friends_count_type": "int",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"e64bd46534f3e87ff4a40fa5b3cb0992": {
+														"friends_count": 1670,
+														"neo4j_id": "e64bd46534f3e87ff4a40fa5b3cb0992",
+														"name_type": "str",
+														"screen_name": "lady_pinx",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "Sonia \u2661",
+														"friends_count_type": "int",
+														"description": "Humanity Has No Borders Or Conditions \n#WorldPeace\n\n\u2661 Humanitarian \u2661 Activist \u2661 Anti Narcissist \u2661 \n\n#FreePalestine \ud83c\uddf5\ud83c\uddf8\n#SaveKashmirSyriaBurma\n#EndTheOccupation",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"5ec6d8fa5e3cf9e6f4868928e7899d62": {
+														"friends_count": 1808,
+														"neo4j_id": "5ec6d8fa5e3cf9e6f4868928e7899d62",
+														"name_type": "str",
+														"screen_name": "jnu_io",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "Jason Uechi",
+														"friends_count_type": "int",
+														"description": "Former ad tech nerd; Still crazy about data, mobile, visualization and privacy. Now Product Engineering, Zocdoc. Tweets/opinions are my own.",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"da5f82d77bc5fcba5bdebfae69a56ebf": {
+														"friends_count": 28887,
+														"neo4j_id": "da5f82d77bc5fcba5bdebfae69a56ebf",
+														"name_type": "str",
+														"screen_name": "circuitstatic",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "Circuit Static",
+														"friends_count_type": "int",
+														"description": "Electronic Musician, Composer, Host for @HouseOfStatic, Performances, Directing. Engineer & Security Enthusiast. DMs not Monitored. https://t.co/3GKeVPbq9w",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"891b6a40c8f7d34d2a2f12fc4b9774c4": {
+														"friends_count": 95,
+														"neo4j_id": "891b6a40c8f7d34d2a2f12fc4b9774c4",
+														"name_type": "str",
+														"screen_name": "eugene1832",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "Ari Kalfus",
+														"friends_count_type": "int",
+														"description": "",
+														"system_user_username": "huzhaoheng",
+														"system_user_hashkey": "123456"
+													},
+													"1fe2011bc411e62d834333ffc9bdfa08": {
+														"friends_count": 59,
+														"neo4j_id": "1fe2011bc411e62d834333ffc9bdfa08",
+														"name_type": "str",
+														"screen_name": "CeliaMateusPed1",
+														"screen_name_type": "str",
+														"description_type": "str",
+														"name": "Celia Mateus  Pedro",
+														"description": "",
+														"friends_count_type": "int",
+														"system_user_hashkey": "123456",
+														"system_user_username": "huzhaoheng"
+													}
+												}
+											}
+										},
+										"data": {
+											"6a2a14eea69b85cc899082022c8a3236": {
+												"friends_count": 623,
+												"neo4j_id": "6a2a14eea69b85cc899082022c8a3236",
+												"name_type": "str",
+												"screen_name": "SJPUIUC",
+												"screen_name_type": "str",
+												"description_type": "str",
+												"name": "SJP UIUC",
+												"friends_count_type": "int",
+												"description": "The Students for Justice in Palestine, University of Illinois chapter, work to promote freedom, human rights, and self-determination for the Palestinian people.",
+												"system_user_username": "huzhaoheng",
+												"system_user_hashkey": "123456"
+											},
+											"dd765aa8b4aa429965328b069d2bda43": {
+												"friends_count": 1141,
+												"neo4j_id": "dd765aa8b4aa429965328b069d2bda43",
+												"name_type": "str",
+												"screen_name": "socrates1024",
+												"screen_name_type": "str",
+												"description_type": "str",
+												"name": "Andrew Miller",
+												"friends_count_type": "int",
+												"description": "Assistant Prof @ UIUC. Decentralized Systems Lab. https://t.co/PLcLgjg6je Zcash Foundation. Vegetarian until further notice",
+												"system_user_username": "huzhaoheng",
+												"system_user_hashkey": "123456"
+											},
+											"d73187df171769d5e4d58ad7be37e7a8": {
+												"friends_count": 1735,
+												"neo4j_id": "d73187df171769d5e4d58ad7be37e7a8",
+												"name_type": "str",
+												"screen_name": "wbm312",
+												"screen_name_type": "str",
+												"description_type": "str",
+												"name": "Whitney Merrill",
+												"description": "Privacy/infosec lawyer & tech geek at @EA w/ masters in CS from UIUC. Fighting for privacy, digital civil liberties & the users. Formerly @FTC. views=own",
+												"friends_count_type": "int",
+												"system_user_username": "huzhaoheng",
+												"system_user_hashkey": "123456"
+											}
+										}
+									}
+								},
+								"data": {}
+							}
+						},
+						"data": {
+							"query_name": "twitter query",
+							"system_user_username": "huzhaoheng",
+							"system_user_hashkey": "123456",
+							"parameter_id": "parameter group 1"
+						}
+					}
+				},
+				"data": {}
+			}
+		},
+		"data": {}
+	}
+}
