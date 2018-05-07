@@ -211,8 +211,8 @@ def storeData(graph, data, username, hashkey, structure, query_name, parameter_i
 
 
 data = json.load(open('data.json'))
-username = 'huzhaoheng'
-hashkey = '123456'
+username = 'hu61'
+hashkey = 'b87df872aad4d56866f33699d4177631'
 structure = json.load(open('sample_structure.json'))
 query_name = 'twitter query'
 parameter_id = 'parameter group 1'
