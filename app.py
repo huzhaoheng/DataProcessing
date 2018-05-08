@@ -26,7 +26,7 @@ def verification():
     username, data, query_name, structure = request.json["username"], json.loads(request.json["data"]), request.json["name"], json.loads(request.json["structure"])
     with open('sample_structure.json', 'w') as fp:
         json.dump(structure, fp)
-    with open('data.json', 'a') as fp:
+    with open('data.json', 'w') as fp:
         json.dump(data, fp)
     hashkey = hashlib.md5((username).encode()).hexdigest()
     parameters = parameterParser(structure)
