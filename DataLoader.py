@@ -82,7 +82,7 @@ class DataLoader(object):
 				instance[key + "_type"] = type(value).__name__
 
 		if instance:
-			print (child_id)
+			print (children_id)
 			neo4j_id = self.generateID(instance)
 			query = "match p=" + curr_path + " with last(nodes(p)) as x merge (y:Data {"
 			for k, v in instance.items():
