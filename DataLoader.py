@@ -83,14 +83,14 @@ class DataLoader(object):
 
 		if instance:
 			neo4j_id = self.generateID(instance)
-			query = "match p=" + curr_path + " with last(nodes(p)) as x create (x)-[:hasData]->(:Data {"
+			query = "match p=" + curr_path + " with last(nodes(p)) as x merge (y:Data {"
 			for k, v in instance.items():
 				if type(v) == str:
 					query += k + " : '" + v.replace("'", " ").replace('"', ' ') + "', "
 				else:
 					query += k + " : " + str(v) + ", "
 
-			query += "system_user_username : '" + self.username + "', system_user_hashkey : '" + self.hashkey + "', neo4j_id : '" + neo4j_id + "'})"
+			query += "system_user_username : '" + self.username + "', system_user_hashkey : '" + self.hashkey + "', neo4j_id : '" + neo4j_id + "'}) with x, y merge (x)-[:hasData]->(y);"
 			print (query)
 			self.tx.append(query)
 			for child_id, object_name in children_id:
