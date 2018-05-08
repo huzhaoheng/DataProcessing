@@ -39,7 +39,7 @@ class DataLoader(object):
 		return neo4j_id
 
 	def storeData(self):
-		self.createLabel()
+		# self.createLabel()
 		nested_data = self.data['data']
 		curr_path = "(a:QueryParameter {query_name : '" + self.query_name + "', system_user_username : '" + self.username + "', system_user_hashkey : '" + self.hashkey + "', parameter_id : '" + self.parameter_id + "'})"
 		self.storeDataHelper(nested_data, curr_path)
