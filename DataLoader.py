@@ -82,6 +82,7 @@ class DataLoader(object):
 				instance[key + "_type"] = type(value).__name__
 
 		if instance:
+			print (child_id)
 			neo4j_id = self.generateID(instance)
 			query = "match p=" + curr_path + " with last(nodes(p)) as x merge (y:Data {"
 			for k, v in instance.items():
@@ -91,7 +92,7 @@ class DataLoader(object):
 					query += k + " : " + str(v) + ", "
 
 			query += "system_user_username : '" + self.username + "', system_user_hashkey : '" + self.hashkey + "', neo4j_id : '" + neo4j_id + "'}) with x, y merge (x)-[:hasData]->(y);"
-			print (query)
+			# print (query)
 			self.tx.append(query)
 			for child_id, object_name in children_id:
 				self.edges['edges'].append({'source' : neo4j_id, 'target' : child_id, 'name' : 'has' + object_name})
