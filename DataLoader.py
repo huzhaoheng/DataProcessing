@@ -58,6 +58,7 @@ class DataLoader(object):
 				instance = {}
 				new_path = curr_path + "-[]->(:QueryObject {name : '" + key + "', query_name : '" + self.query_name + "', system_user_username : '" + self.username + "', system_user_hashkey : '" + self.hashkey + "', parameter_id : '" + self.parameter_id + "'})"
 				child_id = self.storeDataHelper(value, new_path)
+				print (child_id)
 				if child_id:
 					children_id.append((child_id, key))
 
@@ -84,6 +85,7 @@ class DataLoader(object):
 			else:
 				instance[key] = value
 				instance[key + "_type"] = type(value).__name__
+
 
 		if instance:
 			neo4j_id = self.generateID(instance)
