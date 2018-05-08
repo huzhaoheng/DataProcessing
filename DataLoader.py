@@ -53,7 +53,7 @@ class DataLoader(object):
 			print (key)
 			print (type(value))
 			print (type(value) is dict)
-			print ('------------------------------------------')
+			
 			if type(value) is dict:
 				instance = {}
 				new_path = curr_path + "-[]->(:QueryObject {name : '" + key + "', query_name : '" + self.query_name + "', system_user_username : '" + self.username + "', system_user_hashkey : '" + self.hashkey + "', parameter_id : '" + self.parameter_id + "'})"
@@ -86,7 +86,7 @@ class DataLoader(object):
 				instance[key] = value
 				instance[key + "_type"] = type(value).__name__
 
-
+		print ('------------------------------------------')
 		if instance:
 			neo4j_id = self.generateID(instance)
 			query = "match p=" + curr_path + " with last(nodes(p)) as x merge (y:Data {"
