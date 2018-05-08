@@ -91,6 +91,7 @@ class DataLoader(object):
 					query += k + " : " + str(v) + ", "
 
 			query += "system_user_username : '" + self.username + "', system_user_hashkey : '" + self.hashkey + "', neo4j_id : '" + neo4j_id + "'})"
+			print (query)
 			self.tx.append(query)
 			for child_id, object_name in children_id:
 				self.edges['edges'].append({'source' : neo4j_id, 'target' : child_id, 'name' : 'has' + object_name})
