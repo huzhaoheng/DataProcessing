@@ -210,16 +210,16 @@ def storeData(graph, data, username, hashkey, structure, query_name, parameter_i
     return {"msg" : "Done"}
 
 
-# data = json.load(open('data.json'))
+data = json.load(open('data.json'))
 username = 'hu61'
 hashkey = 'b87df872aad4d56866f33699d4177631'
-# structure = json.load(open('sample_structure.json'))
-# query_name = 'twitter query'
-# parameter_id = 'parameter group 1'
+structure = json.load(open('sample_structure.json'))
+query_name = 'twitter query'
+parameter_id = '778d25a2d92122bae87df572ee2b3a53'
 
 
 # createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
-# storeData(graph, data, username, hashkey, structure, query_name, parameter_id)
+storeData(graph, data, username, hashkey, structure, query_name, parameter_id)
 
 
 def getDataStructure():
@@ -270,57 +270,57 @@ def getDataStructure():
 # with open('paths.json', 'w') as fp:
 #     json.dump(getDataStructure(), fp)
 
-ret = {}
-query = "match p = (a:Data)-[*]->(b:Data) where not (:Data {system_user_username : '" + username + "'})-[]->(a {system_user_username : '" + username + "'}) and not (b)-[]->(:Data) with a, b match another = (:SystemUser)-[*]->(a)-[*]->(b) return another;"
-print (query)
-res = graph.cypher.execute(query)
-print (res)
-for each in res:
-    curr = ret
-    path = each.another
-    for i, segment in enumerate(path):
-        start_node, end_node = dict(segment.start_node.get_properties()), dict(segment.end_node.get_properties())
-        if i == 0:
-            if start_node['username'] not in curr:
-                curr[start_node['username']] = {}
-            curr = curr[start_node['username']]
+# ret = {}
+# query = "match p = (a:Data)-[*]->(b:Data) where not (:Data {system_user_username : '" + username + "'})-[]->(a {system_user_username : '" + username + "'}) and not (b)-[]->(:Data) with a, b match another = (:SystemUser)-[*]->(a)-[*]->(b) return another;"
+# print (query)
+# res = graph.cypher.execute(query)
+# print (res)
+# for each in res:
+#     curr = ret
+#     path = each.another
+#     for i, segment in enumerate(path):
+#         start_node, end_node = dict(segment.start_node.get_properties()), dict(segment.end_node.get_properties())
+#         if i == 0:
+#             if start_node['username'] not in curr:
+#                 curr[start_node['username']] = {}
+#             curr = curr[start_node['username']]
 
-        elif i == 1:
-            if start_node['name'] not in curr:
-                curr[start_node['name']] = {}
-            curr = curr[start_node['name']]
+#         elif i == 1:
+#             if start_node['name'] not in curr:
+#                 curr[start_node['name']] = {}
+#             curr = curr[start_node['name']]
         
-        elif i == 2:
-            if start_node['parameter_id'] not in curr:
-                curr[start_node['parameter_id']] = {}
-            curr = curr[start_node['parameter_id']]
+#         elif i == 2:
+#             if start_node['parameter_id'] not in curr:
+#                 curr[start_node['parameter_id']] = {}
+#             curr = curr[start_node['parameter_id']]
         
-        else:
-            if list(segment.start_node.labels)[0] == 'QueryObject':
-                if list(segment.end_node.labels)[0] == 'QueryObject':
-                    if start_node['name'] not in curr:
-                        curr[start_node['name']] = {}
-                    curr = curr[start_node['name']]
-                else:
-                    if start_node['name'] not in curr:
-                        curr[start_node['name']] = {'hasData' : {}}
-                    curr = curr[start_node['name']]['hasData']
+#         else:
+#             if list(segment.start_node.labels)[0] == 'QueryObject':
+#                 if list(segment.end_node.labels)[0] == 'QueryObject':
+#                     if start_node['name'] not in curr:
+#                         curr[start_node['name']] = {}
+#                     curr = curr[start_node['name']]
+#                 else:
+#                     if start_node['name'] not in curr:
+#                         curr[start_node['name']] = {'hasData' : {}}
+#                     curr = curr[start_node['name']]['hasData']
 
-            else:
-                rel_name = segment.properties['name']
-                if start_node['neo4j_id'] not in curr:
-                    curr[start_node['neo4j_id']] = start_node
+#             else:
+#                 rel_name = segment.properties['name']
+#                 if start_node['neo4j_id'] not in curr:
+#                     curr[start_node['neo4j_id']] = start_node
 
-                if rel_name not in curr[start_node['neo4j_id']]:
-                    curr[start_node['neo4j_id']][rel_name] = {}
+#                 if rel_name not in curr[start_node['neo4j_id']]:
+#                     curr[start_node['neo4j_id']][rel_name] = {}
 
-                curr = curr[start_node['neo4j_id']][rel_name]
+#                 curr = curr[start_node['neo4j_id']][rel_name]
 
-                if i == len(path) - 1:
-                    if end_node['neo4j_id'] not in curr:
-                        curr[end_node['neo4j_id']] = end_node
+#                 if i == len(path) - 1:
+#                     if end_node['neo4j_id'] not in curr:
+#                         curr[end_node['neo4j_id']] = end_node
             
 
 
-with open('temp.json', 'w') as fp:
-    json.dump(ret, fp)
+# with open('temp.json', 'w') as fp:
+#     json.dump(ret, fp)

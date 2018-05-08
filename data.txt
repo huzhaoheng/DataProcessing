@@ -1,1 +1,0 @@
-{"errors": [{"message": "Invalid Credentials", "locations": [{"line": 1, "column": 17}], "path": ["youtube", "search"]}], "data": {"youtube": {"search": null}}}

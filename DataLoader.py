@@ -8,7 +8,6 @@ import hashlib
 
 class DataLoader(object):
 	def __init__(self, graph, data, username, hashkey, structure, query_name, parameter_id):
-		print (data)
 		self.graph = graph
 		self.data = data
 		self.username = username
@@ -51,7 +50,6 @@ class DataLoader(object):
 		children_id = []
 		for key, value in data.items():
 			if type(value) is dict:
-				instance = {}
 				new_path = curr_path + "-[]->(:QueryObject {name : '" + key + "', query_name : '" + self.query_name + "', system_user_username : '" + self.username + "', system_user_hashkey : '" + self.hashkey + "', parameter_id : '" + self.parameter_id + "'})"
 				child_id = self.storeDataHelper(value, new_path)
 				if child_id:
@@ -71,24 +69,25 @@ class DataLoader(object):
 
 					else:
 						if type(value) is str:
-							instance[key] = value.replace("'", "").replace('"', '')
+							instance[key] = value.replace("\\", "").replace("'", "").replace('"', '')
 						else:
 							instance[key] = value
 						instance[key + "_type"] = type(value).__name__
 	
 				else:
 					if type(value) is str:
-						instance[key] = value.replace("'", "").replace('"', '')
+						instance[key] = value.replace("\\", "").replace("'", "").replace('"', '')
 					else:
 						instance[key] = value
 					instance[key + "_type"] = type(value).__name__
 
 			else:
 				if type(value) is str:
-					instance[key] = value.replace("'", "").replace('"', '')
+					instance[key] = value.replace("\\", "").replace("'", "").replace('"', '')
 				else:
 					instance[key] = value
 				instance[key + "_type"] = type(value).__name__
+
 
 		if instance:
 			neo4j_id = self.generateID(instance)
@@ -100,8 +99,11 @@ class DataLoader(object):
 					query += k + " : " + str(v) + ", "
 
 			query += "system_user_username : '" + self.username + "', system_user_hashkey : '" + self.hashkey + "', neo4j_id : '" + neo4j_id + "'}) with x, y merge (x)-[:hasData]->(y);"
-			print (query)
 			self.tx.append(query)
+			# try:
+			# 	self.graph.cypher.execute(query)
+			# except Exception as e:
+			# 	print (query)
 			for child_id, object_name in children_id:
 				self.edges['edges'].append({'source' : neo4j_id, 'target' : child_id, 'name' : 'has' + object_name})
 			return neo4j_id
