@@ -214,8 +214,8 @@ data = json.load(open('data.json'))
 username = 'hu61'
 hashkey = 'b87df872aad4d56866f33699d4177631'
 structure = json.load(open('sample_structure.json'))
-query_name = 'twitter query'
-parameter_id = '778d25a2d92122bae87df572ee2b3a53'
+query_name = 'youtube data'
+parameter_id = '0fdf92ea53994197f007e09e31e14d77'
 
 
 # createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
@@ -292,9 +292,6 @@ for each in res:
             curr = curr[start_node['name']]
         
         elif i == 2:
-            # if start_node['parameter_id'] not in curr:
-            #     curr[start_node['parameter_id']] = {}
-            # curr = curr[start_node['parameter_id']]
 
             if start_node['parameter_id'] not in curr:
                 curr[start_node['parameter_id']] = start_node
@@ -322,9 +319,9 @@ for each in res:
 
                 curr = curr[start_node['neo4j_id']][rel_name]
 
-                if i == len(path) - 1:
-                    if end_node['neo4j_id'] not in curr:
-                        curr[end_node['neo4j_id']] = end_node
+        if i == len(path) - 1:
+            if end_node['neo4j_id'] not in curr:
+                curr[end_node['neo4j_id']] = end_node
             
 
 with open('temp.json', 'w') as fp:
