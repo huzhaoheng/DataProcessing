@@ -35,3 +35,18 @@ $('#delete-dataset-btn').on('confirmed.bs.confirmation', function () {
 
 	return;
 })
+
+
+$.getJSON(
+	'/writeOnlyQuery',
+	{arg: JSON.stringify({"query" : query})},
+	function (response){
+		if (window.source == 'Dataset') {
+			loadDataset();
+		}
+		else{
+			loadDatasetList();
+		}
+		return;
+	}
+);

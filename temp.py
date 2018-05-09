@@ -291,9 +291,14 @@ for each in res:
             curr = curr[start_node['name']]
         
         elif i == 2:
+            # if start_node['parameter_id'] not in curr:
+            #     curr[start_node['parameter_id']] = {}
+            # curr = curr[start_node['parameter_id']]
+
             if start_node['parameter_id'] not in curr:
-                curr[start_node['parameter_id']] = {}
-            curr = curr[start_node['parameter_id']]
+                curr[start_node['parameter_id']] = start_node
+                curr[start_node['parameter_id']]['hasObject'] = {}
+            curr = curr[start_node['parameter_id']]['hasObject']
         
         else:
             if list(segment.start_node.labels)[0] == 'QueryObject':
