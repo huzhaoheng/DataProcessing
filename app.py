@@ -35,6 +35,7 @@ def verification():
     print (parameter_id)
     print ('-----------------------------------')
     print ('-----------------------------------')
+    print ('-----------------------------------')
     query = "MATCH (d:SystemUser) WHERE d.username = '" + username + "' RETURN d"
     exists = graph.cypher.execute(query)
     redirect_url = "http://listen.online:1111" + url_for('home', username = username, hashkey = hashkey)
