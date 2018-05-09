@@ -30,7 +30,10 @@ def verification():
         json.dump(data, fp)
     hashkey = hashlib.md5((username).encode()).hexdigest()
     parameters = parameterParser(structure)
+    print (parameters)
     parameter_id = generateParameterID(parameters)
+    print (parameter_id)
+    print ('-----------------------------------')
     query = "MATCH (d:SystemUser) WHERE d.username = '" + username + "' RETURN d"
     exists = graph.cypher.execute(query)
     redirect_url = "http://listen.online:1111" + url_for('home', username = username, hashkey = hashkey)
@@ -122,7 +125,6 @@ def getDataStructure():
 def getData():
     ret = {}
     query = "match p = (a:Data)-[*0..]->(b:Data) where not (:Data {system_user_username : '" + username + "'})-[]->(a {system_user_username : '" + username + "'}) and not (b)-[]->(:Data) with a, b match another = (:SystemUser)-[*]->(a)-[*0..]->(b) return another;"
-    # query = "match another = (a:SystemUser {username :'" + username + "'})-[*]->(b:Data {system_user_username : '" + username + "'}) where not (b)-[]->(:Data {system_user_username : '" + username + "'}) return another;"
     res = graph.cypher.execute(query)
     for each in res:
         curr = ret
@@ -170,9 +172,9 @@ def getData():
 
                     curr = curr[start_node['neo4j_id']][rel_name]
 
-                    if i == len(path) - 1:
-                        if end_node['neo4j_id'] not in curr:
-                            curr[end_node['neo4j_id']] = end_node
+            if i == len(path) - 1:
+                if end_node['neo4j_id'] not in curr:
+                    curr[end_node['neo4j_id']] = end_node
 
     return jsonify(elements = ret)
 
