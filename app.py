@@ -121,8 +121,8 @@ def getDataStructure():
 @app.route('/getData')
 def getData():
     ret = {}
-    # query = "match p = (a:Data)-[*]->(b:Data) where not (:Data {system_user_username : '" + username + "'})-[]->(a {system_user_username : '" + username + "'}) and not (b)-[]->(:Data) with a, b match another = (:SystemUser)-[*]->(a)-[*]->(b) return another;"
-    query = "match another = (a:SystemUser {username :'" + username + "'})-[*]->(b:Data {system_user_username : '" + username + "'}) where not (b)-[]->(:Data {system_user_username : '" + username + "'}) return another;"
+    query = "match p = (a:Data)-[*0..]->(b:Data) where not (:Data {system_user_username : '" + username + "'})-[]->(a {system_user_username : '" + username + "'}) and not (b)-[]->(:Data) with a, b match another = (:SystemUser)-[*]->(a)-[*0..]->(b) return another;"
+    # query = "match another = (a:SystemUser {username :'" + username + "'})-[*]->(b:Data {system_user_username : '" + username + "'}) where not (b)-[]->(:Data {system_user_username : '" + username + "'}) return another;"
     res = graph.cypher.execute(query)
     for each in res:
         curr = ret

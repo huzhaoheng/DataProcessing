@@ -271,11 +271,11 @@ def getDataStructure():
 #     json.dump(getDataStructure(), fp)
 
 ret = {}
-# query = "match p = (a:Data)-[*]->(b:Data) where not (:Data {system_user_username : '" + username + "'})-[]->(a {system_user_username : '" + username + "'}) and not (b)-[]->(:Data) with a, b match another = (:SystemUser)-[*]->(a)-[*]->(b) return another;"
-query = "match another = (a:SystemUser {username :'" + username + "'})-[*]->(b:Data {system_user_username : '" + username + "'}) where not (b)-[]->(:Data {system_user_username : '" + username + "'}) return another;"
+query = "match p = (a:Data)-[*0..]->(b:Data) where not (:Data {system_user_username : '" + username + "'})-[]->(a {system_user_username : '" + username + "'}) and not (b)-[]->(:Data) with a, b match another = (:SystemUser)-[*]->(a)-[*0..]->(b) return another;"
+# query = "match another = (a:SystemUser {username :'" + username + "'})-[*]->(b:Data {system_user_username : '" + username + "'}) where not (b)-[]->(:Data {system_user_username : '" + username + "'}) return another;"
 print (query)
 res = graph.cypher.execute(query)
-print (res)
+# print (res)
 for each in res:
     curr = ret
     path = each.another
@@ -326,7 +326,6 @@ for each in res:
                     if end_node['neo4j_id'] not in curr:
                         curr[end_node['neo4j_id']] = end_node
             
-
 
 with open('temp.json', 'w') as fp:
     json.dump(ret, fp)
