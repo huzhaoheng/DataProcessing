@@ -30,12 +30,7 @@ def verification():
         json.dump(data, fp)
     hashkey = hashlib.md5((username).encode()).hexdigest()
     parameters = parameterParser(structure)
-    print (parameters)
-    parameter_id = generateParameterID(parameters)
-    print (parameter_id)
-    print ('-----------------------------------')
-    print ('-----------------------------------')
-    print ('-----------------------------------')
+    parameter_id = generateParameterID(parameters, username)
     query = "MATCH (d:SystemUser) WHERE d.username = '" + username + "' RETURN d"
     exists = graph.cypher.execute(query)
     redirect_url = "http://listen.online:1111" + url_for('home', username = username, hashkey = hashkey)

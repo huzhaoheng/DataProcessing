@@ -141,6 +141,12 @@ def parameterParser(structure):
         return ret
 
 
-def generateParameterID(parameters):
-    s = json.dumps(parameters)
-    return hashlib.md5(s.encode()).hexdigest()
+def generateParameterID(parameters, username):
+    keys = list(parameters.keys())
+    keys.sort()
+    id_str = username
+    for k in keys:
+        v = parameters[k]
+        id_str += str(v)            
+
+    return hashlib.md5(id_str.encode()).hexdigest()
