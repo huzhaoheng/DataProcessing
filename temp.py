@@ -271,7 +271,8 @@ def getDataStructure():
 #     json.dump(getDataStructure(), fp)
 
 ret = {}
-query = "match p = (a:Data)-[*]->(b:Data) where not (:Data {system_user_username : '" + username + "'})-[]->(a {system_user_username : '" + username + "'}) and not (b)-[]->(:Data) with a, b match another = (:SystemUser)-[*]->(a)-[*]->(b) return another;"
+# query = "match p = (a:Data)-[*]->(b:Data) where not (:Data {system_user_username : '" + username + "'})-[]->(a {system_user_username : '" + username + "'}) and not (b)-[]->(:Data) with a, b match another = (:SystemUser)-[*]->(a)-[*]->(b) return another;"
+query = "match another = (a:SystemUser {username :'" + username + "'})-[*]->(b:Data {system_user_username : '" + username + "'}) where not (b)-[]->(:Data {system_user_username : '" + username + "'}) return another;"
 print (query)
 res = graph.cypher.execute(query)
 print (res)
