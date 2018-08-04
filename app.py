@@ -175,6 +175,27 @@ def getData():
 
     return jsonify(elements = ret)
 
+@app.route('/getDataByPath')
+def getDataByPath():
+    path = json.loads(request.args.get('arg'))['path']
+    ret = []
+    query = "MATCH p="
+    for node in path:
+        query += "(:" + node['label'] + " {" + node['identifier'] + ":'" + node[node['identifier']] + "'})"
+        query += "-[]->"
+    query += "(d:Data) RETURN d"
+    res = graph.cypher.execute(query)
+    for each in res:
+        ret.append(each.d.properties)
+        # print (each.d.properties)
+    return jsonify(elements = ret)
+
+
+
+
+
+
+
 @app.route('/getUpdateTime')
 def getUpdateTime():
     query = json.loads(request.args.get('arg'))['query']
