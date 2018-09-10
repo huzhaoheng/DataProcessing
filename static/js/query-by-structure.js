@@ -15,8 +15,8 @@ $("#query-by-structure").click(function () {
         {arg: JSON.stringify({"path" : processed_path})},
         function (response){
             var data = response.elements;
-            switchButtons();
-            dispalyData(data);
+            //switchButtons();
+            openNewWindow(data);
         }
     )
 })
@@ -92,7 +92,7 @@ function processPath(path){
 	return processed_path;
 }
 
-function dispalyData(data){
+/*function displayData(data){
 	var container = document.getElementById('main-area');
 	var columns = [];
 	if (data.length == 0){
@@ -138,48 +138,11 @@ function dispalyData(data){
 	}
 	window.table = new Handsontable(container, setting);
 
-	/*window.table.updateSettings({
-    	afterChange: function(changes, src) {
-    		myChart.update()
-    	}
-	})
+}*/
 
-
-	var options = {
-		type: 'bar',
-		data: {
-			labels: headers,
-			datasets: [{
-				label: colheaders[0],
-				data: myData[0],
-				borderWidth: 1,
-				backgroundColor: 'rgb(255, 236, 217)'
-			}, {
-				label: colheaders[1],
-				data: myData[1],
-				borderWidth: 1,
-				backgroundColor: 'rgb(235, 224, 255)'
-			}, {
-				label: colheaders[2],
-				data: myData[2],
-				borderWidth: 1,
-				backgroundColor: 'rgb(219, 242, 242)'
-			}]
-		},
-		options: {
-			scales: {
-				yAxes: [{
-					ticks: {
-						reverse: false
-					}
-				}]
-			}
-		}
-	}
-
-	var ctx = document.querySelector('.chartJSContainer').getContext('2d');
-	var myChart = new Chart(ctx, options);*/
-
+function openNewWindow(data){
+	var new_window = window.open("../static/html/table.html");
+	new_window.data = data;
 }
 
 $("#reset-structure").click(function () {
