@@ -92,53 +92,6 @@ function processPath(path){
 	return processed_path;
 }
 
-/*function displayData(data){
-	var container = document.getElementById('main-area');
-	var columns = [];
-	if (data.length == 0){
-		window.alert('empty result!');
-		return;
-	}
-	var sample = data[0];
-	var type_mapping = {
-		'str' : 'text',
-		'int' : 'numeric',
-	};
-	for (key in sample){
-		if (!(['neo4j_id','system_user_username', 'system_user_hashkey'].includes(key)) && !(key.endsWith('_type'))){
-			columns.push({
-				data: key,
-				type: type_mapping[sample[key + '_type']],
-			});
-		}
-	}
-	var colHeaders = [];
-	columns.forEach(each => {
-		colHeaders.push(each.data);
-	})
-	var setting = {
-		data: data,
-		columns: columns,
-		outsideClickDeselects: false,
-		stretchH: 'all',
-		width: document.getElementById('main-area').offsetWidth,
-		autoWrapRow: true,
-		height: document.getElementById('main-area').offsetHeight,
-		maxRows: data.length * 2,
-		manualRowResize: true,
-		manualColumnResize: true,
-		rowHeaders: true,
-		colHeaders: colHeaders,
-		manualRowMove: true,
-		manualColumnMove: true,
-		contextMenu: true,
-		filters: true,
-		dropdownMenu: true,
-		formulas: true,
-	}
-	window.table = new Handsontable(container, setting);
-
-}*/
 
 function openNewWindow(data){
 	var new_window = window.open("../static/html/table.html");
@@ -146,33 +99,11 @@ function openNewWindow(data){
 }
 
 $("#reset-structure").click(function () {
-	//clearSVG();
 	clean();
 	displayDataStructure(window.username, window.hashkey);
 })
 
 function clean() {
-	resetButtons();
-	if (window.table != undefined){
-		window.table.destroy();
-	}
     $("#main-area").empty();
     window.target_node = null;
-}
-
-function resetButtons() {
-	$('#query-by-structure').prop('disabled', false);
-	$('#download').prop('disabled', true);
-	$('#stats').prop('disabled', true);
-}
-
-function switchButtons() {
-	console.log('switching buttons');
-	$('#query-by-structure').prop('disabled', true);
-	$('#download').prop('disabled', false);
-	$('#stats').prop('disabled', false);
-}
-
-function clearSVG() {
-	$("#main-area > svg").remove();
 }

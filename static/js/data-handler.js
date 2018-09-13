@@ -1,8 +1,3 @@
-$(document).ready(function() {
-	window.chartCategories = [];
-	window.chartSeriesName = null;
-});
-	
 function displayData(data) {
 	var rows = [];
 	if(data != undefined && data.length > 0){
