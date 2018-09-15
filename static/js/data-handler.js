@@ -109,7 +109,6 @@ function drawChart() {
 		}
 		return;
 	}
-
 }
 
 function saveChartSetting() {

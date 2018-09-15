@@ -24,92 +24,10 @@ def createQueryParameterStructureHelper(graph, username, hashkey, structures, qu
         createQueryParameterStructureHelper(graph, username, hashkey, each['children'], query_name, parameter_id, new_prev_path)
 
 
-def parseQueryParameterStructure(username, hashkey, structure, query_name, parameter_id):
-    name, output, children, selected = structure['name'], structure['output'], structure['children'], structure['selected']
-    if selected:
-        if not children:
-            return None
-        else:    
-            ret = {
-                    'system_user_username' : username, 
-                    'system_user_hashkey' : hashkey, 
-                    'query_name' : query_name,
-                    'parameter_id' : parameter_id,
-                    'name' : name,
-                    'children' : []
-                }
-
-            try:
-                ret['object_name'] = output['type']['ofType']['name']
-            except Exception as e:
-                ret['object_name'] = ''
-
-            for child in children:
-                child_structure = parseQueryParameterStructure(username, hashkey, child, query_name, parameter_id)
-                if child_structure:
-                    ret['children'].append(child_structure)
-            return ret
-    else:
-        return None
-
-
 def storeData(graph, data, username, hashkey, structure, query_name, parameter_id):
     loader = DataLoader(graph, data, username, hashkey, structure, query_name, parameter_id)
     loader.storeData()
     return {"msg" : "Done"}
-
-def generateGraphStructure(raw_graph, name):
-    graph = {}
-    for each in raw_graph:
-        if len(each[0].split('->')) == 1:
-            element = each[0]
-            graph[element] = {}
-                
-        else:
-            source, relation, target = each[0].split('->')
-            if source not in graph:
-                graph[source] = {"relation->" + relation : {target : {}}}
-            elif "relation->" + relation not in graph[source]:
-                graph[source]["relation->" + relation] = {target : {}}
-            elif target not in graph[source]["relation->" + relation]:
-                graph[source]["relation->" + relation][target] = {}
-            else:
-                pass
-
-    ret = {name : {'relation->has' : graph}}
-
-    return ret
-
-
-def applyStatisticalFunction(data, function, values, name):
-    if function == 'COUNT':
-        return {name : len(data)}
-    elif function == 'COUNT DISTINCT':
-        return {name : len(set(data))}
-    elif function == 'MAX':
-        return {name : max(data)}
-    elif function == 'MIN':
-        return {name : min(data)}
-    elif function == 'AVG':
-        # return {name : np.average(data)}
-        return {name : np.nanmean(data)}
-        # return sum(data) / len(data)
-    elif function == 'SUM':
-        return {name : sum(data)}
-    elif function == 'STDEV':
-        return {name : np.std(data)}
-    elif function == 'WORD FREQ':
-        ret = {}
-        long_string = '  '.join(data).lower()
-        values_list = values.split(',')        
-        for value in values_list:
-            phrase = value.rstrip().lstrip().lower()
-            label = name + " : " + value
-            count = max(len(long_string.split(phrase)) - 1, 0)
-            ret[label] = count
-        return ret
-    else:
-        return None
 
 
 def parameterParser(structure):
@@ -150,3 +68,20 @@ def generateParameterID(parameters, username):
         id_str += str(v)            
 
     return hashlib.md5(id_str.encode()).hexdigest()
+
+
+def applyTextFunction(textFunctionName, data, textAPIClient):
+    result = None
+
+    if textFunctionName == "Concepts":
+        result = textAPIClient.Concepts({'text' : data})
+    elif textFunctionName == "Entities":
+        result = textAPIClient.Entities({'text' : data})
+    elif textFunctionName == "Hashtags":
+        result = textAPIClient.Hashtags({'text' : data})
+    elif textFunctionName == "Sentiment":
+        result = textAPIClient.Sentiment({'text' : data})
+    else:
+        pass
+
+    return result

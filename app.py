@@ -10,6 +10,7 @@ import pandas
 from py2neo.packages.httpstream import http
 from time import gmtime, strftime, localtime
 import sys
+from aylienapiclient import textapi
 http.socket_timeout = 9999
 
 app = Flask(__name__)
@@ -17,7 +18,7 @@ CORS(app)
 authenticate("localhost:7474", "neo4j", "123456")
 neo4jUrl = os.environ.get('NEO4J_URL',"http://localhost:7474/db/data/")
 graph = Graph(neo4jUrl)
-hidden_properties = ['internal_id', 'system_user_username', 'system_user_hashkey']
+textAPIClient = textapi.Client("bcbe7ef4", "627c1e3eeb321a490f68057c197cee6f")
 
 @app.route('/verification', methods=['GET', 'POST'])
 def verification():
@@ -134,9 +135,12 @@ def getDataByPath():
     return jsonify(elements = ret)
 
 
-@app.route('/getTextAPIMethods')
-def getTextAPIMethods():
-    return
+@app.route('/textAnalysis')
+def textAnalysis():
+    data = json.loads(request.args.get('arg'))['data']
+    textFunctionName = json.loads(request.args.get('arg'))['textFunctionName']
+    result = applyTextFunction(textFunctionName, data, textAPIClient)
+    return jsonify(elements = result)
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
