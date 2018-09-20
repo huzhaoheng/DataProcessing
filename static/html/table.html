@@ -78,7 +78,8 @@
                     <input id="textFunctionsList"/>
                     <script>
                         $("#textFunctionsList").kendoDropDownList({
-                            dataSource: ['Concepts', 'Entities', 'Hashtags', 'Sentiment']
+                            /*dataSource: ['Concepts', 'Entities', 'Hashtags', 'Sentiment']*/
+                            dataSource: ['Entities']
                         });
                         var textFunctionsList = $("#textFunctionsList").data("kendoDropDownList");
                         textFunctionsList.trigger("change");
