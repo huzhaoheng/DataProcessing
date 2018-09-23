@@ -63,7 +63,7 @@ def validateQueryNode(username, query_name):
 
 	return query_id
 
-def validateParameterNode(schema, username, query_name):
+def validateParameterNode(schema, username, query_name, parsed_parameters):
 	parameter_hash = hashlib.md5(json.dumps(schema).encode()).hexdigest()
 	query = """
 				MATCH 
@@ -79,12 +79,22 @@ def validateParameterNode(schema, username, query_name):
 	parameter_exists = graph.cypher.execute(query)
 	parameter_id = None
 	if not parameter_exists:
+		parameters_str = ""
+		for k, v in parsed_parameters.items():
+			if v:
+				if type(v) is str:
+					parameters_str += "{k} : '{v}', ".format(k = k, v = v)
+				else:
+					parameters_str += "{k} : {v}, ".format(k = k, v = v)
+			else:
+				parameters_str += "{k} : {v}, ".format(k = k, v = "null")
+
 		query = """
 					CREATE 
-						(p:QueryParameter {{query_name : '{query_name}', username : '{username}', parameter_hash : '{parameter_hash}'}})
+						(p:QueryParameter {{query_name : '{query_name}', username : '{username}', {parameters_str} parameter_hash : '{parameter_hash}'}})
 					RETURN 
 						ID(p)
-				""".format(query_name = query_name, username = username, parameter_hash = parameter_hash)
+				""".format(query_name = query_name, username = username, parameter_hash = parameter_hash, parameters_str = parameters_str)
 		result = graph.cypher.execute(query)
 		parameter_id = result[0]["ID(p)"]
 		storeSchema(parameter_id, schema)
@@ -111,7 +121,6 @@ def connectNodes(source_id, target_id, rel_name):
 	graph.cypher.execute(query)
 
 def storeSchema(parameter_id, schema):
-
 	return
 
 def storeData(data, schema, node_name, parent_id, curr_time):
@@ -203,13 +212,41 @@ def storeData(data, schema, node_name, parent_id, curr_time):
 				graph.cypher.execute(query)
 	return;
 
+def parameterParser(structure):
+    ret = {}
+    if type(structure) is dict:
+        if structure["selected"]:
+            curr_name = structure["name"]
+            if structure["inputs"]:
+                for each in structure["inputs"]:
+                    name = each["name"]
+                    value = each["value"]
+                    inputType = each["inputType"]
+                    if inputType == "Int":
+                        ret[curr_name + "_" + name] = int(value)
+                    elif inputType == "Float":
+                        ret[curr_name + "_" + name] = float(value)
+                    else:
+                        ret[curr_name + "_" + name] = value
+            if structure["children"]:
+                children_ret = parameterParser(structure["children"])
+                for k, v in children_ret.items():
+                    ret[curr_name + "_" + k]  = v
+        return ret
+    
+    else:
+        for each in structure:
+            for k, v in parameterParser(each).items():
+                ret[k] = v
+        return ret
+
 
 if __name__ == '__main__':
 	username = 'hu61'
 	query_structure = json.load(open('sample_structure.json', 'r'))
 	query_name = query_structure['name']
-
-	data = json.load(open('data.json', 'rb'))
+	parsed_parameters = parameterParser(query_structure)
+	data = json.load(open('formated.json', 'rb'))
 	builder.add_object(data)
 	schema = builder.to_schema()
 	json.dump(schema, open("schema.json", "w"))
@@ -217,7 +254,7 @@ if __name__ == '__main__':
 	# exit()
 	user_id = validateUserNode(username)
 	query_id = validateQueryNode(username, query_name)
-	parameter_id = validateParameterNode(schema, username, query_name)
+	parameter_id = validateParameterNode(schema, username, query_name, parsed_parameters)
 	connectNodes(user_id, query_id, "hasQuery")
 	connectNodes(query_id, parameter_id, "hasParameter")
 	curr_time = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
