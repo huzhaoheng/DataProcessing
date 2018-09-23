@@ -63,8 +63,8 @@ def validateQueryNode(username, query_name):
 
 	return query_id
 
-def validateParameterNode(query_structure, username, query_name):
-	parameter_hash = hashlib.md5(json.dumps(query_structure).encode()).hexdigest()
+def validateParameterNode(schema, username, query_name):
+	parameter_hash = hashlib.md5(json.dumps(schema).encode()).hexdigest()
 	query = """
 				MATCH 
 					(p:QueryParameter) 
@@ -87,6 +87,7 @@ def validateParameterNode(query_structure, username, query_name):
 				""".format(query_name = query_name, username = username, parameter_hash = parameter_hash)
 		result = graph.cypher.execute(query)
 		parameter_id = result[0]["ID(p)"]
+		storeSchema(parameter_id, schema)
 	else:
 		parameter_id = parameter_exists[0]["ID(p)"]
 
@@ -109,7 +110,11 @@ def connectNodes(source_id, target_id, rel_name):
 	)
 	graph.cypher.execute(query)
 
-def storeData(data, schema, parent_id, curr_time):
+def storeSchema(parameter_id, schema):
+
+	return
+
+def storeData(data, schema, node_name, parent_id, curr_time):
 	if "anyOf" in schema:
 		new_schema = None
 		sub_schemas = schema["anyOf"]
@@ -119,39 +124,31 @@ def storeData(data, schema, parent_id, curr_time):
 				break
 
 		if data:
-			storeData(data, new_schema, parent_id, curr_time)
+			storeData(data, new_schema, node_name, parent_id, curr_time)
 		else:
 			pass
 
 	else:
 		data_type = schema["type"]
 		if data_type == "object":
-			if "properties" in schema:
-				node_names = list(schema["properties"].keys())
-				node_id_list = []
-				tx = graph.cypher.begin()
-				for node_name in node_names:
-					query = """
-								MATCH
-									(x)
-								WHERE
-									ID(x) = {parent_id}
-								WITH
-									(x)
-								CREATE 
-									(x)-[r:hasChild]->(d:Data {{node_name : '{node_name}', collected_at : '{curr_time}'}})
-								RETURN 
-									ID(d)
-							""".format(node_name = node_name, curr_time = curr_time, parent_id = parent_id)
-					# result = graph.cypher.execute(query)
-					tx.append(query)
-				result = tx.commit()
-				for each in result:
-					node_id_list.append(each[0]["ID(d)"])
+			query = """
+						MATCH
+							(x)
+						WHERE
+							ID(x) = {parent_id}
+						WITH
+							(x)
+						CREATE 
+							(x)-[r:hasChild]->(o:Object {{node_name : '{node_name}', collected_at : '{curr_time}'}})
+						RETURN 
+							ID(o)
+			""".format(parent_id = parent_id, node_name = node_name, curr_time = curr_time)
+			result = graph.cypher.execute(query)
+			this_id = result[0]["ID(o)"]
 
-				for i, node_name in enumerate(node_names):
-					node_id = node_id_list[i]
-					storeData(data[node_name], schema["properties"][node_name], node_id, curr_time)
+			if "properties" in schema:
+				for node_name, node_schema in schema["properties"].items():
+					storeData(data[node_name], node_schema, node_name, this_id, curr_time)
 			else:
 				pass
 
@@ -169,7 +166,7 @@ def storeData(data, schema, parent_id, curr_time):
 
 			for each in data:
 				if each:
-					storeData(each, new_schema, parent_id, curr_time)
+					storeData(each, new_schema, node_name, parent_id, curr_time)
 
 		elif type(data_type) is list:
 			nonnull_type = None
@@ -177,7 +174,7 @@ def storeData(data, schema, parent_id, curr_time):
 				if each != "null":
 					nonnull_type = each
 			if data:
-				storeData(data, {"type" : nonnull_type}, parent_id, curr_time)
+				storeData(data, {"type" : nonnull_type}, node_name, parent_id, curr_time)
 
 		else:
 			value = None
@@ -193,7 +190,6 @@ def storeData(data, schema, parent_id, curr_time):
 				pass
 
 			if value:
-				tx = graph.cypher.begin()
 				query = """
 							MATCH
 								(x)
@@ -202,19 +198,10 @@ def storeData(data, schema, parent_id, curr_time):
 							WITH
 								(x)
 							CREATE 
-								(x)-[r:hasValue]->(d:Data {{node_name : 'value', collected_at : '{curr_time}', value : {value}}})
-							RETURN 
-								ID(d)
-				""".format(curr_time = curr_time, parent_id = parent_id, value = value)
-				tx.append(query)
-
-				result = tx.commit()
-				# print (query)
-				# graph.cypher.execute(query)
+								(x)-[:hasChild]->(o:Object {{node_name : '{node_name}', collected_at : '{curr_time}'}})-[:hasValue]->(v:Value {{collected_at : '{curr_time}', value : {value}}})
+				""".format(curr_time = curr_time, parent_id = parent_id, value = value, node_name = node_name)
+				graph.cypher.execute(query)
 	return;
-
-
-
 
 
 if __name__ == '__main__':
@@ -234,4 +221,4 @@ if __name__ == '__main__':
 	connectNodes(user_id, query_id, "hasQuery")
 	connectNodes(query_id, parameter_id, "hasParameter")
 	curr_time = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-	storeData(data, schema, parameter_id, curr_time)
+	storeData(data, schema, "root", parameter_id, curr_time)
