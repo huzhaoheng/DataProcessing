@@ -63,9 +63,14 @@ function loadGrid(parameters) {
 					name : "View Parameter",
 					iconClass: "k-icon k-i-eye",
 					click : function (e) {
-						/*var query_id = this["columns"][0]["field"];
-						var query_name = this["columns"][1]["field"];
-						viewQueryDetail(window.username, query_id, query_name);*/
+						// prevent page scroll position change
+						e.preventDefault();
+						// e.target is the DOM element representing the button
+						var tr = $(e.target).closest("tr"); // get the current table row (tr)
+						// get the data bound to the current table row
+						var data = this.dataItem(tr);
+						var parameter_id = data["ID"];
+						viewParameter(parameter_id);
 						return;
 					}
 				}, {
@@ -114,6 +119,21 @@ function loadGrid(parameters) {
 					console.log(result);
 				}
 			)	
+		}
+	});
+}
+
+function viewParameter(parameter_id) {
+	var parameterDetail = window.parameters[parameter_id];
+	console.log(parameterDetail);
+	$("#dialog").kendoWindow({
+		modal: true,
+		title: "Parameter Details",
+		height: "50%",
+		width: "50%",
+		position: {
+			top: "25%",
+			left: "25%"
 		}
 	});
 }
