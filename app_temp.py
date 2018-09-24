@@ -93,6 +93,27 @@ def getQueries():
         ret[each["q.name"]] = {"ID" : each["ID(q)"], "comment" : each["q.comment"]}
     return jsonify(elements = ret)
 
+@app.route('/getParameters')
+def getParameters():
+    query_id = json.loads(request.args.get('arg'))['query_id']
+    query = """
+                MATCH 
+                    (q:Query)-[r:hasParameter]->(p:QueryParameter)
+                RETURN
+                    p
+    """
+    ret = {}
+    result = graph.cypher.execute(query)
+    for each in result:
+        parameter_node_id = each["p"]._id
+        parameters = each["p"].properties
+        ret[parameter_node_id] = {}
+        for k, v in parameters.items():
+            if k not in ["username", "parameter_hash"]:
+                ret[parameter_node_id][k] = v
+
+    return jsonify(elements = ret)
+
 @app.route('/setNodeProperties')
 def setNodeProperties():
     node_id = json.loads(request.args.get('arg'))['id']
