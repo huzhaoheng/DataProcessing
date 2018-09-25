@@ -63,8 +63,10 @@ function loadGrid(queries) {
 					name : "Details",
 					iconClass: "k-icon k-i-eye",
 					click : function (e) {
-						var query_id = this["columns"][0]["field"];
-						var query_name = this["columns"][1]["field"];
+						var tr = $(e.target).closest("tr");
+						var data = this.dataItem(tr);
+						var query_id = data["ID"];
+						var query_name = data["Query"];
 						viewQueryDetail(window.username, query_id, query_name);
 					}
 				}, { 

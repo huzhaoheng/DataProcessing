@@ -1,4 +1,7 @@
 function initialization(username, query_id, query_name) {
+	window.username = username;
+	window.query_id = query_id;
+	window.query_name = query_name;
 	$.getJSON(
 		'/getParameters',
 		{arg: JSON.stringify({"username" : username, "query_id" : query_id, "query_name" : query_name})},
@@ -159,7 +162,6 @@ function formatStructure(structure) {
 	for (key in structure) {
 		ret.push({
 			text : key,
-			expanded: true,
 			items : formatStructure(structure[key])
 		});
 	}

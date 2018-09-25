@@ -36,14 +36,24 @@
 					type: "button",
 					text: "View Data",
 					icon: "arrow-60-right",
-					showIcon: "toolbar"
+					showIcon: "toolbar",
+					click: function(e) {
+						console.log(e.target.text() + " is clicked");
+						viewData();
+					}
 				},
 
 				{
 					type: "button",
-					text: "Collapse/Expand",
+					text: "Expand",
 					icon: "select-all",
-					showIcon: "toolbar"
+					showIcon: "toolbar,",
+					click: function(e) {
+						var treeview = $("#treeview").data("kendoTreeView");
+						if (treeview != undefined) {
+							treeview.expand(".k-item");
+						}
+					}
 				},
 
 				//separator
@@ -65,7 +75,15 @@
 					type: "button",
 					text: "Clear Date",
 					icon: "reset",
-					showIcon: "toolbar"
+					showIcon: "toolbar",
+					click: function(e) {
+						var startDatePicker = $("#startDate").data("kendoDatePicker");
+						startDatePicker.value(null);
+						startDatePicker.trigger("change");
+						var endDatePicker = $("#endDate").data("kendoDatePicker");
+						endDatePicker.value(null);
+						endDatePicker.trigger("change");
+					}
 				},
 			]
 		});
