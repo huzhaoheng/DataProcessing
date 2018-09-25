@@ -1,27 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Data</title>
-    <meta charset="utf-8">
-    <link href="../kendoui/examples/content/shared/styles/examples-offline.css" rel="stylesheet">
-    <link href="../kendoui/styles/kendo.common.min.css" rel="stylesheet">
-    <link href="../kendoui/styles/kendo.rtl.min.css" rel="stylesheet">
-    <link href="../kendoui/styles/kendo.default.min.css" rel="stylesheet">
-    <link href="../kendoui/styles/kendo.default.mobile.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<title>Data</title>
+	<meta charset="utf-8">
+	<link href="../kendoui/examples/content/shared/styles/examples-offline.css" rel="stylesheet">
+	<link href="../kendoui/styles/kendo.common.min.css" rel="stylesheet">
+	<link href="../kendoui/styles/kendo.rtl.min.css" rel="stylesheet">
+	<link href="../kendoui/styles/kendo.default.min.css" rel="stylesheet">
+	<link href="../kendoui/styles/kendo.default.mobile.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 
-    <script src="../kendoui/js/jquery.min.js"></script>
-    <script src="../kendoui/js/jszip.min.js"></script>
-    <script src="../kendoui/js/kendo.all.min.js"></script>
-    <script src="../kendoui/examples/content/shared/js/console.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="../kendoui/js/jquery.min.js"></script>
+	<script src="../kendoui/js/jszip.min.js"></script>
+	<script src="../kendoui/js/kendo.all.min.js"></script>
+	<script src="../kendoui/examples/content/shared/js/console.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-    <script src="/static/js_temp/queryDetailTableHandler.js"></script>
-    
+	<script src="/static/js_temp/queryDetailHandler.js"></script>
+
 </head>
 
 <body onload="initialization('{{username}}', '{{query_id}}', '{{query_name}}');">
-    <div id="grid"></div>
-    <div id="dialog"></div>
+	<div id="grid"></div>
+	<div id="structure"></div>
+	<div class="modal fade" id="parameterDetail" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">
+						Parameter Detail
+					</h4>
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>
+									Parameter Name
+								</th>
+								<th>
+									Parameter Value
+								</th>
+							</tr>
+						</thead>
+						<tbody id="parameterDetailTable">
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">
+						Close
+					</button>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+
 </body>

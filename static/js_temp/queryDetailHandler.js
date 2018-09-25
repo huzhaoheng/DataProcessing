@@ -50,24 +50,15 @@ function loadGrid(parameters) {
 				editable: function (dataItem) {
 					return false;
 				}
-			},/*{ 
-				field: "Number",
-				filterable: false,
-				editable: function (dataItem) {
-					return false;
-				}
-			},*/{ 
+			},{ 
 				field: "Comment" 
 			},{
 				command : [{
 					name : "View Parameter",
 					iconClass: "k-icon k-i-eye",
 					click : function (e) {
-						// prevent page scroll position change
 						e.preventDefault();
-						// e.target is the DOM element representing the button
-						var tr = $(e.target).closest("tr"); // get the current table row (tr)
-						// get the data bound to the current table row
+						var tr = $(e.target).closest("tr");
 						var data = this.dataItem(tr);
 						var parameter_id = data["ID"];
 						viewParameter(parameter_id);
@@ -77,12 +68,11 @@ function loadGrid(parameters) {
 					name : "View Structure",
 					iconClass: "k-icon k-i-eye",
 					click : function (e) {
-						/*var tr = $(e.target).closest("tr");
+						//e.preventDefault();
+						var tr = $(e.target).closest("tr");
 						var data = this.dataItem(tr);
-						var query_id = data["ID"];
-						var query_name = data["Query"];
-						var query_comment = data["Comment"];
-						editQueryComment(window.username, query_id, query_name, query_comment);*/
+						var parameter_id = data["ID"];
+						console.log(parameter_id);
 						return;
 					}
 				}, { 
@@ -125,15 +115,10 @@ function loadGrid(parameters) {
 
 function viewParameter(parameter_id) {
 	var parameterDetail = window.parameters[parameter_id];
-	console.log(parameterDetail);
-	$("#dialog").kendoWindow({
-		modal: true,
-		title: "Parameter Details",
-		height: "50%",
-		width: "50%",
-		position: {
-			top: "25%",
-			left: "25%"
-		}
-	});
+	$("#parameterDetailTable").empty();
+	for (key in parameterDetail) {
+		var value = parameterDetail[key];
+		$("#parameterDetailTable").append("<tr><td>" + key + "</td><td>" + value + "</td></tr>");
+	}
+	$('#parameterDetail').modal('show'); 
 }
