@@ -141,7 +141,32 @@ def setNodeProperties():
     except Exception as e:
         ret["message"] = "Error"
 
-    return jsonify(elements = ret) 
+    return jsonify(elements = ret)
+
+@app.route('/getStructure')
+def getStructure():
+    parameter_id = json.loads(request.args.get('arg'))['parameter_id']
+    query = """
+                MATCH 
+                    (a:QueryParameter)-[:hasChild]->(b:Object)-[*]->(c:Object)-[:hasValue]->(d:Value)
+                WHERE
+                    ID(a) = {parameter_id}
+                WITH (b), (c) MATCH p = (b)-[*]-(c) return p;
+    """.format(parameter_id = parameter_id)
+    result = graph.cypher.execute(query)
+    ret = {}
+    for path in result:
+        curr = ret
+        nodes = path["p"].nodes
+        for node in nodes:
+            props = node.properties
+            node_name = props["node_name"]
+            if node_name not in curr:
+                curr[node_name] = {}
+
+            curr = curr[node_name]
+
+    return jsonify(elements = ret)
 
 #----------------------------------------------------------------------------------------
 

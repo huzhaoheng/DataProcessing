@@ -4,12 +4,13 @@ function initialization(username, query_id, query_name) {
 		{arg: JSON.stringify({"username" : username, "query_id" : query_id, "query_name" : query_name})},
 		function (response){
 			var parameters = response.elements;
-			console.log(parameters);
+			//console.log(parameters);
 			window.parameters = parameters;
 			loadGrid(parameters);
 			
 		}
 	)
+	loadDatePicker();
 }
 
 function loadGrid(parameters) {
@@ -72,7 +73,7 @@ function loadGrid(parameters) {
 						var tr = $(e.target).closest("tr");
 						var data = this.dataItem(tr);
 						var parameter_id = data["ID"];
-						console.log(parameter_id);
+						viewStructure(parameter_id);
 						return;
 					}
 				}, { 
@@ -106,11 +107,16 @@ function loadGrid(parameters) {
 				{arg: JSON.stringify({"id" : parameter_id, "key" : "comment", "value" : comment, "type" : "string"})},
 				function (response){
 					var result = response.elements;
-					console.log(result);
+					//console.log(result);
 				}
 			)	
 		}
 	});
+}
+
+function loadDatePicker() {
+	$("#startDate").kendoDatePicker();
+	$("#endDate").kendoDatePicker();
 }
 
 function viewParameter(parameter_id) {
@@ -121,4 +127,41 @@ function viewParameter(parameter_id) {
 		$("#parameterDetailTable").append("<tr><td>" + key + "</td><td>" + value + "</td></tr>");
 	}
 	$('#parameterDetail').modal('show'); 
+}
+
+function viewStructure(parameter_id) {
+	$.getJSON(
+		'/getStructure',
+		{arg: JSON.stringify({"parameter_id" : parameter_id})},
+		function (response){
+			var structure = response.elements;
+			var dataSource = formatStructure(structure);
+			var treeview = $("#treeview").data("kendoTreeView");
+			if (treeview != undefined) {
+				treeview.setDataSource(dataSource);
+			}
+			else {
+				$("#treeview").kendoTreeView({
+					dataSource: dataSource,
+					checkboxes: true,
+					select: function(e) {
+						console.log("Selecting", e.node);
+					}
+				});
+			}
+			return;
+		}
+	)
+}
+
+function formatStructure(structure) {
+	var ret = [];
+	for (key in structure) {
+		ret.push({
+			text : key,
+			expanded: true,
+			items : formatStructure(structure[key])
+		});
+	}
+	return ret;
 }

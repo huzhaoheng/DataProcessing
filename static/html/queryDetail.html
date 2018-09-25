@@ -23,7 +23,56 @@
 
 <body onload="initialization('{{username}}', '{{query_id}}', '{{query_name}}');">
 	<div id="grid"></div>
-	<div id="structure"></div>
+	
+
+
+	<div id="toolbar"></div>
+
+	<script>
+		$("#toolbar").kendoToolBar({
+			items: [
+				//regular button
+				{
+					type: "button",
+					text: "View Data",
+					icon: "arrow-60-right",
+					showIcon: "toolbar"
+				},
+
+				{
+					type: "button",
+					text: "Collapse/Expand",
+					icon: "select-all",
+					showIcon: "toolbar"
+				},
+
+				//separator
+				{
+					type: "separator"
+				},
+
+				{
+					template: "<label>From: <input id='startDate'/></label>",
+					overflowTemplate: "<span></span>"
+				},
+
+				{
+					template: "<label>To: <input id='endDate'/></label>",
+					overflowTemplate: "<span></span>"
+				},
+
+				{
+					type: "button",
+					text: "Clear Date",
+					icon: "reset",
+					showIcon: "toolbar"
+				},
+			]
+		});
+	</script>
+
+	<div id="treeview"></div>
+
 	<div class="modal fade" id="parameterDetail" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
