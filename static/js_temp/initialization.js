@@ -18,7 +18,7 @@ function loadQueries(username) {
 
 function loadGrid(queries) {
 	var data = [];
-	for (query_name in queries) {
+	for (var query_name in queries) {
 		var query_id = queries[query_name]["ID"];
 		var query_comment = queries[query_name]["comment"];
 		data.push({

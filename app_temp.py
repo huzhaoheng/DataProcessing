@@ -4,7 +4,7 @@ from flask import Flask, jsonify, render_template, redirect, url_for, request, m
 from py2neo import Graph, Path, authenticate
 import hashlib
 import json
-from helpers import *
+from helpers_temp import *
 from flask_cors import CORS
 import pandas
 from py2neo.packages.httpstream import http
@@ -166,6 +166,31 @@ def getStructure():
 
             curr = curr[node_name]
 
+    return jsonify(elements = ret)
+
+@app.route('/queryData')
+def queryData():
+    structure = json.loads(request.args.get('arg'))['structure']
+    parameter_id = json.loads(request.args.get('arg'))['parameter_id']
+    dates = json.loads(request.args.get('arg'))['dates']
+    startDate = dates['startDate']
+    endDate = dates['endDate']
+    ret = {}
+    queries = queryBuilder(structure, parameter_id, startDate, endDate)
+    for [node_alias, query] in queries:
+        value_alias = node_alias + "_value"
+        obj_id_alias = node_alias + "_obj_id"
+        print(query)
+        result = graph.cypher.execute(query)
+        # ret[ret_alias] = []
+        for each in result:
+            value = each[value_alias]
+            obj_id = each[obj_id_alias]
+            if obj_id not in ret:
+                ret[obj_id] = {}
+            if node_alias not in ret[obj_id]:
+                ret[obj_id][node_alias] = []
+            ret[obj_id][node_alias].append(value)
     return jsonify(elements = ret)
 
 #----------------------------------------------------------------------------------------

@@ -19,7 +19,7 @@ function initialization(username, query_id, query_name) {
 function loadGrid(parameters) {
 	var data = [];
 	//var i = 0;
-	for (parameter_id in parameters) {
+	for (var parameter_id in parameters) {
 		var parameter_group = parameters[parameter_id];
 		var comment = null;
 		if ("comment" in parameter_group) {
@@ -76,6 +76,7 @@ function loadGrid(parameters) {
 						var tr = $(e.target).closest("tr");
 						var data = this.dataItem(tr);
 						var parameter_id = data["ID"];
+						window.selected_parameter = parameter_id;
 						viewStructure(parameter_id);
 						return;
 					}
@@ -126,7 +127,6 @@ function loadToolBar() {
 				icon: "arrow-60-right",
 				showIcon: "toolbar",
 				click: function(e) {
-					console.log(e.target.text() + " is clicked");
 					viewData();
 				}
 			},{
@@ -171,10 +171,37 @@ function loadDatePicker() {
 	$("#endDate").kendoDatePicker();
 }
 
+function loadMessage(message, message_type) {
+	$("#message").empty();
+	switch (message_type) {
+		case "success" :
+			var code = `
+				<div class="alert alert-success alert-dismissable">		 
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+					<strong>` + message + `</strong>
+				</div>
+			`;
+			$("#message").append(code);
+			break;
+		case "failure" : 
+			var code = `
+				<div class="alert alert-dismissable alert-danger">
+				 
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+				<strong>` + message + `</strong>
+			</div>
+			`;
+			$("#message").append(code);
+			break;
+		default:
+			return;
+	}
+}
+
 function viewParameter(parameter_id) {
 	var parameterDetail = window.parameters[parameter_id];
 	$("#parameterDetailTable").empty();
-	for (key in parameterDetail) {
+	for (var key in parameterDetail) {
 		var value = parameterDetail[key];
 		$("#parameterDetailTable").append("<tr><td>" + key + "</td><td>" + value + "</td></tr>");
 	}
@@ -187,7 +214,11 @@ function viewStructure(parameter_id) {
 		{arg: JSON.stringify({"parameter_id" : parameter_id})},
 		function (response){
 			var structure = response.elements;
-			var dataSource = formatStructure(structure);
+			window.structure = structure;
+			var message = "Cool! The query structure has been successfully loaded!";
+			var message_type = "success";
+			loadMessage(message, message_type);
+			var dataSource = formatStructure(structure, 0);
 			var treeview = $("#treeview").data("kendoTreeView");
 			if (treeview != undefined) {
 				treeview.setDataSource(dataSource);
@@ -195,7 +226,9 @@ function viewStructure(parameter_id) {
 			else {
 				$("#treeview").kendoTreeView({
 					dataSource: dataSource,
-					checkboxes: true,
+					checkboxes: {
+						template: "<input type='checkbox' class = 'treeview-checkbox' name='#= item.layer #' value='#= item.text #' />"
+					},
 					select: function(e) {
 						console.log("Selecting", e.node);
 					}
@@ -206,13 +239,102 @@ function viewStructure(parameter_id) {
 	)
 }
 
-function formatStructure(structure) {
+function formatStructure(structure, curr_layer) {
 	var ret = [];
-	for (key in structure) {
+	for (var key in structure) {
 		ret.push({
 			text : key,
-			items : formatStructure(structure[key])
+			layer: curr_layer,
+			items : formatStructure(structure[key], curr_layer + 1)
 		});
+	}
+	return ret;
+}
+
+function viewData() {
+	if (window.structure == undefined) {
+		var message_type = "failure";
+		var message = "Please select the structure you want to query about."
+		loadMessage(message, message_type);
+		return;
+	}
+
+	var datepicker = $("#startDate").data("kendoDatePicker");
+	var startDate = datepicker.value();
+	var datepicker = $("#endDate").data("kendoDatePicker");
+	var endDate = datepicker.value();
+	var dates = validateDates(startDate, endDate);
+	if (dates == null) {
+		return;
+	}
+	else {
+		var parameter_id = window.selected_parameter;
+		var checkedTreeViewCheckbox = $(".treeview-checkbox:checkbox:checked");
+		var parsed = parseCheckedTreeViewCheckbox(checkedTreeViewCheckbox);
+		$.getJSON(
+			'/queryData',
+			{arg: JSON.stringify({
+				"structure" : parsed, 
+				"parameter_id" : parameter_id, 
+				"dates" : dates})},
+			function (response){
+				var data = response.elements;
+				console.log(data);
+				var message_type = "success";
+				var message = "Great! Successfully loaded your data!";
+				loadMessage(message, message_type);
+			}
+		)	
+	}
+}
+
+function validateDates(startDate, endDate) {
+	var parsedStartDate = null;
+	var parsedendDate = null;
+	if (startDate != null && endDate != null) {
+		var x = new Date(startDate);
+		var y = new Date(endDate);
+		if (x > y) {
+			var message_type = "failure";
+			var message = "Please select valid date range."
+			loadMessage(message, message_type);
+			return null;
+		}
+	}
+	if (startDate != null) {
+		var parsedStartDate = startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + "-" + startDate.getDate();
+	}
+	if (endDate != null) {
+		var parsedendDate = endDate.getFullYear() + "-" + (endDate.getMonth() + 1) + "-" + endDate.getDate();
+	}
+	return {"startDate" : parsedStartDate, "endDate" : parsedendDate};
+}
+
+function parseCheckedTreeViewCheckbox(checkedTreeViewCheckbox) {
+	var nodesToQuery = {};
+	checkedTreeViewCheckbox.each(function() {
+		var layer = this.name;
+		var name = this.value;
+		if (layer in nodesToQuery) {
+			nodesToQuery[layer][name] = true;
+		}
+		else {
+			nodesToQuery[layer] = {};
+			nodesToQuery[layer][name] = true;
+		}
+	})
+
+	var ret = parseTreeViewCheckboxHelper(0, window.structure, nodesToQuery);
+	return ret;
+}
+
+function parseTreeViewCheckboxHelper(curr_layer, curr_structure, nodesToQuery) {
+	var ret = {};
+	for (var key in curr_structure) {
+		var checked = (curr_layer in nodesToQuery) && (key in nodesToQuery[curr_layer]);
+		ret[key] = {"checked" : checked, "children" : null, "layer" : curr_layer};
+		var res = parseTreeViewCheckboxHelper(curr_layer + 1, curr_structure[key], nodesToQuery);
+		ret[key]["children"] = res;
 	}
 	return ret;
 }
