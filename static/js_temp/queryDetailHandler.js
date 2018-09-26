@@ -2,18 +2,18 @@ function initialization(username, query_id, query_name) {
 	window.username = username;
 	window.query_id = query_id;
 	window.query_name = query_name;
+	loadToolBar();
+	loadDatePicker();
 	$.getJSON(
 		'/getParameters',
 		{arg: JSON.stringify({"username" : username, "query_id" : query_id, "query_name" : query_name})},
 		function (response){
 			var parameters = response.elements;
-			//console.log(parameters);
 			window.parameters = parameters;
 			loadGrid(parameters);
 			
 		}
-	)
-	loadDatePicker();
+	)	
 }
 
 function loadGrid(parameters) {
@@ -114,6 +114,55 @@ function loadGrid(parameters) {
 				}
 			)	
 		}
+	});
+}
+
+function loadToolBar() {
+	$("#toolbar").kendoToolBar({
+		items: [
+			{
+				type: "button",
+				text: "View Data",
+				icon: "arrow-60-right",
+				showIcon: "toolbar",
+				click: function(e) {
+					console.log(e.target.text() + " is clicked");
+					viewData();
+				}
+			},{
+				type: "button",
+				text: "Expand",
+				icon: "select-all",
+				showIcon: "toolbar,",
+				click: function(e) {
+					var treeview = $("#treeview").data("kendoTreeView");
+					if (treeview != undefined) {
+						treeview.expand(".k-item");
+					}
+				}
+			},{
+				type: "separator"
+			},{
+				template: "<label>From: <input id='startDate'/></label>",
+				overflowTemplate: "<span></span>"
+			},{
+				template: "<label>To: <input id='endDate'/></label>",
+				overflowTemplate: "<span></span>"
+			},{
+				type: "button",
+				text: "Clear Date",
+				icon: "reset",
+				showIcon: "toolbar",
+				click: function(e) {
+					var startDatePicker = $("#startDate").data("kendoDatePicker");
+					startDatePicker.value(null);
+					startDatePicker.trigger("change");
+					var endDatePicker = $("#endDate").data("kendoDatePicker");
+					endDatePicker.value(null);
+					endDatePicker.trigger("change");
+				}
+			},
+		]
 	});
 }
 
