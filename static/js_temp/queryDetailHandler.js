@@ -10,6 +10,7 @@ function initialization(username, query_id, query_name) {
 	loadDatePicker();
 	loadPanelBar();
 	loadChartTypeList();
+	loadTextFunctionList();
 	$.getJSON(
 		'/getParameters',
 		{arg: JSON.stringify({"username" : username, "query_id" : query_id, "query_name" : query_name})},

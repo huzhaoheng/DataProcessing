@@ -252,11 +252,12 @@ def getDataByPath():
     return jsonify(elements = ret)
 
 
-@app.route('/textAnalysis')
-def textAnalysis():
+@app.route('/textFunction')
+def textFunction():
     data = json.loads(request.args.get('arg'))['data']
     textFunctionName = json.loads(request.args.get('arg'))['textFunctionName']
-    result = applyTextFunction(textFunctionName, data, textAPIClient)
+    parameters = json.loads(request.args.get('arg'))['parameters']
+    result = applyTextFunction(textFunctionName, data, textAPIClient, parameters)
     return jsonify(elements = result)
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'

@@ -1,3 +1,6 @@
+import nltk
+from nltk.tokenize import RegexpTokenizer
+
 def queryBuilder(structure, parameter_id, startDate, endDate):
 	query = """
 		MATCH 
@@ -63,7 +66,7 @@ def queryBuilderHelper(curr_structure, parameter_id, startDate, endDate, query):
 			ret += queryBuilderHelper(children, parameter_id, startDate, endDate, extended_query)
 		return ret
 
-def applyTextFunction(textFunctionName, data, textAPIClient):
+def applyTextFunction(textFunctionName, data, textAPIClient, parameters):
 	result = None
 
 	if textFunctionName == "Concepts":
@@ -74,7 +77,21 @@ def applyTextFunction(textFunctionName, data, textAPIClient):
 		result = textAPIClient.Hashtags({'text' : data})
 	elif textFunctionName == "Sentiment":
 		result = textAPIClient.Sentiment({'text' : data})
-	else:
-		pass
+	elif textFunctionName == "Top K Words":
+		KValue = parameters["KValue"]
+		includeStopWords = parameters["includeStopWords"]
 
+		tokenizer = RegexpTokenizer(r'\w+')
+		allWords = tokenizer.tokenize(data)
+		stopwords = nltk.corpus.stopwords.words('english')
+
+		allWordDist = nltk.FreqDist(w.lower() for w in allWords)
+		allWordExceptStopDist = nltk.FreqDist(w.lower() for w in allWords if w.lower() not in stopwords)
+
+		result = {}
+		top = allWordDist.most_common(KValue) if includeStopWords else allWordExceptStopDist.most_common(KValue)
+		for each in top:
+			word, freq = each
+			result[word] = freq
+		
 	return result

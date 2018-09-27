@@ -66,29 +66,23 @@
 		</li>
 
 		<li>
-			Text Analysis
+			Text Functions
 			<div id="text-analysis">
 				<div class="inner">
-					<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="run-text-function" onclick="runTextFunction();">
+					<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="run-text-function" onclick="showTextFunctionParameterModal();">
 						<span class="glyphicon glyphicon-play"></span>
 					</button>
 				</div>
 
 				<div class="inner">
 					<input id="textFunctionsList"/>
-					<script>
-						$("#textFunctionsList").kendoDropDownList({
-							dataSource: ['Concepts', 'Entities', 'Hashtags', 'Sentiment']
-						});
-						var textFunctionsList = $("#textFunctionsList").data("kendoDropDownList");
-						textFunctionsList.trigger("change");
-					</script>
 				</div>
 			</div>
 			<div id="text-function-result"></div>
 		</li>
 	</ul>
 
+	<!-- modal to show parameter detail -->
 	<div class="modal fade" id="parameterDetail" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -195,6 +189,30 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" onclick="downloadChart();" data-dismiss="modal">
 						Download
+					</button> 
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">
+						Close
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal of text function setting -->
+	<div class="modal fade" id="text-function-setting" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						Function Setting
+					</h5>
+				</div>
+				<div class="modal-body">
+					<form></form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="runTextFunction();" data-dismiss="modal">
+						Ok
 					</button> 
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">
 						Close

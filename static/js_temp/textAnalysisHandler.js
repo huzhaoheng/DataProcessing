@@ -1,12 +1,52 @@
 function loadTextFunctionList() {
 	$("#textFunctionsList").kendoDropDownList({
-		dataSource: ['Concepts', 'Entities', 'Hashtags', 'Sentiment']
+		dataSource: ['Concepts', 'Entities', 'Hashtags', 'Sentiment', 'Top K Words']
 	});
 	var textFunctionsList = $("#textFunctionsList").data("kendoDropDownList");
 	textFunctionsList.trigger("change");
 }
 
-function runTextFunction() {
+function showTextFunctionParameterModal() {
+	var textFunctionNameList = $("#textFunctionsList").data("kendoDropDownList");
+	var selectedIndex = textFunctionNameList.select();
+	var textFunctionName = textFunctionNameList.dataSource.options.data[selectedIndex];
+	$("#text-function-setting form").empty();
+	switch (textFunctionName) {
+		case "Top K Words":
+			var code = `
+				<div class='form-group row'>
+					<label for="KValue" class="col-sm-4 col-form-label">Enter Value of K</label>
+					<div class="col-sm-8">
+						<input id="KValue"/>
+						<script>
+							$("#KValue").kendoNumericTextBox({decimals: 0});
+						</script>
+					</div>
+				</div>
+
+				<div class='form-group row'>
+					<label for="includeStopWords" class="col-sm-4 col-form-label">Include StopWords</label>
+					<div class="col-sm-8">
+						<input id="includeStopWords"/>
+						<script>
+							$("#includeStopWords").kendoMobileSwitch({
+								onLabel: "YES",
+								offLabel: "NO"
+							});
+						</script>
+					</div>
+				</div>
+			`;
+			$("#text-function-setting form").append(code);
+			$('#text-function-setting').modal('show');
+			break;
+		default:
+			runTextFunction();
+	}
+	return;
+}
+
+function runTextFunction(e) {
 	var textFunctionNameList = $("#textFunctionsList").data("kendoDropDownList");
 	var selectedIndex = textFunctionNameList.select();
 	var textFunctionName = textFunctionNameList.dataSource.options.data[selectedIndex];
@@ -16,10 +56,11 @@ function runTextFunction() {
 	var selection = sheet.selection();
 	var values = selection.values();
 	var dataToSend = ([].concat.apply([], values)).join(" ");
+	var parameters = prepareTextFunctionParameters(textFunctionName);
 
 	$.getJSON(
-		'/textAnalysis',
-		{arg: JSON.stringify({"data" : dataToSend, "textFunctionName" : textFunctionName})},
+		'/textFunction',
+		{arg: JSON.stringify({"data" : dataToSend, "textFunctionName" : textFunctionName, "parameters" : parameters})},
 		function (response){
 			var result = response.elements;
 			$("#text-function-result").empty();
@@ -43,11 +84,30 @@ function runTextFunction() {
 					var subjectivity_confidence = result['subjectivity_confidence'];
 					showSentiment(polarity, subjectivity, polarity_confidence, subjectivity_confidence);
 					break;
+				case "Top K Words":
+					showTopKWords(result);
+					break
 				default:
 					return;
 			}
 		}
 	)
+}
+
+function prepareTextFunctionParameters(textFunctionName) {
+	var parameters = null;
+	switch (textFunctionName) {
+		case "Top K Words":
+			var numericTextBoxObject = $("#KValue").data("kendoNumericTextBox");
+			var value = parseInt(numericTextBoxObject.value());
+			var switchInstance = $("#includeStopWords").data("kendoMobileSwitch");
+			var checked = switchInstance.check();
+			parameters = {"KValue" : value, "includeStopWords" : checked}
+			break;
+		default:
+			return parameters;
+	}
+	return parameters;
 }
 
 function showConcepts(concepts) {
@@ -144,4 +204,37 @@ function showSentiment(polarity, subjectivity, polarity_confidence, subjectivity
 	});
 
 	$("#semtiment-grid").kendoGrid(grid_content);
+}
+
+function showTopKWords(result) {
+	console.log(result);
+	var categories = [];
+	var data = [];
+	for (var word in result) {
+		var freq = result[word];
+		categories.push(word);
+		data.push(freq);
+	}
+	$("#text-function-result").kendoChart({
+		title: {
+			text: "Top " + (Object.keys(result).length).toString() + " Words"
+		},
+		series: [{
+			labels: {
+				visible: true,
+				background: "white",
+				border: {
+					width: 2,
+					color: "black"
+				}
+			},
+			type: 'column',
+			name: 'Frequency',
+			data: data
+		}],
+		categoryAxis: {
+			categories: categories
+		}
+	});
+	return;
 }
