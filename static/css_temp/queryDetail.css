@@ -3,6 +3,12 @@
     width:100%;
     text-align: left;
 }
+
+#spreadsheet
+{
+	width:100%;
+}
+
 .inner
 {
     display: inline-block;

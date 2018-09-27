@@ -1,37 +1,9 @@
-function displayData(data) {
-	var rows = [];
-	if(data != undefined && data.length > 0){
-		var first = data[0];
-		var fields = [];
-		for (key in first){
-			if(!(['neo4j_id','system_user_username', 'system_user_hashkey'].includes(key)) && !(key.endsWith('_type'))){
-				fields.push({
-					value: key, 
-					bold: "true", 
-					color: "black", 
-					textAlign: "center"
-				});
-			}
-		}
-		rows.push({cells: fields});
-		data.forEach(function (each) {
-			var row = {cells: []};
-			fields.forEach(function (field) {
-				var field_name = field['value'];
-				var value = each[field_name];
-				row['cells'].push({value: value, textAlign: 'center'});
-			})
-			rows.push(row);
-		})
-	}
-	$(function() {
-		$("#spreadsheet").kendoSpreadsheet({
-			sheets: [{
-				name: "data",
-				rows: rows
-			}]
-		})
+function loadChartTypeList() {
+	$("#chartTypeList").kendoDropDownList({
+		dataSource: ["column", "bar", "pie", "line"]
 	});
+	var chartTypeList = $("#chartTypeList").data("kendoDropDownList");
+	chartTypeList.trigger("change");
 }
 
 function drawChart() {
@@ -45,11 +17,11 @@ function drawChart() {
 	var selection = sheet.selection();
 	//var range = sheet.range("A2:A100");
 	var values = selection.values();
-	var result = [].concat.apply([], values);
+	var result = [].concat.apply([], [].concat.apply([], values));
 	var categories = window.chartCategories;
 	var seriesName = window.chartSeriesName;
 
-	if (['bar', 'line'].includes(chartType)){
+	if (['column', 'bar', 'line'].includes(chartType)){
 		$("#chart").kendoChart({
 			title: {
 				text: "Chart"
@@ -67,8 +39,6 @@ function drawChart() {
 		});
 	}
 	else {
-		console.log(categories);
-		console.log(result);
 		if (categories.length == 0){
 			var data = [];
 			for (var i = 0 ; i < result.length ; i ++) {

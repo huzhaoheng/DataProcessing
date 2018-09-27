@@ -1,3 +1,11 @@
+function loadTextFunctionList() {
+	$("#textFunctionsList").kendoDropDownList({
+		dataSource: ['Concepts', 'Entities', 'Hashtags', 'Sentiment']
+	});
+	var textFunctionsList = $("#textFunctionsList").data("kendoDropDownList");
+	textFunctionsList.trigger("change");
+}
+
 function runTextFunction() {
 	var textFunctionNameList = $("#textFunctionsList").data("kendoDropDownList");
 	var selectedIndex = textFunctionNameList.select();

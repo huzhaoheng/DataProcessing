@@ -2,8 +2,14 @@ function initialization(username, query_id, query_name) {
 	window.username = username;
 	window.query_id = query_id;
 	window.query_name = query_name;
+
+	window.chartCategories = [];
+	window.chartSeriesName = null;
+
 	loadToolBar();
 	loadDatePicker();
+	loadPanelBar();
+	loadChartTypeList();
 	$.getJSON(
 		'/getParameters',
 		{arg: JSON.stringify({"username" : username, "query_id" : query_id, "query_name" : query_name})},
@@ -171,6 +177,11 @@ function loadDatePicker() {
 	$("#endDate").kendoDatePicker();
 }
 
+function loadPanelBar() {
+	$("#panelbar").kendoPanelBar();
+	return;
+}
+
 function loadMessage(message, message_type) {
 	$("#message").empty();
 	switch (message_type) {
@@ -196,6 +207,90 @@ function loadMessage(message, message_type) {
 		default:
 			return;
 	}
+}
+
+function loadSpreadSheet(data) {
+	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+	if (spreadsheet != undefined) {
+		$("#spreadsheet").empty();
+	}
+	var sheets = prepareData(data);
+	//console.log(sheets);
+	$("#spreadsheet").kendoSpreadsheet({
+		sheets: sheets
+	});
+	return;
+}
+
+function prepareData(data) {
+	var dict = {};
+	var fields_dict = {}
+	for (var obj_id in data) {
+		var each = data[obj_id];
+		for (var property_alias in each) {
+			var values = each[property_alias];
+			var layer = parseInt(property_alias.split('_')[1]);
+			var prefix = "layer_" + layer.toString() + "_"
+			var property = property_alias.slice(prefix.length);
+
+			if (!(layer in dict)) {
+				dict[layer] = {};
+				dict[layer][obj_id] = {};
+				dict[layer][obj_id][property] = values;
+			}
+			else if (!(obj_id in dict[layer])) {
+				dict[layer][obj_id] = {};	
+				dict[layer][obj_id][property] = values;
+			}
+			else {
+				dict[layer][obj_id][property] = values;
+			}
+
+			if (!(layer in fields_dict)) {
+				fields_dict[layer] = {};
+				fields_dict[layer][property] = true;
+			}
+			else if (!(property in fields_dict[layer])) {
+				fields_dict[layer][property] = true;
+			}
+			else {
+				true;
+			}
+		}
+	}
+
+	var sheets = [];
+	for (var layer in dict) {
+		var properties = Object.keys(fields_dict[layer]);
+		var rows = [];
+		var fields = [];
+		//fields.push({value: "Neo4j ID", bold: "true", color: "black", textAlign: "center"});
+		properties.forEach(function (property) {
+			fields.push({
+				value: property, 
+				bold: "true", 
+				color: "black", 
+				textAlign: "center"
+			});
+		});
+		rows.push({cells: fields});
+
+		for (var id in dict[layer]) {
+			var raw_row = dict[layer][id];
+			var row = {cells: []};
+			properties.forEach(function (property) {
+				var value = raw_row[property];
+				row['cells'].push({value: value, textAlign: 'center'});
+			});
+			rows.push(row);
+		}
+		sheets.push({
+			name : "layer_" + layer.toString(),
+			rows : rows
+		});
+	}
+
+	return sheets;
 }
 
 function viewParameter(parameter_id) {
@@ -279,10 +374,10 @@ function viewData() {
 				"dates" : dates})},
 			function (response){
 				var data = response.elements;
-				console.log(data);
 				var message_type = "success";
 				var message = "Great! Successfully loaded your data!";
 				loadMessage(message, message_type);
+				loadSpreadSheet(data);
 			}
 		)	
 	}

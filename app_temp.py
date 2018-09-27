@@ -180,9 +180,7 @@ def queryData():
     for [node_alias, query] in queries:
         value_alias = node_alias + "_value"
         obj_id_alias = node_alias + "_obj_id"
-        print(query)
         result = graph.cypher.execute(query)
-        # ret[ret_alias] = []
         for each in result:
             value = each[value_alias]
             obj_id = each[obj_id_alias]

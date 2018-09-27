@@ -11,6 +11,9 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 
+	<link rel="stylesheet" href="/static/css_temp/queryDetail.css">
+
+
 	<script src="../kendoui/js/jquery.min.js"></script>
 	<script src="../kendoui/js/jszip.min.js"></script>
 	<script src="../kendoui/js/kendo.all.min.js"></script>
@@ -18,15 +21,73 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 	<script src="/static/js_temp/queryDetailHandler.js"></script>
+	<script src="/static/js_temp/chartHandler.js"></script>
+	<script src="/static/js_temp/textAnalysisHandler.js"></script>
 
 </head>
 
 <body onload="initialization('{{username}}', '{{query_id}}', '{{query_name}}');">
 	<div id="grid"></div>
-	
 	<div id="message"></div>
 	<div id="toolbar"></div>
 	<div id="treeview"></div>
+	<div id="spreadsheet"></div>
+
+	<ul id="panelbar">
+		<li>
+			Plot
+				<div id="plot">
+					<div id="options">
+						<div class="inner">
+							<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="draw" onclick="drawChart();">
+								<span class="glyphicon glyphicon-play"></span>
+							</button>
+						</div>
+
+						<div class="inner">
+							<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="setting" data-toggle="modal" href="#chart-setting">
+								<span class="glyphicon glyphicon-menu-hamburger"></span>
+							</button>
+						</div>
+
+						<div class="inner">
+							<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="download-plot" data-toggle="modal" href="#download-setting">
+								<span class="glyphicon glyphicon-download-alt"></span>
+							</button>
+						</div>
+
+ 						<div class="inner">
+							<input id="chartTypeList"/>
+						</div>
+					</div>
+
+					<div id="chart"></div>    
+				</div>
+		</li>
+
+		<li>
+			Text Analysis
+			<div id="text-analysis">
+				<div class="inner">
+					<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="run-text-function" onclick="runTextFunction();">
+						<span class="glyphicon glyphicon-play"></span>
+					</button>
+				</div>
+
+				<div class="inner">
+					<input id="textFunctionsList"/>
+					<script>
+						$("#textFunctionsList").kendoDropDownList({
+							dataSource: ['Concepts', 'Entities', 'Hashtags', 'Sentiment']
+						});
+						var textFunctionsList = $("#textFunctionsList").data("kendoDropDownList");
+						textFunctionsList.trigger("change");
+					</script>
+				</div>
+			</div>
+			<div id="text-function-result"></div>
+		</li>
+	</ul>
 
 	<div class="modal fade" id="parameterDetail" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -62,6 +123,84 @@
 				</div>
 			</div>
 			
+		</div>
+	</div>
+
+
+	<!-- modal of chart setting -->
+	<div class="modal fade" id="chart-setting" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						Chart Setting
+					</h5>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group row">
+							<label for="chartSeries" class="col-sm-4 col-form-label">Series (y-axis) Name</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="chartSeries" placeholder="Series">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="chartCategories" class="col-sm-4 col-form-label">Categories (x-axis)</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="chartCategories" placeholder="Categories, splited by comma">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="saveChartSetting();" data-dismiss="modal">
+						Save
+					</button> 
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">
+						Close
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- modal of download setting -->
+	<div class="modal fade" id="download-setting" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						Download Setting
+					</h5>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group row">
+							<label for="fileType" class="col-sm-4 col-form-label">Select file type</label>
+							<div class="col-sm-8">
+								<input id="fileType"/>
+								<script>
+									$("#fileType").kendoDropDownList({
+										dataSource: ["PDF", "Image", "SVG"]
+									});
+									var fileType = $("#fileType").data("kendoDropDownList");
+									fileType.trigger("change");
+								</script>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="downloadChart();" data-dismiss="modal">
+						Download
+					</button> 
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">
+						Close
+					</button>
+				</div>
+			</div>
 		</div>
 	</div>
 

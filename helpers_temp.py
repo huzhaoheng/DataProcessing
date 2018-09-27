@@ -62,3 +62,19 @@ def queryBuilderHelper(curr_structure, parameter_id, startDate, endDate, query):
 				ret.append([node_alias, complete_query])
 			ret += queryBuilderHelper(children, parameter_id, startDate, endDate, extended_query)
 		return ret
+
+def applyTextFunction(textFunctionName, data, textAPIClient):
+	result = None
+
+	if textFunctionName == "Concepts":
+		result = textAPIClient.Concepts({'text' : data})
+	elif textFunctionName == "Entities":
+		result = textAPIClient.Entities({'text' : data})
+	elif textFunctionName == "Hashtags":
+		result = textAPIClient.Hashtags({'text' : data})
+	elif textFunctionName == "Sentiment":
+		result = textAPIClient.Sentiment({'text' : data})
+	else:
+		pass
+
+	return result
