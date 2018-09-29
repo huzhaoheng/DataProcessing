@@ -9,6 +9,7 @@ function initialization(username, query_id, query_name) {
 	loadToolBar();
 	loadDatePicker();
 	loadPanelBar();
+	loadCustomFormulaArea();
 	loadChartTypeList();
 	loadTextFunctionList();
 	$.getJSON(
@@ -235,12 +236,14 @@ function loadSpreadSheet(data) {
 		[ "y2", "number" ]
 	]);
 
-	kendo.spreadsheet.defineFunction("getrow", function(cell){
+	kendo.spreadsheet.defineFunction("getrow", function(cell1, cell2, offset){
 		// add 1 because internally row indexes are zero-based
-		var res = cell.row + 1;
+		var res = cell1.row + 1 + cell2.row + 1 + offset;
 		return res;
 	}).args([
-		[ "reference", "cell" ]
+		[ "reference", "cell" ],
+		[ "reference", "cell" ],
+		[ "offset", "number"]
 	]);
 
 	return;

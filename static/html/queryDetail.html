@@ -21,6 +21,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 	<script src="/static/js_temp/queryDetailHandler.js"></script>
+	<script src="/static/js_temp/customFormulaHandler.js"></script>
 	<script src="/static/js_temp/chartHandler.js"></script>
 	<script src="/static/js_temp/textAnalysisHandler.js"></script>
 
@@ -34,6 +35,35 @@
 	<div id="spreadsheet"></div>
 
 	<ul id="panelbar">
+		<li>
+			Custom Formula
+				<div id="custom-formula">
+					<div>
+						<div class="inner">
+							<div id="formula-parameters"></div>
+						</div>
+
+ 						<div class="inner">
+							<textarea id="formula-coding-area" rows="10" cols="30"></textarea>
+							<script>
+								$("#formula-coding-area").kendoEditor({
+									tools: [
+										"bold",
+										"fontSize"
+									]
+								});
+							</script>
+						</div>
+
+						<div class="inner">
+							<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="submit-formula" onclick="submitFormula();">
+								<span class="glyphicon glyphicon-play"></span>
+							</button>
+						</div>
+					</div> 
+				</div>
+		</li>
+
 		<li>
 			Plot
 				<div id="plot">
