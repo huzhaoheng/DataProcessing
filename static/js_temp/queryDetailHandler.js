@@ -220,6 +220,29 @@ function loadSpreadSheet(data) {
 	$("#spreadsheet").kendoSpreadsheet({
 		sheets: sheets
 	});
+
+
+	kendo.spreadsheet.defineFunction("distance", function(x1, y1, x2, y2){
+		var dx = Math.abs(x1 - x2);
+		var dy = Math.abs(y1 - y2);
+		var dist = Math.sqrt(dx*dx + dy*dy);
+		console.log(dist);
+		return dist;
+	}).args([
+		[ "x1", "number" ],
+		[ "y1", "number" ],
+		[ "x2", "number" ],
+		[ "y2", "number" ]
+	]);
+
+	kendo.spreadsheet.defineFunction("getrow", function(cell){
+		// add 1 because internally row indexes are zero-based
+		var res = cell.row + 1;
+		return res;
+	}).args([
+		[ "reference", "cell" ]
+	]);
+
 	return;
 }
 
