@@ -223,7 +223,7 @@ function loadSpreadSheet(data) {
 	});
 
 
-	kendo.spreadsheet.defineFunction("distance", function(x1, y1, x2, y2){
+	/*kendo.spreadsheet.defineFunction("distance", function(x1, y1, x2, y2){
 		var dx = Math.abs(x1 - x2);
 		var dy = Math.abs(y1 - y2);
 		var dist = Math.sqrt(dx*dx + dy*dy);
@@ -236,7 +236,7 @@ function loadSpreadSheet(data) {
 		[ "y2", "number" ]
 	]);
 
-	kendo.spreadsheet.defineFunction("getrow", function(cell1, cell2, offset){
+	kendo.spreadsheet.defineFunction("getrow", function myfunc(cell1, cell2, offset){
 		// add 1 because internally row indexes are zero-based
 		var res = cell1.row + 1 + cell2.row + 1 + offset;
 		return res;
@@ -244,7 +244,7 @@ function loadSpreadSheet(data) {
 		[ "reference", "cell" ],
 		[ "reference", "cell" ],
 		[ "offset", "number"]
-	]);
+	]);*/
 
 	return;
 }

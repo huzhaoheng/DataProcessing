@@ -16,8 +16,15 @@ function loadCustomFormulaArea() {
 		dataSource: dataSource,
 		height: 200,
 		toolbar: [
+			{
+				template: `
+					<input type="text" class="form-control" placeholder="Formula Name" id="formulaName"/>
+				`
+			},
 			"create", 
-			{template: '<a class="k-button" href="\\#" onclick="return AssignArguments()">Assign Arguments</a>'}
+			{
+				template: '<a class="k-button" href="\\#" onclick="return AssignArguments()">Assign Arguments</a>'
+			},
 		],
 		editable: "inline",
 		columns: [
@@ -77,34 +84,66 @@ function argsValidation(args) {
 	args.forEach(function (each) {
 		var name = each['variableName'];
 		var type = each['variableType'];
-		if (name == null || type == null) {
+		if (name.length == 0 || type.length == 0) {
 			window.alert('Name/Type of argument cannot be null');
 			return false;
 		}
 		else if (name in dict) {
-			window.alert('Duplilcate argument name');
+			window.alert('Argument names cannot be the same');
 			return false;
 		}
 		else {
+			dict[name] = type;
 			true;
 		}
 	})
 
 	return true;
 }
+
+function buildSignature(formulaName, args) {
+	var signature = "function " + formulaName + "(";
+	var extra = [];
+	args.forEach(function (each) {
+		var name = each['variableName'];
+		var type = each['variableType'];
+		signature += (name + ",");
+		if (["area", "cell"].includes(type)) {
+			extra.push(["reference", type]);
+		}
+		else {
+			extra.push([name, type]);
+		}
+	})
+	if (signature.endsWith(',')) {
+		signature = signature.slice(0, -1)
+	}
+	signature += ") {\n\n\n\n\n\n\n\n}";
+
+	return {"signature" : signature, "extra" : extra};
+}
+
 function AssignArguments() {
 	var args = getArguments();
-	var res = argsValidation(args);
-	if (res == false) {
+	var valid = argsValidation(args);
+	if (valid == false) {
 		return false;
 	}
 
-	var signature = `
-		function 
-	`
+	var formulaName = $('#formulaName').val();
+	console.log(formulaName);
+	if (formulaName.length == 0) {
+		window.alert("Formula name cannot be null");
+		return false;
+	}
 
-	$('#custom-formula .inner').eq(1).append(`
-		<textarea id="formula-coding-area" rows="10" cols="30"></textarea>
+	var res = buildSignature(formulaName, args);
+	var signature = res['signature'];
+	var extra = res['extra'];
+
+	$("#formulaTextArea").empty();
+	/*$("#formulaTextArea").append(`
+		<textarea id="formula-coding-area" rows="10" cols="30">` + signature + `</textarea>
 		<script>
 			$("#formula-coding-area").kendoEditor({
 				tools: [
@@ -113,6 +152,31 @@ function AssignArguments() {
 				]
 			});
 		</script>
-	`);
+	`);*/
+	$("#formulaTextArea").append(`<textarea id="formula-coding-area" rows="10" cols="30">` + signature + `</textarea>`);
 	return false;
+}
+
+function submitFormula() {
+	var formulaName = $('#formulaName').val();
+
+	var args = getArguments();
+	var res = buildSignature(formulaName, args);
+	var extra = res['extra'];
+
+	/*var editor = $("#formula-coding-area").data("kendoEditor");
+	var value = editor.value();*/
+	var value = $("#formula-coding-area").val();
+	
+	var code = `kendo.spreadsheet.defineFunction("` + formulaName + `", ` + value + `).args([`;
+	extra.forEach(function (each) {
+		var name = each[0];
+		var type = each[1];
+		code += `["` + each.join('","') + `"],`;
+	});
+	code += `]);`
+	console.log(code);
+	eval(code);
+
+
 }
