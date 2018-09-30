@@ -44,15 +44,18 @@
 						</div>
 
  						<div class="inner">
-							<textarea id="formula-coding-area" rows="10" cols="30"></textarea>
+							<!-- <textarea id="formula-coding-area" rows="10" cols="30"></textarea>
 							<script>
 								$("#formula-coding-area").kendoEditor({
 									tools: [
 										"bold",
 										"fontSize"
-									]
+									],
+									select: function(e) {
+										checkArgumentAssignment();
+									}
 								});
-							</script>
+							</script> -->
 						</div>
 
 						<div class="inner">
