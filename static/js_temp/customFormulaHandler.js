@@ -141,33 +141,33 @@ function AssignArguments() {
 	var signature = res['signature'];
 	var extra = res['extra'];
 
-	$("#formulaTextArea").empty();
-	/*$("#formulaTextArea").append(`
-		<textarea id="formula-coding-area" rows="10" cols="30">` + signature + `</textarea>
-		<script>
-			$("#formula-coding-area").kendoEditor({
-				tools: [
-					"bold",
-					"fontSize"
-				]
-			});
-		</script>
-	`);*/
-	$("#formulaTextArea").append(`<textarea id="formula-coding-area" rows="10" cols="30">` + signature + `</textarea>`);
+	openCodingArea(signature);
 	return false;
 }
 
-function submitFormula() {
+function openCodingArea(signature) {
+	window.sharedObject = {"signature" : signature};
+	var URL_OF_POPUP_WINDOW = "/static/html/codingArea.html";
+	var NAME_OF_POPUP_WINDOW = "codingArea";
+	var POPUP_WINDOW_STYLE_PROPERTIES = null;
+	window.open(URL_OF_POPUP_WINDOW, NAME_OF_POPUP_WINDOW, POPUP_WINDOW_STYLE_PROPERTIES);
+}
+
+
+function closeCodingArea() {
+	var code = window.sharedObject['code'];
+	if (code == null) {
+		return;
+	}
+	submitFormula(code);
+}
+
+function submitFormula(value) {
 	var formulaName = $('#formulaName').val();
 
 	var args = getArguments();
 	var res = buildSignature(formulaName, args);
 	var extra = res['extra'];
-
-	/*var editor = $("#formula-coding-area").data("kendoEditor");
-	var value = editor.value();*/
-	var value = $("#formula-coding-area").val();
-	
 	var code = `kendo.spreadsheet.defineFunction("` + formulaName + `", ` + value + `).args([`;
 	extra.forEach(function (each) {
 		var name = each[0];
@@ -177,6 +177,7 @@ function submitFormula() {
 	code += `]);`
 	console.log(code);
 	eval(code);
-
-
+	var message = "Great! Your function has been created!";
+	var message_type = "success";
+	loadMessage(message, message_type);
 }

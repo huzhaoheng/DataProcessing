@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Define Custom Formula</title>
+		<script src="https://unpkg.com/codeflask/build/codeflask.min.js"></script>
+		<script src="../kendoui/js/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/static/css_temp/codingArea.css">
+
+		
+
+	</head>
+	<body>
+		<h1 id="header">Write your code here:</h1>
+		<button type="button" class="btn btn-success" id="submit">Submit</button>
+		<button type="button" class="btn btn-danger" id="cancel">Cancel</button>
+		<div id="code"></div>
+		<script>
+			$( document ).ready(function() {
+				var signature = window.opener.sharedObject['signature'];
+				var flask = new CodeFlask('#code', {
+					language: 'js',
+					lineNumbers: true,
+					ariaLabelledby: 'header',
+					handleTabs: true
+				});
+				flask.updateCode(signature);
+				$("#submit").click(function () {
+					console.log('here');
+					window.opener.sharedObject['code'] = flask.getCode();
+					window.opener.closeCodingArea();
+					window.close();
+				});
+				$("#cancel").click(function () {
+					window.opener.sharedObject['code'] = null;
+					window.opener.closeCodingArea();
+					window.close();
+				});
+			});
+		</script>
+	</body>
+</html>

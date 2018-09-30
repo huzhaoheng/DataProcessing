@@ -246,6 +246,10 @@ function loadSpreadSheet(data) {
 		[ "offset", "number"]
 	]);*/
 
+	/*kendo.spreadsheet.defineFunction("myformula", function myformula(offset,cell2,cell1) {
+		return Math.abs(this.getRefData(cell1) - this.getRefData(cell2)) + offset;
+	}).args([["offset","number"],["reference","cell"],["reference","cell"],]);*/
+
 	return;
 }
 
