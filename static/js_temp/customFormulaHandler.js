@@ -175,7 +175,7 @@ function submitFormula(value) {
 		var name = each[0];
 		var type = each[1];
 		code += `["` + each.join('","') + `"],`;
-	});
+	})
 	code += `]);`
 	eval(code);
 	storeFormula(formulaName, code, value, args_list);

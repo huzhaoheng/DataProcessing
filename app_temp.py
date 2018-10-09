@@ -194,6 +194,7 @@ def queryData():
 
 @app.route('/storeFormula')
 def storeFormula():
+    print ("here")
     formula = json.loads(request.args.get('arg'))
     query = """
         WITH 
