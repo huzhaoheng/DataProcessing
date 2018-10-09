@@ -238,6 +238,34 @@ def storeFormula():
         ret["status"] = "failure"
         ret["message"] = "Oops! Something wrong, check console for more details :("
     return jsonify(elements = ret)
+
+@app.route('/getFormulaList')
+def getFormulaList():
+    username = json.loads(request.args.get('arg'))['username']
+    query = """
+        MATCH 
+            (f:Formula)
+        WHERE
+            f.username = '{username}'
+        RETURN
+            ID(f) AS id,
+            f.formulaName AS formulaName
+    """.format(username = username)
+    ret = {"status" : "", "message" : "", "formulaList" : {}}
+    try:
+        result = graph.cypher.execute(query)
+        # ret["formulaList"] = [each['formulaName'] for each in result]
+        ret["status"] = "success"
+        ret["message"] = "Great! Your formula has been successfully created!"
+        for each in result:
+            formulaName = each["formulaName"]
+            formulaID = each["id"]
+            ret["formulaList"][formulaID] = formulaName
+    except Exception as e:
+        print (e)
+        ret["status"] = "failure"
+        ret["message"] = "Oops! Something wrong, check console for more details :("
+    return jsonify(elements = ret)
 #----------------------------------------------------------------------------------------
 
 @app.route('/getDataStructure')

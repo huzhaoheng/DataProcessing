@@ -249,8 +249,6 @@ function loadSpreadSheet(data) {
 	return;
 }
 
-
-
 function prepareData(data) {
 	var dict = {};
 	var fields_dict = {}

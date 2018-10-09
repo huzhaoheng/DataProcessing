@@ -8,18 +8,25 @@
 	<link href="../kendoui/styles/kendo.rtl.min.css" rel="stylesheet">
 	<link href="../kendoui/styles/kendo.default.min.css" rel="stylesheet">
 	<link href="../kendoui/styles/kendo.default.mobile.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
 
 
 	<link rel="stylesheet" href="/static/css_temp/queryDetail.css">
-
-
 	<script src="../kendoui/js/jquery.min.js"></script>
 	<script src="../kendoui/js/jszip.min.js"></script>
 	<script src="../kendoui/js/kendo.all.min.js"></script>
 	<script src="../kendoui/examples/content/shared/js/console.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
 	<script src="https://unpkg.com/codeflask/build/codeflask.min.js"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 	<script src="/static/js_temp/queryDetailHandler.js"></script>
 	<script src="/static/js_temp/customFormulaHandler.js"></script>
@@ -42,14 +49,6 @@
 					<div>
 						<div class="inner">
 							<div id="formula-parameters"></div>
-						</div>
-
- 						<!-- <div class="inner" id="formulaTextArea"></div> -->
-
-						<div class="inner">
-							<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="submit-formula" onclick="submitFormula();">
-								<span class="glyphicon glyphicon-play"></span>
-							</button>
 						</div>
 					</div> 
 				</div>
@@ -100,6 +99,44 @@
 				</div>
 			</div>
 			<div id="text-function-result"></div>
+		</li>
+
+		<li>
+			Others
+			<div id="others">
+				<div class="inner">
+					<div class="thumbnail">
+						<img src="https://developer.salesforce.com/resource/images/trailhead/badges/modules/trailhead_module_formulas_and_validations.png">
+						<div class="caption">
+							<h3>Edit Formula</h3>
+							<p>Click button below to access, view and edit your formulas</p>
+							<p><a href="#" class="btn btn-primary" role="button" onclick="editFormula();">Go</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="inner">
+					<div class="thumbnail">
+						<img src="http://www.clarionnewsonline.com/sites/default/files/imagecache/article_photo/DSC_001%2C%20Coming%20Soon%20For%20Website_2.jpg">
+						<div class="caption">
+							<h3>Other</h3>
+							<p>More functions or settings will be added in the future</p>
+							<p><a href="#" class="btn btn-primary" role="button">Go</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="inner">
+					<div class="thumbnail">
+						<img src="http://www.clarionnewsonline.com/sites/default/files/imagecache/article_photo/DSC_001%2C%20Coming%20Soon%20For%20Website_2.jpg">
+						<div class="caption">
+							<h3>Other</h3>
+							<p>More functions or settings will be added in the future</p>
+							<p><a href="#" class="btn btn-primary" role="button">Go</a>
+						</div>
+					</div>
+				</div>
+			</div>
 		</li>
 	</ul>
 

@@ -154,7 +154,6 @@ function openCodingArea(signature) {
 	window.open(URL_OF_POPUP_WINDOW, NAME_OF_POPUP_WINDOW, POPUP_WINDOW_STYLE_PROPERTIES);
 }
 
-
 function closeCodingArea() {
 	var code = window.sharedObject['code'];
 	if (code == null) {
@@ -201,4 +200,11 @@ function storeFormula(formulaName, evalCode, writtenCode, args) {
 			loadMessage(message, message_type);
 		}
 	)
+}
+
+function editFormula() {
+	var path = "/static/html/viewFormula.html";
+	var name = "viewFormula";
+	var new_window = window.open(path, name);
+	new_window.username = window.username;
 }
