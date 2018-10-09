@@ -104,9 +104,11 @@ function argsValidation(args) {
 function buildSignature(formulaName, args) {
 	var signature = "function " + formulaName + "(";
 	var extra = [];
+	var args_list = [];
 	args.forEach(function (each) {
 		var name = each['variableName'];
 		var type = each['variableType'];
+		args_list.push([name, type]);
 		signature += (name + ",");
 		if (["area", "cell"].includes(type)) {
 			extra.push(["reference", type]);
@@ -120,7 +122,7 @@ function buildSignature(formulaName, args) {
 	}
 	signature += ") {\n\n\n\n\n\n\n\n}";
 
-	return {"signature" : signature, "extra" : extra};
+	return {"signature" : signature, "extra" : extra, "args_list" : args_list};
 }
 
 function AssignArguments() {
@@ -131,7 +133,6 @@ function AssignArguments() {
 	}
 
 	var formulaName = $('#formulaName').val();
-	console.log(formulaName);
 	if (formulaName.length == 0) {
 		window.alert("Formula name cannot be null");
 		return false;
@@ -168,6 +169,7 @@ function submitFormula(value) {
 	var args = getArguments();
 	var res = buildSignature(formulaName, args);
 	var extra = res['extra'];
+	var args_list = res['args_list']
 	var code = `kendo.spreadsheet.defineFunction("` + formulaName + `", ` + value + `).args([`;
 	extra.forEach(function (each) {
 		var name = each[0];
@@ -175,9 +177,28 @@ function submitFormula(value) {
 		code += `["` + each.join('","') + `"],`;
 	});
 	code += `]);`
-	console.log(code);
 	eval(code);
-	var message = "Great! Your function has been created!";
-	var message_type = "success";
-	loadMessage(message, message_type);
+	storeFormula(formulaName, code, value, args_list);
+}
+
+function storeFormula(formulaName, evalCode, writtenCode, args) {
+	$.getJSON(
+		'/storeFormula',
+		{arg: JSON.stringify({
+				"formulaName" : formulaName, 
+				"evalCode" : evalCode, 
+				"writtenCode" : writtenCode,
+				"username" : window.username,
+				"args" : JSON.stringify(args)
+			})
+		},
+		function (response){
+			var res = response.elements;
+			var message = res["message"];
+			var message_type = res["status"];
+			// var args = res["args"];
+			// console.log(JSON.parse(args));
+			loadMessage(message, message_type);
+		}
+	)
 }

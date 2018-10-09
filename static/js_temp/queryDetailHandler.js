@@ -1,8 +1,4 @@
-function initialization(username, query_id, query_name) {
-	window.username = username;
-	window.query_id = query_id;
-	window.query_name = query_name;
-
+function initialization() {
 	window.chartCategories = [];
 	window.chartSeriesName = null;
 
@@ -14,7 +10,7 @@ function initialization(username, query_id, query_name) {
 	loadTextFunctionList();
 	$.getJSON(
 		'/getParameters',
-		{arg: JSON.stringify({"username" : username, "query_id" : query_id, "query_name" : query_name})},
+		{arg: JSON.stringify({"username" : window.username, "query_id" : window.query_id, "query_name" : window.query_name})},
 		function (response){
 			var parameters = response.elements;
 			window.parameters = parameters;

@@ -7,6 +7,7 @@ import json
 from helpers_temp import *
 from flask_cors import CORS
 import pandas
+import py2neo
 from py2neo.packages.httpstream import http
 from time import gmtime, strftime, localtime
 import sys
@@ -74,7 +75,7 @@ def verification():
 @app.route('/home')
 def home():
     username, hashkey = request.args.get('username'), request.args.get('hashkey')
-    return render_template('home_temp.html', username = username, hashkey = hashkey)
+    return render_template('home_temp.html', username = username)
 #----------------------------------------------------------------------------------------
 @app.route('/getQueries')
 def getQueries():
@@ -191,6 +192,51 @@ def queryData():
             ret[obj_id][node_alias].append(value)
     return jsonify(elements = ret)
 
+@app.route('/storeFormula')
+def storeFormula():
+    formula = json.loads(request.args.get('arg'))
+    query = """
+        WITH 
+            {formula} 
+        AS 
+            formula
+        MATCH
+            (u:SystemUser {username : formula.username})
+        
+        MERGE 
+            (f:Formula {formulaName : formula.formulaName})
+        ON
+            CREATE 
+        SET 
+            f.formulaName = formula.formulaName, 
+            f.username = formula.username,
+            f.evalCode = formula.evalCode,
+            f.writtenCode = formula.writtenCode,
+            f.args = formula.args
+        ON 
+            MATCH
+        SET
+            f.formulaName = formula.formulaName, 
+            f.username = formula.username,
+            f.evalCode = formula.evalCode,
+            f.writtenCode = formula.writtenCode,
+            f.args = formula.args
+
+        MERGE 
+            (u)-[:hasFormula]->(f)
+    """
+
+
+
+    ret = {"message" : "", "status" : ""};
+    try:
+        result = graph.cypher.execute(query, formula = formula)
+        ret["status"] = "success"
+        ret["message"] = "Great! Your formula has been successfully created!"
+    except Exception as e:
+        ret["status"] = "failure"
+        ret["message"] = "Oops! Something wrong, check console for more details :("
+    return jsonify(elements = ret)
 #----------------------------------------------------------------------------------------
 
 @app.route('/getDataStructure')

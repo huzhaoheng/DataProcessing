@@ -108,9 +108,10 @@ function loadGrid(queries) {
 }
 
 function viewQueryDetail(username, query_id, query_name) {
-	var new_window = window.open("../static/html/queryDetail.html?username=" + username + "&query_id=" + query_id + "&query_name=" + query_name);
-	new_window.username = username;
-	new_window.query_id = query_id;
-	new_window.query_name = query_name;
+	var detailWindow = window.open("../static/html/queryDetail.html?username=" + username + "&query_id=" + query_id + "&query_name=" + query_name);
+	// var detailWindow = window.open("../static/html/queryDetail.html");
+	detailWindow.username = username;
+	detailWindow.query_id = query_id;
+	detailWindow.query_name = query_name;
 	return;
 }
