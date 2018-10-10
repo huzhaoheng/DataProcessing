@@ -6,11 +6,9 @@ function initialization() {
 			var result = response.elements;
 			var status = result["status"];
 			var formulaList = result["formulaList"];
-			console.log(formulaList);
 			loadGrid(formulaList);
 		}
 	)
-	
 }
 
 function loadGrid(formulaList) {
@@ -46,14 +44,14 @@ function loadGrid(formulaList) {
 				field: "Name" 
 			},{
 				command : [{
-					name : "View Code",
+					name : "View Formula",
 					iconClass: "k-icon k-i-eye",
 					click : function (e) {
 						e.preventDefault();
 						var tr = $(e.target).closest("tr");
 						var data = this.dataItem(tr);
 						var formulaID = data["ID"];
-						console.log(formulaID);
+						loadFormula(formulaID);
 						return;
 					}
 				}, {
@@ -64,7 +62,7 @@ function loadGrid(formulaList) {
 						var tr = $(e.target).closest("tr");
 						var data = this.dataItem(tr);
 						var formulaID = data["ID"];
-						console.log(formulaID);
+						deleteFormula(formulaID);
 						return;
 					}
 				}]
@@ -76,4 +74,34 @@ function loadGrid(formulaList) {
 			pageSize: 10
 		}
 	});
+}
+
+function deleteFormula(formulaID) {
+	$.getJSON(
+		'/deleteFormula',
+		{arg: JSON.stringify({"formulaID" : formulaID})},
+		function (response){
+			var result = response.elements;
+			var status = result["status"];
+			var message = result["message"];
+			console.log(status);
+			initialization();
+		}
+	)
+}
+
+function loadFormula(formulaID) {
+	console.log(formulaID);
+	$.getJSON(
+		'/loadFormula',
+		{arg: JSON.stringify({"formulaID" : formulaID})},
+		function (response){
+			var result = response.elements;
+			var status = result["status"];
+			var message = result["message"];
+			var formula = result["formula"];
+			console.log(formula);
+			//initialization();
+		}
+	)	
 }

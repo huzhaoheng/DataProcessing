@@ -266,6 +266,58 @@ def getFormulaList():
         ret["status"] = "failure"
         ret["message"] = "Oops! Something wrong, check console for more details :("
     return jsonify(elements = ret)
+
+@app.route('/deleteFormula')
+def deleteFormula():
+    formulaID = json.loads(request.args.get('arg'))['formulaID']
+    query = """
+        MATCH
+            (f:Formula)
+        WHERE
+            ID(f) = {formulaID}
+        DETACH DELETE
+            f
+    """.format(formulaID = formulaID)
+    ret = {"status" : "", "message" : ""}
+    try:
+        graph.cypher.execute(query)
+        ret["status"] = "success"
+        ret["message"] = "Successfully delete your formula"
+    except Exception as e:
+        ret["status"] = "failure"
+        ret["message"] = "Oops! Something wrong, check console for more details :("
+    return jsonify(elements = ret)
+
+@app.route('/loadFormula')
+def loadFormula():
+    formulaID = json.loads(request.args.get('arg'))['formulaID']
+    query = """
+        MATCH
+            (f:Formula)
+        WHERE
+            ID(f) = {formulaID}
+        RETURN
+            f.formulaName AS formulaName,
+            f.username AS username,
+            f.evalCode AS evalCode,
+            f.writtenCode AS writtenCode,
+            f.args AS args
+    """.format(formulaID = formulaID)
+    ret = {"status" : "", "message" : "", "formula":{}}
+    try:
+        result= graph.cypher.execute(query)
+        ret["status"] = "success"
+        ret["message"] = "Successfully loaded your formula"
+        for each in result:
+            ret["formula"]["formulaName"] = each["formulaName"]
+            ret["formula"]["username"] = each["username"]
+            ret["formula"]["evalCode"] = each["evalCode"]
+            ret["formula"]["writtenCode"] = each["writtenCode"]
+            ret["formula"]["args"] = each["args"]
+    except Exception as e:
+        ret["status"] = "failure"
+        ret["message"] = "Oops! Something wrong, check console for more details :("
+    return jsonify(elements = ret)
 #----------------------------------------------------------------------------------------
 
 @app.route('/getDataStructure')
