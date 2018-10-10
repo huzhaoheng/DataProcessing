@@ -5,9 +5,9 @@ function initialization() {
 	loadToolBar();
 	loadDatePicker();
 	loadPanelBar();
-	loadCustomFormulaArea();
 	loadChartTypeList();
 	loadTextFunctionList();
+	loadFormula();
 	$.getJSON(
 		'/getParameters',
 		{arg: JSON.stringify({"username" : window.username, "query_id" : window.query_id, "query_name" : window.query_name})},
@@ -22,7 +22,6 @@ function initialization() {
 
 function loadGrid(parameters) {
 	var data = [];
-	//var i = 0;
 	for (var parameter_id in parameters) {
 		var parameter_group = parameters[parameter_id];
 		var comment = null;
@@ -459,4 +458,34 @@ function parseTreeViewCheckboxHelper(curr_layer, curr_structure, nodesToQuery) {
 		ret[key]["children"] = res;
 	}
 	return ret;
+}
+
+function manageFormula() {
+	window.sharedObject = {"evalCode" : null};
+	var path = "/static/html/viewFormula.html";
+	var name = "viewFormula";
+	var new_window = window.open(path, name);
+	new_window.username = window.username;
+}
+
+function loadNewFormula() {
+	var evalCode = window.sharedObject['evalCode'];
+	eval(evalCode);
+}
+
+function loadFormula() {
+	$.getJSON(
+		'/loadFormulaByUser',
+		{arg: JSON.stringify({"username" : window.username})},
+		function (response){
+			var result = response.elements;
+			var status = result["status"];
+			var message = result["message"];
+			var formulaList = result["formula"];
+			formulaList.forEach(function (each) {
+				var evalCode = each["evalCode"];
+				eval(evalCode);
+			})
+		}
+	)
 }

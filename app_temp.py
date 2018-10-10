@@ -288,32 +288,67 @@ def deleteFormula():
         ret["message"] = "Oops! Something wrong, check console for more details :("
     return jsonify(elements = ret)
 
-@app.route('/loadFormula')
-def loadFormula():
-    formulaID = json.loads(request.args.get('arg'))['formulaID']
+@app.route('/loadFormulaByID')
+def loadFormulaByID():
+    formulaIDList = json.loads(request.args.get('arg'))['formulaIDList']
     query = """
         MATCH
             (f:Formula)
         WHERE
-            ID(f) = {formulaID}
+            ID(f) IN [{formulaIDList}]
         RETURN
             f.formulaName AS formulaName,
             f.username AS username,
             f.evalCode AS evalCode,
             f.writtenCode AS writtenCode,
             f.args AS args
-    """.format(formulaID = formulaID)
-    ret = {"status" : "", "message" : "", "formula":{}}
+    """.format(formulaIDList = ",".join(formulaIDList))
+    ret = {"status" : "", "message" : "", "formula":[]}
     try:
         result= graph.cypher.execute(query)
         ret["status"] = "success"
         ret["message"] = "Successfully loaded your formula"
         for each in result:
-            ret["formula"]["formulaName"] = each["formulaName"]
-            ret["formula"]["username"] = each["username"]
-            ret["formula"]["evalCode"] = each["evalCode"]
-            ret["formula"]["writtenCode"] = each["writtenCode"]
-            ret["formula"]["args"] = each["args"]
+            ret["formula"].append({
+                "formulaName" : each["formulaName"],
+                "username" : each["username"],
+                "evalCode" : each["evalCode"],
+                "writtenCode" : each["writtenCode"],
+                "args" : each["args"],
+            })
+    except Exception as e:
+        ret["status"] = "failure"
+        ret["message"] = "Oops! Something wrong, check console for more details :("
+    return jsonify(elements = ret)
+
+@app.route('/loadFormulaByUser')
+def loadFormulaByUser():
+    username = json.loads(request.args.get('arg'))['username']
+    query = """
+        MATCH
+            (f:Formula)
+        WHERE
+            f.username = "{username}"
+        RETURN
+            f.formulaName AS formulaName,
+            f.username AS username,
+            f.evalCode AS evalCode,
+            f.writtenCode AS writtenCode,
+            f.args AS args
+    """.format(username = username)
+    ret = {"status" : "", "message" : "", "formula":[]}
+    try:
+        result= graph.cypher.execute(query)
+        ret["status"] = "success"
+        ret["message"] = "Successfully loaded your formula"
+        for each in result:
+            ret["formula"].append({
+                "formulaName" : each["formulaName"],
+                "username" : each["username"],
+                "evalCode" : each["evalCode"],
+                "writtenCode" : each["writtenCode"],
+                "args" : each["args"],
+            })
     except Exception as e:
         ret["status"] = "failure"
         ret["message"] = "Oops! Something wrong, check console for more details :("
