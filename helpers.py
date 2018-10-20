@@ -1,87 +1,97 @@
-from GraphGenerator import GraphGenerator
-from DataLoader import DataLoader
-import numpy as np
-import pandas as pd
-import hashlib
-import json
+import nltk
+from nltk.tokenize import RegexpTokenizer
+
+def queryBuilder(structure, parameter_id, startDate, endDate):
+	query = """
+		MATCH 
+			(a:QueryParameter) 
+		WHERE 
+			ID(a) = {parameter_id} 
+		WITH 
+			(a) 
+		MATCH 
+			(a)""".format(parameter_id = parameter_id)
+	ret = queryBuilderHelper(structure, parameter_id, startDate, endDate, query)
+	return ret
+	
+def queryBuilderHelper(curr_structure, parameter_id, startDate, endDate, query):
+	if len(curr_structure) == 0:
+		return []
+
+	else:
+		ret = []
+		for node_name in curr_structure:
+			checked = curr_structure[node_name]["checked"]
+			layer = curr_structure[node_name]["layer"]
+			children = curr_structure[node_name]["children"]
+			node_alias = "layer_{layer}_{node_name}".format(layer = str(layer), node_name = node_name.replace(' ', ''))
+			extended_query = query + "-[:hasChild]->({alias}:Object {{node_name : '{node_name}'}})".format(alias = node_alias, node_name = node_name)
+			if checked:
+				startDataCondition = "date(split(v.collected_at, ' ')[0]) >= date('{startDate}')".format(startDate = startDate) if startDate else "true"
+				endDateCondition = "date(split(v.collected_at, ' ')[0]) <= date('{endDate}')".format(endDate = endDate) if endDate else "true"
+				# end_part = """-[:hasValue]->(v:Value) 
+				# 				WHERE 
+				# 					{startDataCondition}
+				# 				AND
+				# 					{endDateCondition}
+				# 				RETURN 
+				# 					v.value AS {alias}_value
+				# 			""".format(
+				# 				startDataCondition = startDataCondition, 
+				# 				endDateCondition = endDateCondition,
+				# 				alias = node_alias)
 
 
-def createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id):
-    query_parameter_structure = parseQueryParameterStructure(username, hashkey, structure, query_name, parameter_id)
-    prev_path = "(a:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'})"
-    children = query_parameter_structure['children']
-    createQueryParameterStructureHelper(graph, username, hashkey, children, query_name, parameter_id, prev_path)
-    
-
-def createQueryParameterStructureHelper(graph, username, hashkey, structures, query_name, parameter_id, prev_path):
-    if len(structures) == 0:
-        return
-
-    for each in structures:
-        query = "match p=" + prev_path + " with last(nodes(p)) as x create (x)-[:Has" + each['name'] + "]->(:QueryObject {name : '" + each['name'] + "', object : '" + each['object_name'] + "', query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'});"
-        graph.cypher.execute(query)
-        new_prev_path = prev_path + "-[:Has" + each['name'] + "]->(:QueryObject {name : '" + each['name'] + "', object : '" + each['object_name'] + "', query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'})"
-        createQueryParameterStructureHelper(graph, username, hashkey, each['children'], query_name, parameter_id, new_prev_path)
-
-
-def storeData(graph, data, username, hashkey, structure, query_name, parameter_id):
-    loader = DataLoader(graph, data, username, hashkey, structure, query_name, parameter_id)
-    loader.storeData()
-    return {"msg" : "Done"}
+				end_part = """-[:hasValue]->(v:Value) 
+								WHERE 
+									{startDataCondition}
+								AND
+									{endDateCondition}
+								WITH 
+									({alias}), (v)
+								MATCH 
+									(x:Object)-[:hasChild]->({alias})
+								RETURN
+									ID(x) AS {alias}_obj_id, 
+									v.value AS {alias}_value
+							""".format(
+								startDataCondition = startDataCondition, 
+								endDateCondition = endDateCondition,
+								alias = node_alias)
 
 
-def parameterParser(structure):
-    ret = {}
-    if type(structure) is dict:
-        if structure["selected"]:
-            curr_name = structure["name"]
-            if structure["inputs"]:
-                for each in structure["inputs"]:
-                    name = each["name"]
-                    value = each["value"]
-                    inputType = each["inputType"]
-                    if inputType == "Int":
-                        ret[curr_name + "_" + name] = int(value)
-                    elif inputType == "Float":
-                        ret[curr_name + "_" + name] = float(value)
-                    else:
-                        ret[curr_name + "_" + name] = value
-            if structure["children"]:
-                children_ret = parameterParser(structure["children"])
-                for k, v in children_ret.items():
-                    ret[curr_name + "_" + k]  = v
-        return ret
-    
-    else:
-        for each in structure:
-            for k, v in parameterParser(each).items():
-                ret[k] = v
-        return ret
 
+				complete_query = extended_query + end_part
+				ret.append([node_alias, complete_query])
+			ret += queryBuilderHelper(children, parameter_id, startDate, endDate, extended_query)
+		return ret
 
-def generateParameterID(parameters, username):
-    keys = list(parameters.keys())
-    keys.sort()
-    id_str = username
-    for k in keys:
-        v = parameters[k]
-        id_str += str(v)            
+def applyTextFunction(textFunctionName, data, textAPIClient, parameters):
+	result = None
 
-    return hashlib.md5(id_str.encode()).hexdigest()
+	if textFunctionName == "Concepts":
+		result = textAPIClient.Concepts({'text' : data})
+	elif textFunctionName == "Entities":
+		result = textAPIClient.Entities({'text' : data})
+	elif textFunctionName == "Hashtags":
+		result = textAPIClient.Hashtags({'text' : data})
+	elif textFunctionName == "Sentiment":
+		result = textAPIClient.Sentiment({'text' : data})
+	elif textFunctionName == "Top K Words":
+		KValue = parameters["KValue"]
+		includeStopWords = parameters["includeStopWords"]
 
+		tokenizer = RegexpTokenizer(r'\w+')
+		allWords = tokenizer.tokenize(data)
+		stopwords = nltk.corpus.stopwords.words('english')
 
-def applyTextFunction(textFunctionName, data, textAPIClient):
-    result = None
+		allWordDist = nltk.FreqDist(w.lower() for w in allWords)
+		allWordExceptStopDist = nltk.FreqDist(w.lower() for w in allWords if w.lower() not in stopwords)
 
-    if textFunctionName == "Concepts":
-        result = textAPIClient.Concepts({'text' : data})
-    elif textFunctionName == "Entities":
-        result = textAPIClient.Entities({'text' : data})
-    elif textFunctionName == "Hashtags":
-        result = textAPIClient.Hashtags({'text' : data})
-    elif textFunctionName == "Sentiment":
-        result = textAPIClient.Sentiment({'text' : data})
-    else:
-        pass
-
-    return result
+		result = {}
+		top = allWordDist.most_common(KValue) if includeStopWords else allWordExceptStopDist.most_common(KValue)
+		for each in top:
+			word, freq = each
+			result[word] = freq
+		
+	return result
