@@ -208,43 +208,24 @@ function loadMessage(message, message_type) {
 
 function loadSpreadSheet(data) {
 	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-	if (spreadsheet != undefined) {
+	if (spreadsheet == undefined) {
+		var sheets = prepareData(data);
+		console.log(sheets);
+		$("#spreadsheet").kendoSpreadsheet({
+			sheets: sheets
+		});
+		var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+		var sheetsArray = spreadsheet.sheets();
+		console.log(spreadsheet.toJSON());
+	}
+	else {
+		var sheets = spreadsheet.sheets();
+		sheets.forEach(function (each) {
+			console.log(each.dataSource);
+		})
+
 		$("#spreadsheet").empty();
 	}
-	var sheets = prepareData(data);
-	//console.log(sheets);
-	$("#spreadsheet").kendoSpreadsheet({
-		sheets: sheets
-	});
-
-
-	/*kendo.spreadsheet.defineFunction("distance", function(x1, y1, x2, y2){
-		var dx = Math.abs(x1 - x2);
-		var dy = Math.abs(y1 - y2);
-		var dist = Math.sqrt(dx*dx + dy*dy);
-		console.log(dist);
-		return dist;
-	}).args([
-		[ "x1", "number" ],
-		[ "y1", "number" ],
-		[ "x2", "number" ],
-		[ "y2", "number" ]
-	]);
-
-	kendo.spreadsheet.defineFunction("getrow", function myfunc(cell1, cell2, offset){
-		// add 1 because internally row indexes are zero-based
-		var res = cell1.row + 1 + cell2.row + 1 + offset;
-		return res;
-	}).args([
-		[ "reference", "cell" ],
-		[ "reference", "cell" ],
-		[ "offset", "number"]
-	]);*/
-
-	/*kendo.spreadsheet.defineFunction("myformula", function myformula(offset,cell2,cell1) {
-		return Math.abs(this.getRefData(cell1) - this.getRefData(cell2)) + offset;
-	}).args([["offset","number"],["reference","cell"],["reference","cell"],]);*/
-
 	return;
 }
 
@@ -290,7 +271,6 @@ function prepareData(data) {
 		var properties = Object.keys(fields_dict[layer]);
 		var rows = [];
 		var fields = [];
-		//fields.push({value: "Neo4j ID", bold: "true", color: "black", textAlign: "center"});
 		properties.forEach(function (property) {
 			fields.push({
 				value: property, 
