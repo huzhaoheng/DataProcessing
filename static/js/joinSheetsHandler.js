@@ -1,8 +1,12 @@
 function initialization() {
 	var args = location.search.replace('?','').split('&').reduce(function(s,c){var t=c.split('=');s[t[0]]=t[1];return s;},{});
 	window.username = args['username'];
+	var spreadsheet = $("#spreadsheet", window.opener.document);
+	
 	var sheets = window.opener.sharedObjectToJoinSheets['sheets'];
-	var parsedSheets = parseSheets(sheets)
+	var parsedSheets = parseSheets(sheets);
+	console.log(sheets);
+	//loadGrid(parameters);
 	$.getJSON(
 		'/joinSheets',
 		{arg: JSON.stringify({"sheets" : parsedSheets})},
@@ -12,6 +16,10 @@ function initialization() {
 			return;
 		}
 	)
+}
+
+function loadGrid(argument) {
+	// body...
 }
 
 function parseSheets(sheets) {
@@ -44,3 +52,4 @@ function parseSheets(sheets) {
 	console.log(parsedSheets);
 	return parsedSheets;
 }
+

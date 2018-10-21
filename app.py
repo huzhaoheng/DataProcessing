@@ -356,66 +356,6 @@ def loadFormulaByUser():
         ret["status"] = "failure"
         ret["message"] = "Oops! Something wrong, check console for more details :("
     return jsonify(elements = ret)
-#----------------------------------------------------------------------------------------
-
-@app.route('/getDataStructure')
-def getDataStructure():
-    username, hashkey = json.loads(request.args.get('arg'))['username'], json.loads(request.args.get('arg'))['hashkey']
-    ret = {}
-    query = "MATCH p=(:SystemUser {username : '" + username + "'})-[*]->(x:QueryObject) WITH p, x MATCH (x)-[:hasData]->(d) RETURN p, d;"
-    res = graph.cypher.execute(query)
-    for each in res:
-        node = dict(each.d.get_properties())
-        path = each.p
-        label_path = []
-        query_parameter = None
-        for i, segment in enumerate(path):
-            start_node, end_node = dict(segment.start_node.get_properties()), dict(segment.end_node.get_properties())
-            if i == 0:
-                start_label, end_label = start_node['username'], end_node['name']
-                label_path = [start_label, end_label]
-
-            elif i == 1:
-                label_path.append(end_node['parameter_id'])
-                # label_path.append("query parameter")
-                query_parameter = end_node
-
-            else:
-                label_path.append(end_node['name'])
-
-        curr = ret
-        for i, label in enumerate(label_path):
-            if label not in curr:
-                curr[label] = {'children' : {}, 'data' : {}}
-            else:
-                pass
-
-            if i == len(label_path) - 1:
-                curr[label]['data'][node['neo4j_id']] = node
-            elif i == 2:
-                curr[label]['data'] = query_parameter
-            else:
-                pass
-
-            curr = curr[label]['children']
-
-    return jsonify(elements = ret)
-
-@app.route('/getDataByPath')
-def getDataByPath():
-    path = json.loads(request.args.get('arg'))['path']
-    ret = []
-    query = "MATCH p="
-    for node in path:
-        query += "(:" + node['label'] + " {" + node['identifier'] + ":'" + node[node['identifier']] + "'})"
-        query += "-[]->"
-    query += "(d:Data) RETURN d"
-    res = graph.cypher.execute(query)
-    for each in res:
-        ret.append(each.d.properties)
-        # print (each.d.properties)
-    return jsonify(elements = ret)
-
 
 @app.route('/textFunction')
 def textFunction():
@@ -428,8 +368,9 @@ def textFunction():
 @app.route('/joinSheets')
 def joinSheets():
     sheets = json.loads(request.args.get('arg'))['sheets']
-    sheetsDF = list(map(convertToDataFrame, sheets))
-    res = pd.merge(sheetsDF[0], sheetsDF[1])
+    DFs = list(map(convertToDataFrame, sheets))
+    df_final = reduce(lambda left,right: pd.merge(left,right,on='name'), DFs)
+    res = pd.merge(DFs[0], DFs[1])
     ret = convertFromDataFrame(res)
     return jsonify(elements = ret)
 
