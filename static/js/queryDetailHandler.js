@@ -219,7 +219,7 @@ function loadSpreadSheet(data) {
 	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
 	var sheets = prepareData(data);
 	window.sheets = window.sheets.concat(sheets);
-	window.sharedObjectToJoinSheets = {'sheets' : window.sheets};
+	//window.sharedObjectToJoinSheets = {'sheets' : window.sheets};
 	if (spreadsheet != undefined) {
 		$("#spreadsheet").empty();
 	}
@@ -478,4 +478,10 @@ function joinSheets() {
 	var new_window = window.open(path, name);
 	//console.log(window.sharedObjectToJoinSheets);
 	new_window.username = window.username;
+}
+
+function getSpreadSheetsData() {
+	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+	var data = spreadsheet.toJSON();
+	window.sharedObjectToJoinSheets['sheets'] = data['sheets'];
 }
