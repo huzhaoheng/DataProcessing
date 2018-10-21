@@ -1,4 +1,6 @@
 function initialization() {
+	var args = location.search.replace('?','').split('&').reduce(function(s,c){var t=c.split('=');s[t[0]]=t[1];return s;},{});
+	window.username = args['username'];
 	$.getJSON(
 		'/getFormulaList',
 		{arg: JSON.stringify({"username" : window.username})},
@@ -340,7 +342,7 @@ function storeFormula(formulaName, evalCode, writtenCode, args) {
 			var res = response.elements;
 			var message = res["message"];
 			var message_type = res["status"];
-			window.opener.sharedObject['evalCode'] = evalCode;
+			window.opener.sharedObjectToManageFormula['evalCode'] = evalCode;
 			window.opener.loadNewFormula();
 			initialization();
 		}

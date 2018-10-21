@@ -12,6 +12,9 @@ from py2neo.packages.httpstream import http
 from time import gmtime, strftime, localtime
 import sys
 from aylienapiclient import textapi
+import pandas as pd
+import numpy as np
+
 http.socket_timeout = 9999
 
 app = Flask(__name__)
@@ -421,6 +424,14 @@ def textFunction():
     parameters = json.loads(request.args.get('arg'))['parameters']
     result = applyTextFunction(textFunctionName, data, textAPIClient, parameters)
     return jsonify(elements = result)
+
+@app.route('/joinSheets')
+def joinSheets():
+    sheets = json.loads(request.args.get('arg'))['sheets']
+    sheetsDF = list(map(convertToDataFrame, sheets))
+    res = pd.merge(sheetsDF[0], sheetsDF[1])
+    ret = convertFromDataFrame(res)
+    return jsonify(elements = ret)
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 

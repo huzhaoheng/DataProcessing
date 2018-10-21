@@ -1,7 +1,5 @@
 function initialization() {
-	window.chartCategories = [];
-	window.chartSeriesName = null;
-
+	setWindowParameters();
 	loadToolBar();
 	loadDatePicker();
 	loadPanelBar();
@@ -18,6 +16,17 @@ function initialization() {
 			
 		}
 	)	
+}
+
+function setWindowParameters() {
+	window.chartCategories = [];
+	window.chartSeriesName = null;
+	window.sheets = [];
+
+	var args = location.search.replace('?','').split('&').reduce(function(s,c){var t=c.split('=');s[t[0]]=t[1];return s;},{});
+	window.username = args['username'];
+	window.query_name = args['query_name'];
+	window.query_id = parseInt(args['query_id']);
 }
 
 function loadGrid(parameters) {
@@ -208,24 +217,16 @@ function loadMessage(message, message_type) {
 
 function loadSpreadSheet(data) {
 	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-	if (spreadsheet == undefined) {
-		var sheets = prepareData(data);
-		console.log(sheets);
-		$("#spreadsheet").kendoSpreadsheet({
-			sheets: sheets
-		});
-		var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-		var sheetsArray = spreadsheet.sheets();
-		console.log(spreadsheet.toJSON());
-	}
-	else {
-		var sheets = spreadsheet.sheets();
-		sheets.forEach(function (each) {
-			console.log(each.dataSource);
-		})
-
+	var sheets = prepareData(data);
+	window.sheets = window.sheets.concat(sheets);
+	window.sharedObjectToJoinSheets = {'sheets' : window.sheets};
+	if (spreadsheet != undefined) {
 		$("#spreadsheet").empty();
 	}
+	$("#spreadsheet").kendoSpreadsheet({
+		sheets: window.sheets
+	});
+
 	return;
 }
 
@@ -291,7 +292,7 @@ function prepareData(data) {
 			rows.push(row);
 		}
 		sheets.push({
-			name : "layer_" + layer.toString(),
+			//name : "layer_" + layer.toString(),
 			rows : rows
 		});
 	}
@@ -441,15 +442,15 @@ function parseTreeViewCheckboxHelper(curr_layer, curr_structure, nodesToQuery) {
 }
 
 function manageFormula() {
-	window.sharedObject = {"evalCode" : null};
-	var path = "/static/html/viewFormula.html";
+	window.sharedObjectToManageFormula = {"evalCode" : null};
+	var path = "/static/html/viewFormula.html?username=" + window.username;
 	var name = "viewFormula";
 	var new_window = window.open(path, name);
 	new_window.username = window.username;
 }
 
 function loadNewFormula() {
-	var evalCode = window.sharedObject['evalCode'];
+	var evalCode = window.sharedObjectToManageFormula['evalCode'];
 	eval(evalCode);
 }
 
@@ -468,4 +469,13 @@ function loadFormula() {
 			})
 		}
 	)
+}
+
+function joinSheets() {
+	//window.sharedObjectToJoinSheets = {"sheets" : window.sheets};
+	var path = "/static/html/joinSheets.html?username=" + window.username;
+	var name = "joinSheets";
+	var new_window = window.open(path, name);
+	//console.log(window.sharedObjectToJoinSheets);
+	new_window.username = window.username;
 }

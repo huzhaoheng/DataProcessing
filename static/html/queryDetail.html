@@ -1,271 +1,272 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Data</title>
-	<meta charset="utf-8">
-	<link href="../kendoui/examples/content/shared/styles/examples-offline.css" rel="stylesheet">
-	<link href="../kendoui/styles/kendo.common.min.css" rel="stylesheet">
-	<link href="../kendoui/styles/kendo.rtl.min.css" rel="stylesheet">
-	<link href="../kendoui/styles/kendo.default.min.css" rel="stylesheet">
-	<link href="../kendoui/styles/kendo.default.mobile.min.css" rel="stylesheet">
-	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
+	<head>
+		<title>Data</title>
+		<meta charset="utf-8">
+		<link href="../kendoui/examples/content/shared/styles/examples-offline.css" rel="stylesheet">
+		<link href="../kendoui/styles/kendo.common.min.css" rel="stylesheet">
+		<link href="../kendoui/styles/kendo.rtl.min.css" rel="stylesheet">
+		<link href="../kendoui/styles/kendo.default.min.css" rel="stylesheet">
+		<link href="../kendoui/styles/kendo.default.mobile.min.css" rel="stylesheet">
+		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
 
 
-	<link rel="stylesheet" href="/static/css/queryDetail.css">
-	<script src="../kendoui/js/jquery.min.js"></script>
-	<script src="../kendoui/js/jszip.min.js"></script>
-	<script src="../kendoui/js/kendo.all.min.js"></script>
-	<script src="../kendoui/examples/content/shared/js/console.js"></script>
-	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
-	<script src="https://unpkg.com/codeflask/build/codeflask.min.js"></script>
+		<link rel="stylesheet" href="/static/css/queryDetail.css">
+		<script src="../kendoui/js/jquery.min.js"></script>
+		<script src="../kendoui/js/jszip.min.js"></script>
+		<script src="../kendoui/js/kendo.all.min.js"></script>
+		<script src="../kendoui/examples/content/shared/js/console.js"></script>
+		<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+		<script src="https://unpkg.com/codeflask/build/codeflask.min.js"></script>
 
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-	<script src="/static/js/queryDetailHandler.js"></script>
-	<script src="/static/js/chartHandler.js"></script>
-	<script src="/static/js/textAnalysisHandler.js"></script>
+		<script src="/static/js/queryDetailHandler.js"></script>
+		<script src="/static/js/chartHandler.js"></script>
+		<script src="/static/js/textAnalysisHandler.js"></script>
 
-</head>
+	</head>
 
-<body onload="initialization();">
-	<div id="grid"></div>
-	<div id="message"></div>
-	<div id="toolbar"></div>
-	<div id="treeview"></div>
-	<div id="spreadsheet"></div>
+	<body onload="initialization();">
+		<div id="grid"></div>
+		<div id="message"></div>
+		<div id="toolbar"></div>
+		<div id="treeview"></div>
+		<div id="spreadsheet"></div>
 
-	<ul id="panelbar">
-		<li>
-			Plot
-				<div id="plot">
-					<div id="options">
-						<div class="inner">
-							<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="draw" onclick="drawChart();">
-								<span class="glyphicon glyphicon-play"></span>
-							</button>
-						</div>
+		<ul id="panelbar">
+			<li>
+				Plot
+					<div id="plot">
+						<div id="options">
+							<div class="inner">
+								<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="draw" onclick="drawChart();">
+									<span class="glyphicon glyphicon-play"></span>
+								</button>
+							</div>
 
-						<div class="inner">
-							<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="setting" data-toggle="modal" href="#chart-setting">
-								<span class="glyphicon glyphicon-menu-hamburger"></span>
-							</button>
-						</div>
+							<div class="inner">
+								<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="setting" data-toggle="modal" href="#chart-setting">
+									<span class="glyphicon glyphicon-menu-hamburger"></span>
+								</button>
+							</div>
 
-						<div class="inner">
-							<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="download-plot" data-toggle="modal" href="#download-setting">
-								<span class="glyphicon glyphicon-download-alt"></span>
-							</button>
-						</div>
+							<div class="inner">
+								<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="download-plot" data-toggle="modal" href="#download-setting">
+									<span class="glyphicon glyphicon-download-alt"></span>
+								</button>
+							</div>
 
- 						<div class="inner">
-							<input id="chartTypeList"/>
-						</div>
-					</div>
-
-					<div id="chart"></div>    
-				</div>
-		</li>
-
-		<li>
-			Text Functions
-			<div id="text-analysis">
-				<div class="inner">
-					<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="run-text-function" onclick="showTextFunctionParameterModal();">
-						<span class="glyphicon glyphicon-play"></span>
-					</button>
-				</div>
-
-				<div class="inner">
-					<input id="textFunctionsList"/>
-				</div>
-			</div>
-			<div id="text-function-result"></div>
-		</li>
-
-		<li>
-			Others
-			<div id="others">
-				<div class="inner">
-					<div class="thumbnail">
-						<img src="https://developer.salesforce.com/resource/images/trailhead/badges/modules/trailhead_module_formulas_and_validations.png">
-						<div class="caption">
-							<h3>Manage Formula</h3>
-							<p>Click button below to create, view or edit your formulas</p>
-							<p><a class="btn btn-primary" role="button" onclick="manageFormula();">Go</a>
-						</div>
-					</div>
-				</div>
-
-				<div class="inner">
-					<div class="thumbnail">
-						<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM39GmClTSYmjrhIJhUOSAqTWMUmzCJ0jZ7fmbAWPhH8wHF1hW">
-						<div class="caption">
-							<h3>Join Sheets</h3>
-							<p>Join sheets by columns to find more information</p>
-							<p><a href="#" class="btn btn-primary" role="button">Go</a>
-						</div>
-					</div>
-				</div>
-
-				<div class="inner">
-					<div class="thumbnail">
-						<img src="http://www.clarionnewsonline.com/sites/default/files/imagecache/article_photo/DSC_001%2C%20Coming%20Soon%20For%20Website_2.jpg">
-						<div class="caption">
-							<h3>Other</h3>
-							<p>More functions or settings will be added in the future</p>
-							<p><a href="#" class="btn btn-primary" role="button">Go</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
-
-	<!-- modal to show parameter detail -->
-	<div class="modal fade" id="parameterDetail" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title" id="myModalLabel">
-						Parameter Detail
-					</h4>
-					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<table class="table">
-						<thead>
-							<tr>
-								<th>
-									Parameter Name
-								</th>
-								<th>
-									Parameter Value
-								</th>
-							</tr>
-						</thead>
-						<tbody id="parameterDetailTable">
-						</tbody>
-					</table>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">
-						Close
-					</button>
-				</div>
-			</div>
-			
-		</div>
-	</div>
-
-
-	<!-- modal of chart setting -->
-	<div class="modal fade" id="chart-setting" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">
-						Chart Setting
-					</h5>
-				</div>
-				<div class="modal-body">
-					<form>
-						<div class="form-group row">
-							<label for="chartSeries" class="col-sm-4 col-form-label">Series (y-axis) Name</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="chartSeries" placeholder="Series">
+	 						<div class="inner">
+								<input id="chartTypeList"/>
 							</div>
 						</div>
 
-						<div class="form-group row">
-							<label for="chartCategories" class="col-sm-4 col-form-label">Categories (x-axis)</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="chartCategories" placeholder="Categories, splited by comma">
+						<div id="chart"></div>    
+					</div>
+			</li>
+
+			<li>
+				Text Functions
+				<div id="text-analysis">
+					<div class="inner">
+						<button type="button" class="btn btn-info btn-primary btn-circle btn-lg" id="run-text-function" onclick="showTextFunctionParameterModal();">
+							<span class="glyphicon glyphicon-play"></span>
+						</button>
+					</div>
+
+					<div class="inner">
+						<input id="textFunctionsList"/>
+					</div>
+				</div>
+				<div id="text-function-result"></div>
+			</li>
+
+			<li>
+				Others
+				<div id="others">
+					<div class="inner">
+						<div class="thumbnail">
+							<img src="https://developer.salesforce.com/resource/images/trailhead/badges/modules/trailhead_module_formulas_and_validations.png">
+							<div class="caption">
+								<h3>Manage Formula</h3>
+								<p>Click button below to create, view or edit your formulas</p>
+								<p><a class="btn btn-primary" role="button" onclick="manageFormula();">Go</a></p>
 							</div>
 						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" onclick="saveChartSetting();" data-dismiss="modal">
-						Save
-					</button> 
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">
-						Close
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
+					</div>
 
-
-	<!-- modal of download setting -->
-	<div class="modal fade" id="download-setting" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">
-						Download Setting
-					</h5>
-				</div>
-				<div class="modal-body">
-					<form>
-						<div class="form-group row">
-							<label for="fileType" class="col-sm-4 col-form-label">Select file type</label>
-							<div class="col-sm-8">
-								<input id="fileType"/>
-								<script>
-									$("#fileType").kendoDropDownList({
-										dataSource: ["PDF", "Image", "SVG"]
-									});
-									var fileType = $("#fileType").data("kendoDropDownList");
-									fileType.trigger("change");
-								</script>
+					<div class="inner">
+						<div class="thumbnail">
+							<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM39GmClTSYmjrhIJhUOSAqTWMUmzCJ0jZ7fmbAWPhH8wHF1hW">
+							<div class="caption">
+								<h3>Join Sheets</h3>
+								<p>Join sheets by columns to find more information</p>
+								<p><a class="btn btn-primary" role="button" onclick="joinSheets();">Go</a></p>
 							</div>
 						</div>
-					</form>
+					</div>
+
+					<div class="inner">
+						<div class="thumbnail">
+							<img src="http://www.clarionnewsonline.com/sites/default/files/imagecache/article_photo/DSC_001%2C%20Coming%20Soon%20For%20Website_2.jpg">
+							<div class="caption">
+								<h3>Other</h3>
+								<p>More functions or settings will be added in the future</p>
+								<p><a href="#" class="btn btn-primary" role="button">Go</a></p>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" onclick="downloadChart();" data-dismiss="modal">
-						Download
-					</button> 
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">
-						Close
-					</button>
+			</li>
+		</ul>
+
+		<!-- modal to show parameter detail -->
+		<div class="modal fade" id="parameterDetail" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="myModalLabel">
+							Parameter Detail
+						</h4>
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>
+										Parameter Name
+									</th>
+									<th>
+										Parameter Value
+									</th>
+								</tr>
+							</thead>
+							<tbody id="parameterDetailTable">
+							</tbody>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">
+							Close
+						</button>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+
+
+		<!-- modal of chart setting -->
+		<div class="modal fade" id="chart-setting" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">
+							Chart Setting
+						</h5>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group row">
+								<label for="chartSeries" class="col-sm-4 col-form-label">Series (y-axis) Name</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="chartSeries" placeholder="Series">
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label for="chartCategories" class="col-sm-4 col-form-label">Categories (x-axis)</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="chartCategories" placeholder="Categories, splited by comma">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" onclick="saveChartSetting();" data-dismiss="modal">
+							Save
+						</button> 
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">
+							Close
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<!-- modal of text function setting -->
-	<div class="modal fade" id="text-function-setting" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">
-						Function Setting
-					</h5>
-				</div>
-				<div class="modal-body">
-					<form></form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" onclick="runTextFunction();" data-dismiss="modal">
-						Ok
-					</button> 
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">
-						Close
-					</button>
+
+		<!-- modal of download setting -->
+		<div class="modal fade" id="download-setting" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">
+							Download Setting
+						</h5>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group row">
+								<label for="fileType" class="col-sm-4 col-form-label">Select file type</label>
+								<div class="col-sm-8">
+									<input id="fileType"/>
+									<script>
+										$("#fileType").kendoDropDownList({
+											dataSource: ["PDF", "Image", "SVG"]
+										});
+										var fileType = $("#fileType").data("kendoDropDownList");
+										fileType.trigger("change");
+									</script>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" onclick="downloadChart();" data-dismiss="modal">
+							Download
+						</button> 
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">
+							Close
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-</body>
+		<!-- modal of text function setting -->
+		<div class="modal fade" id="text-function-setting" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">
+							Function Setting
+						</h5>
+					</div>
+					<div class="modal-body">
+						<form></form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" onclick="runTextFunction();" data-dismiss="modal">
+							Ok
+						</button> 
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">
+							Close
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>
