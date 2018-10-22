@@ -2,12 +2,9 @@ function initialization() {
 	var args = location.search.replace('?','').split('&').reduce(function(s,c){var t=c.split('=');s[t[0]]=t[1];return s;},{});
 	window.username = args['username'];
 	window.mapping = {'sheets':[], 'columns':[]};
-	//window.opener.getSpreadSheetsData();
 	var sheets = window.opener.sharedObjectToJoinSheets['sheets'];
-	console.log(sheets);
 	generateSheetsAndColumnsMapping(sheets);
-	/*loadGrid(sheets);
-	var parsedSheets = parseSheets(sheets);*/
+	/*var parsedSheets = parseSheets(sheets);*/
 	/*$.getJSON(
 		'/joinSheets',
 		{arg: JSON.stringify({"sheets" : parsedSheets})},
@@ -61,98 +58,6 @@ function generateSheetsAndColumnsMapping(originSheets) {
 	})
 }
 
-function loadGrid(originSheets) {
-	$("#grid").kendoGrid({
-		dataSource: {
-			data: [{ 
-				id: 0, 
-				leftSheetId: 0,
-				leftColumnId: 0,
-				rightSheetId: 0,
-				rightColumnId: 0
-			}],
-			schema: {
-				model: {
-					id: "id",
-					fields: {
-						id: {type: 'integer'},
-						leftSheetId: {type: 'integer'},
-						leftColumnId: {type: 'integer'},
-						rightSheetId: {type: 'integer'},
-						rightColumnId: {type: 'integer'},
-					}
-				}
-			}
-		},
-		editable: "inline",
-		columns: [{ 
-			field: "id",
-			editable: function (dataItem) {
-				return false;
-			}
-		},{
-			title: "Left Sheet",
-			field: "leftSheetId",
-			template: "#= sheetName(leftSheetId) #",
-			editor: function(container) {
-				var input = $('<input id="leftSheetId" name="leftSheetId">');
-				input.appendTo(container);
-				input.kendoDropDownList({
-					dataTextField: "name",
-					dataValueField: "sheetId",
-					dataSource: window.mapping['sheets']
-				}).appendTo(container);
-			}
-		},{
-			title: "Left Sheet Column",
-			field: "leftColumnId",
-			template: "#= columnName(leftColumnId) #",
-			editor: function(container) {
-				var input = $('<input id="leftColumnId" name="leftColumnId">');
-				input.appendTo(container);
-				input.kendoDropDownList({
-					dataTextField: "name",
-					dataValueField: "columnId",
-					cascadeFrom: "leftSheetId",
-					dataSource: window.mapping['columns']
-				}).appendTo(container);
-			}
-		},{
-			title: "Right Sheet",
-			field: "rightSheetId",
-			template: "#= sheetName(rightSheetId) #",
-			editor: function(container) {
-				var input = $('<input id="rightSheetId" name="rightSheetId">');
-				input.appendTo(container);
-				input.kendoDropDownList({
-					dataTextField: "name",
-					dataValueField: "sheetId",
-					dataSource: window.mapping['sheets']
-				}).appendTo(container);
-			}
-		},{
-			title: "Right Sheet Column",
-			field: "rightColumnId",
-			template: "#= columnName(rightColumnId) #",
-			editor: function(container) {
-				var input = $('<input id="rightColumnId" name="rightColumnId">');
-				input.appendTo(container);
-				input.kendoDropDownList({
-					dataTextField: "name",
-					dataValueField: "columnId",
-					cascadeFrom: "rightSheetId",
-					dataSource: window.mapping['columns']
-				}).appendTo(container);
-			}
-		},{ 
-			command: "edit" 
-		}],
-		toolbar: ["create", "save", "cancel"],
-	});
-}
-
-
-
 function parseSheets(sheets) {
 	var parsedSheets = sheets.map(function(sheet) {
 		var parsedSheet = []; 
@@ -184,3 +89,6 @@ function parseSheets(sheets) {
 	return parsedSheets;
 }
 
+function submitHandler() {
+	console.log('submit');
+}
