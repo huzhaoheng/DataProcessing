@@ -9,8 +9,7 @@
 		<script src="../kendoui/js/jszip.min.js"></script>
 		<script src="../kendoui/js/kendo.all.min.js"></script>
 		<script src="../kendoui/examples/content/shared/js/console.js"></script>
-		<!-- <script src="https://unpkg.com/codeflask/build/codeflask.min.js"></script> -->
-
+		
 		<script src="/static/js/joinSheetsHandler.js"></script>
 
 		<link rel="stylesheet" href="/static/css/joinSheets.css">
@@ -21,7 +20,155 @@
 		<link href="../kendoui/styles/kendo.default.mobile.min.css" rel="stylesheet">
 	</head>
 
-	<body onload="initialization();">
+	<!-- <body onload="initialization();"> -->
+	<body>
 		<div id="grid"></div>
+		<script id="popupTemplate" type="text/x-kendo-template">
+
+			<div class="k-edit-label">
+				<label for="LeftSheet">LeftSheet:</label>
+			</div>
+			<div class="k-edit-field">
+				<input id="LeftSheet" name="LeftSheet" data-bind="value:LeftSheet"  />
+				<span class="k-invalid-msg" data-for="LeftSheet"></span>
+			</div>
+
+
+			<div class="k-edit-label">
+				<label for="LeftSheetColumn">LeftSheetColumn:</label>
+			</div>
+			<div class="k-edit-field">
+				<input id="LeftSheetColumn" name="LeftSheetColumn" data-bind="value:LeftSheetColumn"  />
+				<span class="k-invalid-msg" data-for="LeftSheetColumn"></span>
+			</div>
+
+
+			<div class="k-edit-label">
+				<label for="RightSheet">RightSheet:</label>
+			</div>
+			<div class="k-edit-field">
+				<input id="RightSheet" name="RightSheet" data-bind="value:RightSheet"  />
+				<span class="k-invalid-msg" data-for="RightSheet"></span>
+			</div>
+
+
+			<div class="k-edit-label">
+				<label for="RightSheetColumn">RightSheetColumn:</label>
+			</div>
+			<div class="k-edit-field">
+				<input id="RightSheetColumn" name="RightSheetColumn" data-bind="value:RightSheetColumn"  />
+				<span class="k-invalid-msg" data-for="RightSheetColumn"></span>
+			</div>
+		</script>
+
+
+		<script>
+			initialization();
+
+			$(function () {
+				var gridData = [];
+
+				var gridDataNextID = gridData.length + 1;
+
+				var gridDataSource = new kendo.data.DataSource({
+					transport: {
+						read: function (options) {
+							console.log(options);
+							options.success(gridData);
+						},
+						update: function (options) {
+							console.log(options);
+							options.success();
+						},
+						create: function (options) {
+							console.log(options);
+							options.data.ID = gridDataNextID++;
+							//gridData.push(options.data);
+							gridData.push({
+								ID: options.data['ID'],
+								LeftSheet: options.data['sheetId'],
+								LeftSheetColumn: options.data['ID'],
+								RightSheet: options.data['sheetId'],
+								RightSheetColumn: options.data['ID'],
+							});
+							options.success(options.data);
+						}
+					},
+					schema: {
+						model: {
+							id: "ID",
+							fields: {
+								ID: { type: "number", editable: false },
+								LeftSheet: { defaultValue: null },
+								LeftSheetColumn: { defaultValue: null },
+								RightSheet: { defaultValue: null },
+								RightSheetColumn: { defaultValue: null },
+							}
+						}
+					}
+				});
+
+			    function initDropDownLists() {
+					var LeftSheet = $("#LeftSheet").kendoDropDownList({
+						dataTextField: "name",
+						dataValueField: "sheetId",
+						dataSource: window.mapping['sheets']
+					}).data("kendoDropDownList");
+
+					console.log(window.mapping['columns']);
+					var LeftSheetColumn = $("#LeftSheetColumn").kendoDropDownList({
+						cascadeFrom: "LeftSheet",
+						dataTextField: "LeftSheetColumnName",
+						dataValueField: "LeftSheetColumnID",
+						dataSource: {
+							dataTextField: "name",
+							dataValueField: "columnId",
+							//dataSource: window.mapping['columns']
+							dataSource: [
+								{sheetId: 0, name: "text", columnId: 0},
+								{sheetId: 0, name: "hashtags", columnId: 1},
+								{sheetId: 1, name: "name", columnId: 2},
+								{sheetId: 1, name: "retweet_count", columnId: 3},
+								{sheetId: 2, name: "viewCount", columnId: 4}]
+						}
+					}).data("kendoDropDownList");
+
+					var RightSheet = $("#RightSheet").kendoDropDownList({
+						dataTextField: "name",
+						dataValueField: "sheetId",
+						dataSource: window.mapping['sheets']
+					}).data("kendoDropDownList");
+
+					var RightSheetColumn = $("#RightSheetColumn").kendoDropDownList({
+						cascadeFrom: "RightSheet",
+						dataTextField: "RightSheetColumnName",
+						dataValueField: "RightSheetColumnID",
+						dataSource: {
+							dataTextField: "name",
+							dataValueField: "columnId",
+							dataSource: window.mapping['columns']
+						}
+					}).data("kendoDropDownList");
+				}
+
+				$("#grid").kendoGrid({
+					columns: [
+						{ field: "LeftSheet", title: "Left Sheet", template: "#= sheetName(LeftSheet) #" },
+						{ field: "LeftSheetColumn", title: "Left Sheet Column", template: "#= columnName(LeftSheetColumn) #" },
+						{ field: "RightSheet", title: "Right Sheet", template: "#= sheetName(RightSheet) #" },
+						{ field: "RightSheetColumn", title: "Right Sheet Column", template: "#= columnName(RightSheetColumn) #" },
+						{ command: ["edit"] }
+					],
+					toolbar: ["create", "save", "cancel"],
+					editable: { mode: "popup", window: { width: 600 }, template: $("#popupTemplate").html() },
+					edit: function (e) {
+						initDropDownLists();
+					},
+					autoBind: true,
+					dataSource: gridDataSource
+				});
+			});
+
+		</script>
 	</body>
 </html>

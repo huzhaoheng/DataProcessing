@@ -476,12 +476,11 @@ function joinSheets() {
 	var path = "/static/html/joinSheets.html?username=" + window.username;
 	var name = "joinSheets";
 	var new_window = window.open(path, name);
-	//console.log(window.sharedObjectToJoinSheets);
-	new_window.username = window.username;
-}
 
-function getSpreadSheetsData() {
 	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
 	var data = spreadsheet.toJSON();
+	window.sharedObjectToJoinSheets = {'sheets':null};
 	window.sharedObjectToJoinSheets['sheets'] = data['sheets'];
+
+	new_window.username = window.username;
 }
