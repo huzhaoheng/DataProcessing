@@ -3,17 +3,8 @@ function initialization() {
 	window.username = args['username'];
 	window.mapping = {'sheets':[], 'columns':[]};
 	var sheets = window.opener.sharedObjectToJoinSheets['sheets'];
+	console.log(sheets);
 	generateSheetsAndColumnsMapping(sheets);
-	/*var parsedSheets = parseSheets(sheets);*/
-	/*$.getJSON(
-		'/joinSheets',
-		{arg: JSON.stringify({"sheets" : parsedSheets})},
-		function (response){
-			var result = response.elements;
-			console.log(result);
-			return;
-		}
-	)*/
 }
 
 function sheetName(sheetId) {
@@ -73,7 +64,14 @@ function parseSheets(sheets) {
 			var parsedRow = {};
 			columns.forEach(function (column, index) {
 				if (row['cells'][index]['value'] != undefined) {
-					parsedRow[column] = row['cells'][index]['value'].join();	
+					var value = row['cells'][index]['value'];
+					if (Array.isArray(value)) {
+						parsedRow[column] = row['cells'][index]['value'].join();
+					}
+					else {
+						parsedRow[column] = row['cells'][index]['value'];
+					}
+					
 				}
 				else {
 					parsedRow[column] = null;
@@ -85,10 +83,120 @@ function parseSheets(sheets) {
 		return parsedSheet;
 	});
 
-	console.log(parsedSheets);
 	return parsedSheets;
 }
 
 function submitHandler() {
-	console.log('submit');
+	window.opener.updateSharedObjectToJoinSheets();
+	var sheets = window.opener.sharedObjectToJoinSheets['sheets'];
+	var joiningGroups = {};
+	var grid = $("#grid").data("kendoGrid");
+	var rowNum = grid.items().length;
+
+	for (var i = 0; i < rowNum; i ++) {
+		var dataItem = 	grid.dataItem("tbody tr:eq(" + i.toString() + ")");
+		var joiningGroupId = dataItem['ID'];
+		var leftSheetId = dataItem['LeftSheet'];
+		var rightSheetId = dataItem['RightSheet'];
+		var leftSheetColumnId = dataItem['LeftSheetColumn'];
+		var rightSheetColumnId = dataItem['RightSheetColumn'];
+
+		var leftSheet = findCorrespondingSheet(sheets, leftSheetId);
+		var rightSheet = findCorrespondingSheet(sheets, rightSheetId);
+		joiningGroups[joiningGroupId] = {
+			'leftSheetName' : sheetName(leftSheetId),
+			'rightSheetName' : sheetName(rightSheetId),
+			'leftSheet' : parseSheets([leftSheet])[0],
+			'rightSheet' : parseSheets([rightSheet])[0],
+			'leftColumn' : columnName(leftSheetColumnId),
+			'rightColumn' : columnName(rightSheetColumnId),
+		};
+	}
+
+	console.log(joiningGroups);
+
+	$.getJSON(
+		'/joinSheets',
+		{arg: JSON.stringify({"joiningGroups" : joiningGroups})},
+		function (response){
+			var result = response.elements;
+			console.log(result);
+			displayJoiningResult(result);
+			return;
+		}
+	)
+}
+
+function findCorrespondingSheet(sheets, sheetId) {
+	var ret = null;
+
+	for (var i = 0; i < sheets.length; i ++) {
+		var sheet = sheets[i];
+		if (sheet['name'] == sheetName(sheetId)) {
+			ret = sheet;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+function displayJoiningResult(result) {
+	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+	if (spreadsheet != undefined) {
+		$("#spreadsheet").empty();
+	}
+	$("#spreadsheet").kendoSpreadsheet({
+		sheets: Object.values(result).map(function (sheet) {
+			var ret = {
+				'rows' : []
+			};
+
+			if (sheet.length == 0) {
+				return ret;
+			}
+
+			ret['rows'].push({
+				'cells' : Object.keys(sheet[0]).map(function (key) {
+					return {
+						value: key, 
+						textAlign: 'center'
+					};
+				})
+			});
+
+			
+
+			sheet.forEach(function (record) {
+				ret['rows'].push({
+					'cells' : Object.values(record).map(function (value) {
+						return {
+							value: value, 
+							textAlign: 'center'
+						};
+					})
+				});
+			})
+
+			return ret;
+		})
+	});
+	loadFormula();
+}
+
+function loadFormula() {
+	$.getJSON(
+		'/loadFormulaByUser',
+		{arg: JSON.stringify({"username" : window.username})},
+		function (response){
+			var result = response.elements;
+			var status = result["status"];
+			var message = result["message"];
+			var formulaList = result["formula"];
+			formulaList.forEach(function (each) {
+				var evalCode = each["evalCode"];
+				eval(evalCode);
+			})
+		}
+	)
 }

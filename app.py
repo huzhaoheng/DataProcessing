@@ -367,11 +367,22 @@ def textFunction():
 
 @app.route('/joinSheets')
 def joinSheets():
-    sheets = json.loads(request.args.get('arg'))['sheets']
-    DFs = list(map(convertToDataFrame, sheets))
-    df_final = reduce(lambda left,right: pd.merge(left,right,on='name'), DFs)
-    res = pd.merge(DFs[0], DFs[1])
-    ret = convertFromDataFrame(res)
+    ret = {}
+    joiningGroups = json.loads(request.args.get('arg'))['joiningGroups']
+    for groupID, groupContent in joiningGroups.items():
+        leftSheet = groupContent['leftSheet']
+        rightSheet = groupContent['rightSheet']
+        leftSheetName = groupContent['leftSheetName']
+        rightSheetName = groupContent['rightSheetName']
+        leftColumn = groupContent['leftColumn']
+        rightColumn = groupContent['rightColumn']
+
+        sheets = [leftSheet, rightSheet]
+        DFs = list(map(convertToDataFrame, sheets))
+        res = pd.merge(DFs[0], DFs[1], suffixes=['_' + leftSheetName, '_' + rightSheetName], left_on = leftColumn, right_on = rightColumn)
+        ret[groupID] = convertFromDataFrame(res)
+
+    # df_final = reduce(lambda left,right: pd.merge(left,right,on='name'), DFs)
     return jsonify(elements = ret)
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'

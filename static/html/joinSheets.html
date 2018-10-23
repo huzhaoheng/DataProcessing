@@ -22,7 +22,7 @@
 
 	<body>
 		<div id="grid"></div>
-		<button id="submit" type="button">Submit</button>
+		<div id="spreadsheet"></div>
 		<script id="popupTemplate" type="text/x-kendo-template">
 
 			<div class="k-edit-label">
@@ -170,22 +170,14 @@
 									<span class="k-icon k-i-check"></span>Submit
 								</a>`
 						}],
-					editable: { mode: "popup", window: { width: 600 }, template: $("#popupTemplate").html() },
+					/*editable: { mode: "popup", window: { width: 600 }, template: $("#popupTemplate").html() },*/
+					editable: { mode: "popup", template: $("#popupTemplate").html() },
 					edit: function (e) {
 						initDropDownLists();
 					},
 					autoBind: true,
 					dataSource: gridDataSource
 				});
-			});
-		</script>
-
-		<script>
-			$("#submit").kendoButton({
-				enable: true,
-				click: function(e) {
-					console.log(e.event.target.tagName);
-				}
 			});
 		</script>
 	</body>
