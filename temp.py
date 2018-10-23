@@ -97,7 +97,6 @@ def validateParameterNode(schema, username, query_name, parsed_parameters):
 				""".format(query_name = query_name, username = username, parameter_hash = parameter_hash, parameters_str = parameters_str)
 		result = graph.cypher.execute(query)
 		parameter_id = result[0]["ID(p)"]
-		storeSchema(parameter_id, schema)
 	else:
 		parameter_id = parameter_exists[0]["ID(p)"]
 
@@ -119,9 +118,6 @@ def connectNodes(source_id, target_id, rel_name):
 		rel_name = rel_name
 	)
 	graph.cypher.execute(query)
-
-def storeSchema(parameter_id, schema):
-	return
 
 def storeData(data, schema, node_name, parent_id, curr_time):
 	if "anyOf" in schema:
