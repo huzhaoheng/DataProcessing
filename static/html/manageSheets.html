@@ -4,15 +4,15 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		<title>Join Sheets</title>
+		<title>Manage Sheets</title>
 		<script src="../kendoui/js/jquery.min.js"></script>
 		<script src="../kendoui/js/jszip.min.js"></script>
 		<script src="../kendoui/js/kendo.all.min.js"></script>
 		<script src="../kendoui/examples/content/shared/js/console.js"></script>
 		
-		<script src="/static/js/joinSheetsHandler.js"></script>
+		<script src="/static/js/manageSheetsHandler.js"></script>
 
-		<link rel="stylesheet" href="/static/css/joinSheets.css">
+		<link rel="stylesheet" href="/static/css/manageSheets.css">
 		<link href="../kendoui/examples/content/shared/styles/examples-offline.css" rel="stylesheet">
 		<link href="../kendoui/styles/kendo.common.min.css" rel="stylesheet">
 		<link href="../kendoui/styles/kendo.rtl.min.css" rel="stylesheet">
@@ -20,8 +20,8 @@
 		<link href="../kendoui/styles/kendo.default.mobile.min.css" rel="stylesheet">
 	</head>
 
-	<body>
-		<div id="grid"></div>
+	<body onload="initialization();">
+		<!-- <div id="grid"></div>
 		<div id="spreadsheet"></div>
 		<script id="popupTemplate" type="text/x-kendo-template">
 
@@ -179,6 +179,11 @@
 					dataSource: gridDataSource
 				});
 			});
-		</script>
+		</script> -->
+
+		<div id="currentSheetsGrid"></div>
+		<div id="StoredSheetsGrid"></div>
+		<div id="spreadsheet"></div>
+
 	</body>
 </html>

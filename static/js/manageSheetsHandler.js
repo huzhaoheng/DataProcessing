@@ -1,10 +1,76 @@
 function initialization() {
 	var args = location.search.replace('?','').split('&').reduce(function(s,c){var t=c.split('=');s[t[0]]=t[1];return s;},{});
 	window.username = args['username'];
-	window.mapping = {'sheets':[], 'columns':[]};
+	initSpreadSheet();
+	loadCurrentSheetsGrid();
+	/*window.mapping = {'sheets':[], 'columns':[]};
 	var sheets = window.opener.sharedObjectToJoinSheets['sheets'];
 	console.log(sheets);
-	generateSheetsAndColumnsMapping(sheets);
+	generateSheetsAndColumnsMapping(sheets);*/
+}
+
+function initSpreadSheet() {
+	$("#spreadsheet").kendoSpreadsheet();
+}
+
+function loadCurrentSheetsGrid() {
+	var sheets = window.opener.sharedObjectToManageSheets['sheets'];
+	var data = sheets.map(function (sheet, index) {
+		return {
+			"ID" : index,
+			"Name" : sheet['name']
+		};
+	})
+	$("#currentSheetsGrid").kendoGrid({
+		columns: [{
+			field: "ID"
+		},{
+			field: "Name"
+		},{
+			command : [{
+				name : "View Sheet",
+				iconClass: "k-icon k-i-eye",
+				click : function (e) {
+					e.preventDefault();
+					var tr = $(e.target).closest("tr");
+					var data = this.dataItem(tr);
+					loadCurrentSheet(data["ID"]);
+					return;
+				}
+			}]
+		}],
+		dataSource: {
+			data: data,
+			schema : {
+				model : {
+					id : "ID",
+					fields: {
+						Name: {type: "string"},
+						ID: {type: "integer"}
+					}
+				}
+			} 
+		}
+	})
+}
+
+function loadCurrentSheet(ID) {
+	var sheets = window.window.opener.sharedObjectToManageSheets['sheets'];
+	var sheet = sheets[ID];
+	console.log(sheet);
+	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+    var data = spreadsheet.toJSON();
+    if (sheetLoaded(data, sheet)) {
+
+    }
+    console.log(data);
+}
+
+function sheetLoaded(data, sheet) {
+	var loaded = false;
+	data['sheets'].forEach(function (each) {
+		if (each['name'])
+	})
 }
 
 function sheetName(sheetId) {

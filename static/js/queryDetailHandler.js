@@ -471,18 +471,18 @@ function loadFormula() {
 	)
 }
 
-function joinSheets() {
+function manageSheets() {
 	//window.sharedObjectToJoinSheets = {"sheets" : window.sheets};
-	var path = "/static/html/joinSheets.html?username=" + window.username;
-	var name = "joinSheets";
+	var path = "/static/html/manageSheets.html?username=" + window.username;
+	var name = "manageSheets";
 	var new_window = window.open(path, name);
-	updateSharedObjectToJoinSheets();
+	updateSharedObjectToManageSheets();
 	new_window.username = window.username;
 }
 
-function updateSharedObjectToJoinSheets() {
+function updateSharedObjectToManageSheets() {
 	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
 	var data = spreadsheet.toJSON();
-	window.sharedObjectToJoinSheets = {'sheets':null};
-	window.sharedObjectToJoinSheets['sheets'] = data['sheets'];
+	window.sharedObjectToManageSheets = {'sheets':null};
+	window.sharedObjectToManageSheets['sheets'] = data['sheets'];
 }
