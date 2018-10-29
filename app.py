@@ -13,7 +13,6 @@ from time import gmtime, strftime, localtime
 import sys
 from aylienapiclient import textapi
 import MySQLdb
-import xlrd
 
 http.socket_timeout = 9999
 
@@ -28,8 +27,15 @@ db = MySQLdb.connect(
     user = "root", 
     passwd = "root", 
     db = "ListenOnline",
+    use_unicode=True,
+    charset = "utf8mb4"
 )
+# db.autocommit(True)
+
 cursor = db.cursor()
+cursor.execute("SET NAMES utf8mb4;")
+cursor.execute("SET CHARACTER SET utf8mb4;")
+cursor.execute("SET character_set_connection=utf8mb4;")
 
 @app.route('/verification', methods=['GET', 'POST'])
 def verification():
@@ -373,14 +379,27 @@ def textFunction():
     return jsonify(elements = result)
 
 @app.route('/saveSheets')
-def joinSheets():
-    ret = {}
+def saveSheets():
     name = json.loads(request.args.get('arg'))['name']
     data = json.loads(request.args.get('arg'))['data']
-    query = "CREATE TABLE IF NOT EXISTS {name} (test1_ID TEXT, age TEXT, test1_name TEXT);"
+    columns = json.loads(request.args.get('arg'))['columns']
+    query = "CREATE TABLE IF NOT EXISTS {table} ({columns} TEXT);".format(table = name, columns = " TEXT, ".join(columns))
+    cursor.execute(query)
+    query = "ALTER TABLE {table} CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;".format(table = name)
     cursor.execute(query)
     
-    return jsonify(elements = ret)
+    for each in data:
+        query = "INSERT INTO {table} ({columns}) VALUES (".format(table = name, columns = ", ".join(columns))
+        for column in columns:
+            # print ()
+            query += " '{value}',".format(value = each[column].replace("'", "''")) if each[column] else " NULL,"
+
+        query = query[:-1] + ");"
+        cursor.execute(query)
+
+    db.commit()
+
+    return jsonify(elements = {"message" : "Done"})
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 

@@ -112,13 +112,13 @@ function saveSheet() {
 			break;
 		}
 	}
-	console.log(activeSheet);
-	var parsedSheet = parseSheet(activeSheet);
-	console.log(parsedSheet);
-
+	var result = parseSheet(activeSheet);
+	parsedSheet = result["parsedSheet"];
+	columns = result["columns"];
+	
 	$.getJSON(
 		'/saveSheets',
-		{arg: JSON.stringify({"name" : activeSheetName, "data" : parsedSheet})},
+		{arg: JSON.stringify({"name" : activeSheetName, "data" : parsedSheet, "columns" : columns})},
 		function (response){
 			var result = response.elements;
 			console.log(result);
@@ -156,7 +156,7 @@ function parseSheet(sheet) {
 		})
 		parsedSheet.push(parsedRow);
 	}
-	return parsedSheet;
+	return {"parsedSheet" : parsedSheet, "columns" : columns};
 }
 
 

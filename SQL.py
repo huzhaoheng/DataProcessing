@@ -1,19 +1,19 @@
 import MySQLdb
 import xlrd
-
+# import mysql.connector
 db = MySQLdb.connect(
 	host = "localhost", 
 	user = "root", 
 	passwd = "root", 
 	db = "ListenOnline",
-	# db = "ListenOnline"
 )
+
 cursor = db.cursor()
 
-cursor.execute("CREATE TEMPORARY TABLE IF NOT EXISTS test1(test1_ID TEXT, age TEXT, test1_name TEXT);")
+cursor.execute("CREATE TABLE IF NOT EXISTS test1(test1_ID TEXT, age TEXT, test1_name TEXT);")
 
 book = xlrd.open_workbook("Workbook.xlsx")
-sheet = book.sheet_by_name("test1")
+sheet = book.sheet_by_name("test2")
 query = """
 	INSERT INTO 
 		test1 (test1_ID, age, test1_name) 
