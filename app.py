@@ -424,13 +424,14 @@ def saveSheets():
 @app.route('/getStoredTables')
 def getStoredTables():
     username = json.loads(request.args.get('arg'))['username']
-    query = "SELECT originalTableName FROM OWNERS WHERE username = '{username}'".format(username = username)
+    query = "SELECT originalTableName, derivedTableName FROM OWNERS WHERE username = '{username}'".format(username = username)
     cursor.execute(query)
     db.commit()
     result = cursor.fetchall()
-    tables = [each[0] for each in result]
+    originalTableNameList = [each[0] for each in result]
+    derivedTableNameList = [each[1] for each in result]
 
-    return jsonify(elements = {"tables" : tables})
+    return jsonify(elements = {"originalTableNameList" : originalTableNameList, "derivedTableNameList" : derivedTableNameList})
 
 @app.route('/loadTable')
 def loadTable():

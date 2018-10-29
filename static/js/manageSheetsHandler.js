@@ -103,19 +103,22 @@ function loadStoredSheetsGrid() {
 		{arg: JSON.stringify({"username" : window.username})},
 		function (response){
 			var result = response.elements;
-			console.log(result);
-			var tables = result['tables']
-			var data = tables.map(function (table, index) {
+			var originalTableNameList = result['originalTableNameList'];
+			var derivedTableNameList = result['derivedTableNameList'];
+			var data = originalTableNameList.map(function (originalTableName, index) {
 				return {
 					"ID" : index,
-					"Name" : table
+					"originalTableName" : originalTableName,
+					"derivedTableName" : derivedTableNameList[index]
 				};
 			})
 			$("#StoredSheetsGrid").kendoGrid({
 				columns: [{
 					field: "ID"
 				},{
-					field: "Name"
+					field: "originalTableName"
+				},{
+					field: "derivedTableName"
 				},{
 					command : [{
 						name : "View Sheet",
@@ -124,7 +127,7 @@ function loadStoredSheetsGrid() {
 							e.preventDefault();
 							var tr = $(e.target).closest("tr");
 							var data = this.dataItem(tr);
-							loadStoredTable(data["Name"]);
+							loadStoredTable(data["originalTableName"]);
 							return;
 						}
 					}]
@@ -135,7 +138,8 @@ function loadStoredSheetsGrid() {
 						model : {
 							id : "ID",
 							fields: {
-								Name: {type: "string"},
+								originalTableName: {type: "string"},
+								derivedTableName : {type: "string"},
 								ID: {type: "integer"}
 							}
 						}
