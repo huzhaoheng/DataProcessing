@@ -112,27 +112,8 @@ function loadStoredSheetsGrid() {
 					"derivedTableName" : derivedTableNameList[index]
 				};
 			})
-			$("#StoredSheetsGrid").kendoGrid({
-				columns: [{
-					field: "ID"
-				},{
-					field: "originalTableName"
-				},{
-					field: "derivedTableName"
-				},{
-					command : [{
-						name : "View Sheet",
-						iconClass: "k-icon k-i-eye",
-						click : function (e) {
-							e.preventDefault();
-							var tr = $(e.target).closest("tr");
-							var data = this.dataItem(tr);
-							loadStoredTable(data["originalTableName"]);
-							return;
-						}
-					}]
-				}],
-				dataSource: {
+
+			var dataSource = {
 					data: data,
 					schema : {
 						model : {
@@ -144,8 +125,37 @@ function loadStoredSheetsGrid() {
 							}
 						}
 					} 
-				}
-			})
+				};
+
+			var grid = $("#StoredSheetsGrid").data("kendoGrid");
+			if (grid != undefined) {
+				grid.setDataSource(dataSource);
+			}
+			else {
+				$("#StoredSheetsGrid").kendoGrid({
+					columns: [{
+						field: "ID"
+					},{
+						field: "originalTableName"
+					},{
+						field: "derivedTableName"
+					},{
+						command : [{
+							name : "View Sheet",
+							iconClass: "k-icon k-i-eye",
+							click : function (e) {
+								e.preventDefault();
+								var tr = $(e.target).closest("tr");
+								var data = this.dataItem(tr);
+								loadStoredTable(data["originalTableName"]);
+								return;
+							}
+						}]
+					}],
+					dataSource: dataSource
+				})
+			}
+
 			return;
 		}
 	)
