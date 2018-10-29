@@ -31,7 +31,7 @@ db = MySQLdb.connect(
     charset = "utf8mb4"
 )
 # db.autocommit(True)
-
+db.ping(True)
 cursor = db.cursor()
 cursor.execute("SET NAMES utf8mb4;")
 cursor.execute("SET CHARACTER SET utf8mb4;")
