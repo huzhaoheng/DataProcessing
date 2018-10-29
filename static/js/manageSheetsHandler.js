@@ -4,10 +4,8 @@ function initialization() {
 	initSpreadSheet();
 	initCodingArea();
 	loadCurrentSheetsGrid();
-	/*window.mapping = {'sheets':[], 'columns':[]};
-	var sheets = window.opener.sharedObjectToJoinSheets['sheets'];
-	console.log(sheets);
-	generateSheetsAndColumnsMapping(sheets);*/
+	loadStoredSheetsGrid();
+	loadFormula();
 }
 
 function initSpreadSheet() {
@@ -83,7 +81,6 @@ function loadCurrentSheet(ID) {
 		data['sheets'].push(sheet);
 		activateID = data['sheets'].length - 1;
 	}
-
 	spreadsheet.fromJSON(data);
 	spreadsheet.activeSheet(spreadsheet.sheets()[activateID]);
 }
@@ -98,6 +95,111 @@ function sheetLoaded(data, sheet) {
 		}
 	})
 	return {"loaded" : loaded, "index" : index};
+}
+
+function loadStoredSheetsGrid() {
+	$.getJSON(
+		'/getStoredTables',
+		{arg: JSON.stringify({"username" : window.username})},
+		function (response){
+			var result = response.elements;
+			console.log(result);
+			var tables = result['tables']
+			var data = tables.map(function (table, index) {
+				return {
+					"ID" : index,
+					"Name" : table
+				};
+			})
+			$("#StoredSheetsGrid").kendoGrid({
+				columns: [{
+					field: "ID"
+				},{
+					field: "Name"
+				},{
+					command : [{
+						name : "View Sheet",
+						iconClass: "k-icon k-i-eye",
+						click : function (e) {
+							e.preventDefault();
+							var tr = $(e.target).closest("tr");
+							var data = this.dataItem(tr);
+							loadStoredTable(data["Name"]);
+							return;
+						}
+					}]
+				}],
+				dataSource: {
+					data: data,
+					schema : {
+						model : {
+							id : "ID",
+							fields: {
+								Name: {type: "string"},
+								ID: {type: "integer"}
+							}
+						}
+					} 
+				}
+			})
+			return;
+		}
+	)
+}
+
+function loadStoredTable(table) {
+	$.getJSON(
+		'/loadTable',
+		{arg: JSON.stringify({"table" : table, "username" : window.username})},
+		function (response){
+			var result = response.elements;
+			var tableData = result['data'];
+			var columns = result['columns'];
+			var sheet = convertTableToSheet(table, tableData, columns);
+			var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+			var data = spreadsheet.toJSON();
+			var check = sheetLoaded(data, sheet);
+			var activateID = -1;
+			if (check["loaded"]) {
+				var index = check["index"];
+				data['sheets'][index] = sheet;
+				activateID = index
+			}
+			else {
+				data['sheets'].push(sheet);
+				activateID = data['sheets'].length - 1;
+			}
+			spreadsheet.fromJSON(data);
+			spreadsheet.activeSheet(spreadsheet.sheets()[activateID]);
+			return;
+		}
+	)
+}
+
+function convertTableToSheet(tableName, tableData, columns) {
+	var rows = [];
+
+	var fields = [];
+	columns.forEach(function (column) {
+		fields.push({
+			value: column, 
+			bold: "true", 
+			color: "black", 
+			textAlign: "center"
+		});
+	});
+	rows.push({cells: fields});
+
+	tableData.forEach(function (each) {
+		var row = {cells: []};
+		columns.forEach(function (column) {
+			var value = each[column];
+			row['cells'].push({value: value, textAlign: 'center'});
+		});
+		rows.push(row);
+	});
+	var sheet = {"name" : tableName, "rows" : rows};
+	return sheet;
 }
 
 function saveSheet() {
@@ -115,16 +217,30 @@ function saveSheet() {
 	var result = parseSheet(activeSheet);
 	parsedSheet = result["parsedSheet"];
 	columns = result["columns"];
-	
-	$.getJSON(
-		'/saveSheets',
-		{arg: JSON.stringify({"name" : activeSheetName, "data" : parsedSheet, "columns" : columns})},
-		function (response){
-			var result = response.elements;
-			console.log(result);
-			return;
-		}
-	)
+
+	promptFunction("Please enter a name:", activeSheetName).then(function (data) {
+		$.getJSON(
+			'/saveSheets',
+			{arg: JSON.stringify({"name" : data, "data" : parsedSheet, "columns" : columns, "username" : window.username})},
+			function (response){
+				var result = response.elements;
+				loadStoredSheetsGrid();
+				loadMessage("Sheet Saved.", "success");
+				return;
+			}
+		)
+	}, function () {
+		return;
+	})
+	return;
+}
+
+function promptFunction(content, defaultValue){
+	return $("<div></div>").kendoPrompt({
+		title: "My Title",
+		value: defaultValue,
+		content: content
+	}).data("kendoPrompt").open().result;
 }
 
 function parseSheet(sheet) {
@@ -159,7 +275,6 @@ function parseSheet(sheet) {
 	return {"parsedSheet" : parsedSheet, "columns" : columns};
 }
 
-
 function loadFormula() {
 	$.getJSON(
 		'/loadFormulaByUser',
@@ -175,4 +290,31 @@ function loadFormula() {
 			})
 		}
 	)
+}
+
+function loadMessage(message, message_type) {
+	$("#message").empty();
+	switch (message_type) {
+		case "success" :
+			var code = `
+				<div class="alert alert-success alert-dismissable">		 
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+					<strong>` + message + `</strong>
+				</div>
+			`;
+			$("#message").append(code);
+			break;
+		case "failure" : 
+			var code = `
+				<div class="alert alert-dismissable alert-danger">
+				 
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+				<strong>` + message + `</strong>
+			</div>
+			`;
+			$("#message").append(code);
+			break;
+		default:
+			return;
+	}
 }

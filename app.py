@@ -37,6 +37,9 @@ cursor.execute("SET NAMES utf8mb4;")
 cursor.execute("SET CHARACTER SET utf8mb4;")
 cursor.execute("SET character_set_connection=utf8mb4;")
 
+cursor.execute("CREATE TABLE IF NOT EXISTS OWNERS (username TEXT NOT NULL, originalTableName TEXT NOT NULL, derivedTableName TEXT NOT NULL);")
+db.commit()
+
 @app.route('/verification', methods=['GET', 'POST'])
 def verification():
     print("request received")
@@ -380,18 +383,35 @@ def textFunction():
 
 @app.route('/saveSheets')
 def saveSheets():
-    name = json.loads(request.args.get('arg'))['name']
+    username = json.loads(request.args.get('arg'))['username']
+    originalTableName = json.loads(request.args.get('arg'))['name']
     data = json.loads(request.args.get('arg'))['data']
     columns = json.loads(request.args.get('arg'))['columns']
-    query = "CREATE TABLE IF NOT EXISTS {table} ({columns} TEXT);".format(table = name, columns = " TEXT, ".join(columns))
+    derivedTableName = "_".join([username, originalTableName])
+
+    query = "SELECT * FROM OWNERS WHERE derivedTableName = '{derivedTableName}'".format(derivedTableName = derivedTableName)
     cursor.execute(query)
-    query = "ALTER TABLE {table} CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;".format(table = name)
-    cursor.execute(query)
-    
+    db.commit()
+    result = cursor.fetchall()
+    if len(result) == 0:
+        query = "CREATE TABLE IF NOT EXISTS {table} ({columns} TEXT);".format(table = derivedTableName, columns = " TEXT, ".join(columns))
+        cursor.execute(query)
+        query = "ALTER TABLE {table} CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;".format(table = derivedTableName)
+        cursor.execute(query)
+        query = """
+            INSERT INTO 
+                OWNERS (username, originalTableName, derivedTableName) 
+            VALUES ('{username}', '{originalTableName}', '{derivedTableName}');
+            """.format(
+                username = username,
+                originalTableName = originalTableName,
+                derivedTableName = derivedTableName
+            )
+        cursor.execute(query)
+
     for each in data:
-        query = "INSERT INTO {table} ({columns}) VALUES (".format(table = name, columns = ", ".join(columns))
+        query = "INSERT INTO {table} ({columns}) VALUES (".format(table = derivedTableName, columns = ", ".join(columns))
         for column in columns:
-            # print ()
             query += " '{value}',".format(value = each[column].replace("'", "''")) if each[column] else " NULL,"
 
         query = query[:-1] + ");"
@@ -400,6 +420,56 @@ def saveSheets():
     db.commit()
 
     return jsonify(elements = {"message" : "Done"})
+
+@app.route('/getStoredTables')
+def getStoredTables():
+    username = json.loads(request.args.get('arg'))['username']
+    query = "SELECT originalTableName FROM OWNERS WHERE username = '{username}'".format(username = username)
+    cursor.execute(query)
+    db.commit()
+    result = cursor.fetchall()
+    tables = [each[0] for each in result]
+
+    return jsonify(elements = {"tables" : tables})
+
+@app.route('/loadTable')
+def loadTable():
+    username = json.loads(request.args.get('arg'))['username']
+    originalTableName = json.loads(request.args.get('arg'))['table']
+
+    query = """
+        SELECT 
+            derivedTableName 
+        FROM 
+            OWNERS 
+        WHERE 
+            username = '{username}' AND originalTableName = '{originalTableName}'
+    """.format(username = username, originalTableName = originalTableName)
+    cursor.execute(query)
+    db.commit()
+    result = cursor.fetchall()
+    derivedTableName = result[0][0]
+
+    
+    query = "DESCRIBE  {derivedTableName}".format(derivedTableName = derivedTableName)
+    cursor.execute(query)
+    db.commit()
+    result = cursor.fetchall()
+    columns = [each[0] for each in result]
+
+    query = "SELECT {columns} FROM {derivedTableName};".format(columns = ', '.join(columns), derivedTableName = derivedTableName)
+    cursor.execute(query)
+    db.commit()
+    result = cursor.fetchall()
+
+    data = []
+    for row in result:
+        record = {}
+        for i, column in enumerate(columns):
+            record[column] = row[i]
+        data.append(record)
+
+    return jsonify(elements = {"data" : data, 'columns' : columns})
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 

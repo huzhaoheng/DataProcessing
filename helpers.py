@@ -96,16 +96,3 @@ def applyTextFunction(textFunctionName, data, textAPIClient, parameters):
 			result[word] = freq
 		
 	return result
-
-def convertToDataFrame(sheet):
-	return pd.DataFrame(sheet)
-
-def convertFromDataFrame(result):
-	ret = []
-	keys = list(dict(result).keys())
-	for index, row in result.iterrows():
-		parsedRow = {}
-		for key in keys:
-			parsedRow[key] = row[key]
-		ret.append(parsedRow) 
-	return ret
