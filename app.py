@@ -12,8 +12,8 @@ from py2neo.packages.httpstream import http
 from time import gmtime, strftime, localtime
 import sys
 from aylienapiclient import textapi
-import pandas as pd
-import numpy as np
+import MySQLdb
+import xlrd
 
 http.socket_timeout = 9999
 
@@ -23,6 +23,13 @@ authenticate("localhost:7474", "neo4j", "123456")
 neo4jUrl = os.environ.get('NEO4J_URL',"http://localhost:7474/db/data/")
 graph = Graph(neo4jUrl)
 textAPIClient = textapi.Client("bcbe7ef4", "627c1e3eeb321a490f68057c197cee6f")
+db = MySQLdb.connect(
+    host = "localhost", 
+    user = "root", 
+    passwd = "root", 
+    db = "ListenOnline",
+)
+cursor = db.cursor()
 
 @app.route('/verification', methods=['GET', 'POST'])
 def verification():
@@ -365,24 +372,14 @@ def textFunction():
     result = applyTextFunction(textFunctionName, data, textAPIClient, parameters)
     return jsonify(elements = result)
 
-@app.route('/joinSheets')
+@app.route('/saveSheets')
 def joinSheets():
     ret = {}
-    joiningGroups = json.loads(request.args.get('arg'))['joiningGroups']
-    for groupID, groupContent in joiningGroups.items():
-        leftSheet = groupContent['leftSheet']
-        rightSheet = groupContent['rightSheet']
-        leftSheetName = groupContent['leftSheetName']
-        rightSheetName = groupContent['rightSheetName']
-        leftColumn = groupContent['leftColumn']
-        rightColumn = groupContent['rightColumn']
-
-        sheets = [leftSheet, rightSheet]
-        DFs = list(map(convertToDataFrame, sheets))
-        res = pd.merge(DFs[0], DFs[1], suffixes=['_' + leftSheetName, '_' + rightSheetName], left_on = leftColumn, right_on = rightColumn)
-        ret[groupID] = convertFromDataFrame(res)
-
-    # df_final = reduce(lambda left,right: pd.merge(left,right,on='name'), DFs)
+    name = json.loads(request.args.get('arg'))['name']
+    data = json.loads(request.args.get('arg'))['data']
+    query = "CREATE TABLE IF NOT EXISTS {name} (test1_ID TEXT, age TEXT, test1_name TEXT);"
+    cursor.execute(query)
+    
     return jsonify(elements = ret)
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'

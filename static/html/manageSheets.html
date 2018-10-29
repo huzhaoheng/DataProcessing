@@ -18,6 +18,22 @@
 		<link href="../kendoui/styles/kendo.rtl.min.css" rel="stylesheet">
 		<link href="../kendoui/styles/kendo.default.min.css" rel="stylesheet">
 		<link href="../kendoui/styles/kendo.default.mobile.min.css" rel="stylesheet">
+
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/codemirror.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/codemirror.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/addon/hint/sql-hint.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/mode/sql/sql.js"></script>
+
+
 	</head>
 
 	<body onload="initialization();">
@@ -184,6 +200,13 @@
 		<div id="currentSheetsGrid"></div>
 		<div id="StoredSheetsGrid"></div>
 		<div id="spreadsheet"></div>
-
+		<div class="btn-group">
+			<button type="button" class="btn btn-success" onclick="saveSheet();">Save Current Sheet</button>
+			<button type="button" class="btn btn-success" onclick="runQuery();">Run Query</button>	
+		</div>
+		
+		<textarea id="code"></textarea>
+		
+		
 	</body>
 </html>
