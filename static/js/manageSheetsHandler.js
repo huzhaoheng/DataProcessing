@@ -192,26 +192,55 @@ function loadStoredTable(table) {
 
 function convertTableToSheet(tableName, tableData, columns) {
 	var rows = [];
-
 	var fields = [];
-	columns.forEach(function (column) {
-		fields.push({
-			value: column, 
-			bold: "true", 
-			color: "black", 
-			textAlign: "center"
-		});
-	});
-	rows.push({cells: fields});
 
-	tableData.forEach(function (each) {
-		var row = {cells: []};
+	if (columns.length > 0) {
 		columns.forEach(function (column) {
-			var value = each[column];
-			row['cells'].push({value: value, textAlign: 'center'});
+			fields.push({
+				value: column, 
+				bold: "true", 
+				color: "black", 
+				textAlign: "center"
+			});
 		});
-		rows.push(row);
-	});
+		rows.push({cells: fields});
+
+		tableData.forEach(function (each) {
+			var row = {cells: []};
+			columns.forEach(function (column) {
+				var value = each[column];
+				row['cells'].push({value: value, textAlign: 'center'});
+			});
+			rows.push(row);
+		});
+	}
+
+	else {
+		var columnNumer = 0;
+		var columnCounted = false;
+		tableData.forEach(function (record) {
+			var row = {cells: []};
+			record.forEach(function (value) {
+				row['cells'].push({value: value, textAlign: 'center'});
+				if (!columnCounted) {
+					columnNumer += 1;
+				}
+			})
+			rows.push(row);
+			columnCounted = true;
+		})
+
+		for (var i = 0; i < columnNumer; i ++) {
+			fields.push({
+				value: "ENTER COLUMN NAME HERE BEFORE STORING !", 
+				bold: "true", 
+				color: "red", 
+				textAlign: "center"
+			})
+		}
+		rows.unshift({cells: fields});
+	}
+	
 	var sheet = {"name" : tableName, "rows" : rows};
 	return sheet;
 }
@@ -331,4 +360,40 @@ function loadMessage(message, message_type) {
 		default:
 			return;
 	}
+}
+
+function runQuery() {
+	var query = window.editor.getValue();
+	$.getJSON(
+		'/runQuery',
+		{arg: JSON.stringify({"query" : query})},
+		function (response){
+			var result = response.elements;
+			var message = result["message"];
+			if (message == "Done") {
+				loadMessage("Query Executed", "success");
+			}
+			else {
+				loadMessage(message, "failure");
+			}
+			var tableData = result["data"];
+			var sheet = convertTableToSheet("QueryResult", tableData, []);
+			var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+			var data = spreadsheet.toJSON();
+			var check = sheetLoaded(data, sheet);
+			var activateID = -1;
+			if (check["loaded"]) {
+				var index = check["index"];
+				data['sheets'][index] = sheet;
+				activateID = index
+			}
+			else {
+				data['sheets'].push(sheet);
+				activateID = data['sheets'].length - 1;
+			}
+			spreadsheet.fromJSON(data);
+			spreadsheet.activeSheet(spreadsheet.sheets()[activateID]);
+			return;
+		}
+	)
 }

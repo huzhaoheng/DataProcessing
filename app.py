@@ -472,6 +472,22 @@ def loadTable():
 
     return jsonify(elements = {"data" : data, 'columns' : columns})
 
+@app.route('/runQuery')
+def runQuery():
+    query = json.loads(request.args.get('arg'))['query']
+    ret = {"message" : None, "data" : []}
+    try:
+        cursor.execute(query)
+        db.commit()
+        result = cursor.fetchall()
+        ret['message'] = "Done"
+        for each in result:
+            ret["data"].append(list(each))
+    except Exception as e:
+        ret['message'] = str(e)
+
+    return jsonify(elements = ret)
+
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 if __name__ == '__main__':
