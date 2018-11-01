@@ -188,28 +188,59 @@ def getStructure():
 
     return jsonify(elements = ret)
 
+# @app.route('/queryData')
+# def queryData():
+#     structure = json.loads(request.args.get('arg'))['structure']
+#     parameter_id = json.loads(request.args.get('arg'))['parameter_id']
+#     dates = json.loads(request.args.get('arg'))['dates']
+#     startDate = dates['startDate']
+#     endDate = dates['endDate']
+#     ret = {"data" : {}, "queries" : []}
+#     queries = queryBuilder(structure, parameter_id, startDate, endDate)
+#     for [node_alias, query] in queries:
+#         value_alias = node_alias + "_value"
+#         obj_id_alias = node_alias + "_obj_id"
+#         result = graph.cypher.execute(query)
+#         ret["queries"].append(' '.join(query.split()))
+#         for each in result:
+#             value = each[value_alias]
+#             obj_id = each[obj_id_alias]
+#             if obj_id not in ret["data"]:
+#                 ret["data"][obj_id] = {}
+#             if node_alias not in ret["data"][obj_id]:
+#                 ret["data"][obj_id][node_alias] = []
+#             ret["data"][obj_id][node_alias].append(value)
+#     return jsonify(elements = ret)
+
 @app.route('/queryData')
 def queryData():
-    structure = json.loads(request.args.get('arg'))['structure']
+    paths = json.loads(request.args.get('arg'))['paths']
     parameter_id = json.loads(request.args.get('arg'))['parameter_id']
     dates = json.loads(request.args.get('arg'))['dates']
     startDate = dates['startDate']
     endDate = dates['endDate']
     ret = {"data" : {}, "queries" : []}
-    queries = queryBuilder(structure, parameter_id, startDate, endDate)
-    for [node_alias, query] in queries:
+    queries = [queryBuilder(path, parameter_id, startDate, endDate) for path in paths]
+    # for path in paths:
+    #     query = 
+    # queries = queryBuilder(paths, parameter_id, startDate, endDate)
+    for each in queries:
+        node_alias = each["alias"]
+        query = each["query"]
         value_alias = node_alias + "_value"
-        obj_id_alias = node_alias + "_obj_id"
+        objectID_alias = node_alias + "_objectID"
         result = graph.cypher.execute(query)
         ret["queries"].append(' '.join(query.split()))
         for each in result:
             value = each[value_alias]
-            obj_id = each[obj_id_alias]
-            if obj_id not in ret["data"]:
-                ret["data"][obj_id] = {}
-            if node_alias not in ret["data"][obj_id]:
-                ret["data"][obj_id][node_alias] = []
-            ret["data"][obj_id][node_alias].append(value)
+            objectID = each[objectID_alias]
+            if objectID not in ret["data"]:
+                ret["data"][objectID] = {}
+            if node_alias not in ret["data"][objectID]:
+                ret["data"][objectID][node_alias] = []
+            ret["data"][objectID][node_alias].append(value)
+
+    print (ret)
     return jsonify(elements = ret)
 
 @app.route('/storeFormula')

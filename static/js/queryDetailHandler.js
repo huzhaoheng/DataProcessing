@@ -233,25 +233,26 @@ function loadSpreadSheet(data) {
 function prepareData(data) {
 	var dict = {};
 	var fields_dict = {}
-	for (var obj_id in data) {
-		var each = data[obj_id];
+	for (var objectID in data) {
+		var each = data[objectID];
 		for (var property_alias in each) {
 			var values = each[property_alias];
-			var layer = parseInt(property_alias.split('_')[1]);
-			var prefix = "layer_" + layer.toString() + "_"
-			var property = property_alias.slice(prefix.length);
+			var layer = property_alias.split('_')[0];
+			var prefix = layer + "_"
+			//var property = property_alias.slice(prefix.length);
+			var property = property_alias.split('_')[1];
 
 			if (!(layer in dict)) {
 				dict[layer] = {};
-				dict[layer][obj_id] = {};
-				dict[layer][obj_id][property] = values;
+				dict[layer][objectID] = {};
+				dict[layer][objectID][property] = values;
 			}
-			else if (!(obj_id in dict[layer])) {
-				dict[layer][obj_id] = {};	
-				dict[layer][obj_id][property] = values;
+			else if (!(objectID in dict[layer])) {
+				dict[layer][objectID] = {};	
+				dict[layer][objectID][property] = values;
 			}
 			else {
-				dict[layer][obj_id][property] = values;
+				dict[layer][objectID][property] = values;
 			}
 
 			if (!(layer in fields_dict)) {
@@ -337,7 +338,10 @@ function viewStructure(parameter_id) {
 						template: "<input type='checkbox' class = 'treeview-checkbox' name='#= item.layer #' value='#= item.text #' />"
 					},
 					select: function(e) {
-						console.log("Selecting", e.node);
+						e.preventDefault();                      
+						var checkbox = $(e.node).find(":checkbox");
+						var checked = checkbox.prop("checked");
+						checkbox.prop("checked", !checked);          
 					}
 				});
 			}
@@ -378,12 +382,12 @@ function viewData() {
 	else {
 		var parameter_id = window.selected_parameter;
 		var checkedTreeViewCheckbox = $(".treeview-checkbox:checkbox:checked");
-		console.log(checkedTreeViewCheckbox);
-		var parsed = parseCheckedTreeViewCheckbox(checkedTreeViewCheckbox);
+		var paths = parseCheckedTreeViewCheckbox(checkedTreeViewCheckbox);
+		console.log(paths);
 		$.getJSON(
 			'/queryData',
 			{arg: JSON.stringify({
-				"structure" : parsed, 
+				"paths" : paths, 
 				"parameter_id" : parameter_id, 
 				"dates" : dates})},
 			function (response){
@@ -423,31 +427,22 @@ function validateDates(startDate, endDate) {
 }
 
 function parseCheckedTreeViewCheckbox(checkedTreeViewCheckbox) {
-	var nodesToQuery = {};
+	var treeview = $("#treeview").data("kendoTreeView");
+	ret = [];
 	checkedTreeViewCheckbox.each(function() {
+		var path = [this.value];
 		var layer = this.name;
-		var name = this.value;
-		if (layer in nodesToQuery) {
-			nodesToQuery[layer][name] = true;
+		var parent = treeview.parent(this);
+
+		for (var i = layer - 1; i >= 0; i --) {
+			var name = treeview.text(parent);
+			path.unshift(name);
+			parent = treeview.parent(parent);
+
 		}
-		else {
-			nodesToQuery[layer] = {};
-			nodesToQuery[layer][name] = true;
-		}
+		ret.push(path);
 	})
 
-	var ret = parseTreeViewCheckboxHelper(0, window.structure, nodesToQuery);
-	return ret;
-}
-
-function parseTreeViewCheckboxHelper(curr_layer, curr_structure, nodesToQuery) {
-	var ret = {};
-	for (var key in curr_structure) {
-		var checked = (curr_layer in nodesToQuery) && (key in nodesToQuery[curr_layer]);
-		ret[key] = {"checked" : checked, "children" : null, "layer" : curr_layer};
-		var res = parseTreeViewCheckboxHelper(curr_layer + 1, curr_structure[key], nodesToQuery);
-		ret[key]["children"] = res;
-	}
 	return ret;
 }
 
