@@ -154,6 +154,7 @@ def storeData(data, schema, node_name, parent_id, curr_time):
 						RETURN 
 							ID(o)
 			""".format(parent_id = parent_id, node_name = node_name, curr_time = curr_time)
+
 			result = graph.cypher.execute(query)
 			this_id = result[0]["ID(o)"]
 

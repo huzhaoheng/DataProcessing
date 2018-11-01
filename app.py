@@ -13,6 +13,7 @@ from time import gmtime, strftime, localtime
 import sys
 from aylienapiclient import textapi
 import MySQLdb
+import time
 
 http.socket_timeout = 9999
 
@@ -166,14 +167,31 @@ def setNodeProperties():
 @app.route('/getStructure')
 def getStructure():
     parameter_id = json.loads(request.args.get('arg'))['parameter_id']
+    # query = """
+    #             MATCH 
+    #                 (a:QueryParameter)-[:hasChild]->(b:Object)-[*]->(c:Object)-[:hasValue]->(d:Value)
+    #             WHERE
+    #                 ID(a) = {parameter_id}
+    #             WITH 
+    #                 (b), (c) 
+    #             MATCH 
+    #                 p = (b)-[*]-(c) 
+    #             RETURN p;
+    # """.format(parameter_id = parameter_id)
+
     query = """
                 MATCH 
-                    (a:QueryParameter)-[:hasChild]->(b:Object)-[*]->(c:Object)-[:hasValue]->(d:Value)
+                    p = (a:QueryParameter)-[:hasChild]->(b:Object)-[*]->(c:Object)-[:hasValue]->(d:Value)
                 WHERE
                     ID(a) = {parameter_id}
-                WITH (b), (c) MATCH p = (b)-[*]-(c) return p;
+                RETURN 
+                    p;
     """.format(parameter_id = parameter_id)
+    start = time.time()
     result = graph.cypher.execute(query)
+    print ("query executed")
+    print (time.time() - start)
+    start = time.time()
     ret = {}
     for path in result:
         curr = ret
@@ -185,32 +203,10 @@ def getStructure():
                 curr[node_name] = {}
 
             curr = curr[node_name]
+    print ("returning")
+    print (time.time() - start)
 
     return jsonify(elements = ret)
-
-# @app.route('/queryData')
-# def queryData():
-#     structure = json.loads(request.args.get('arg'))['structure']
-#     parameter_id = json.loads(request.args.get('arg'))['parameter_id']
-#     dates = json.loads(request.args.get('arg'))['dates']
-#     startDate = dates['startDate']
-#     endDate = dates['endDate']
-#     ret = {"data" : {}, "queries" : []}
-#     queries = queryBuilder(structure, parameter_id, startDate, endDate)
-#     for [node_alias, query] in queries:
-#         value_alias = node_alias + "_value"
-#         obj_id_alias = node_alias + "_obj_id"
-#         result = graph.cypher.execute(query)
-#         ret["queries"].append(' '.join(query.split()))
-#         for each in result:
-#             value = each[value_alias]
-#             obj_id = each[obj_id_alias]
-#             if obj_id not in ret["data"]:
-#                 ret["data"][obj_id] = {}
-#             if node_alias not in ret["data"][obj_id]:
-#                 ret["data"][obj_id][node_alias] = []
-#             ret["data"][obj_id][node_alias].append(value)
-#     return jsonify(elements = ret)
 
 @app.route('/queryData')
 def queryData():
