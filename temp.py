@@ -120,6 +120,12 @@ def connectNodes(source_id, target_id, rel_name):
 	graph.cypher.execute(query)
 
 def storeData(data, schema, node_name, parent_id, curr_time):
+	# print (data)
+	# print (schema)
+	# print ('-----------------------------')
+	if not data:
+		return
+		
 	if "anyOf" in schema:
 		new_schema = None
 		sub_schemas = schema["anyOf"]
@@ -153,7 +159,8 @@ def storeData(data, schema, node_name, parent_id, curr_time):
 
 			if "properties" in schema:
 				for node_name, node_schema in schema["properties"].items():
-					storeData(data[node_name], node_schema, node_name, this_id, curr_time)
+					if node_name in data:
+						storeData(data[node_name], node_schema, node_name, this_id, curr_time)
 			else:
 				pass
 
@@ -242,7 +249,7 @@ if __name__ == '__main__':
 	query_structure = json.load(open('sample_structure.json', 'r'))
 	query_name = query_structure['name']
 	parsed_parameters = parameterParser(query_structure)
-	data = json.load(open('data.json', 'rb'))
+	data = json.load(open('30tweets.json', 'rb'))
 	builder.add_object(data)
 	schema = builder.to_schema()
 	json.dump(schema, open("schema.json", "w"))

@@ -315,6 +315,7 @@ function viewParameter(parameter_id) {
 }
 
 function viewStructure(parameter_id) {
+	kendo.ui.progress($(document.body), true);
 	$.getJSON(
 		'/getStructure',
 		{arg: JSON.stringify({"parameter_id" : parameter_id})},
@@ -340,6 +341,7 @@ function viewStructure(parameter_id) {
 					}
 				});
 			}
+			kendo.ui.progress($(document.body), false);
 			return;
 		}
 	)
@@ -376,6 +378,7 @@ function viewData() {
 	else {
 		var parameter_id = window.selected_parameter;
 		var checkedTreeViewCheckbox = $(".treeview-checkbox:checkbox:checked");
+		console.log(checkedTreeViewCheckbox);
 		var parsed = parseCheckedTreeViewCheckbox(checkedTreeViewCheckbox);
 		$.getJSON(
 			'/queryData',
@@ -384,10 +387,13 @@ function viewData() {
 				"parameter_id" : parameter_id, 
 				"dates" : dates})},
 			function (response){
-				var data = response.elements;
+				var result = response.elements;
+				var data = result["data"];
+				var queries = result["queries"];
 				var message_type = "success";
 				var message = "Great! Successfully loaded your data!";
 				loadMessage(message, message_type);
+				console.log(queries);
 				loadSpreadSheet(data);
 			}
 		)	

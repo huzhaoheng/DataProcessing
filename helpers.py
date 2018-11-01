@@ -30,19 +30,6 @@ def queryBuilderHelper(curr_structure, parameter_id, startDate, endDate, query):
 			if checked:
 				startDataCondition = "date(split(v.collected_at, ' ')[0]) >= date('{startDate}')".format(startDate = startDate) if startDate else "true"
 				endDateCondition = "date(split(v.collected_at, ' ')[0]) <= date('{endDate}')".format(endDate = endDate) if endDate else "true"
-				# end_part = """-[:hasValue]->(v:Value) 
-				# 				WHERE 
-				# 					{startDataCondition}
-				# 				AND
-				# 					{endDateCondition}
-				# 				RETURN 
-				# 					v.value AS {alias}_value
-				# 			""".format(
-				# 				startDataCondition = startDataCondition, 
-				# 				endDateCondition = endDateCondition,
-				# 				alias = node_alias)
-
-
 				end_part = """-[:hasValue]->(v:Value) 
 								WHERE 
 									{startDataCondition}

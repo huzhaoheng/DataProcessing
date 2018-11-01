@@ -195,20 +195,21 @@ def queryData():
     dates = json.loads(request.args.get('arg'))['dates']
     startDate = dates['startDate']
     endDate = dates['endDate']
-    ret = {}
+    ret = {"data" : {}, "queries" : []}
     queries = queryBuilder(structure, parameter_id, startDate, endDate)
     for [node_alias, query] in queries:
         value_alias = node_alias + "_value"
         obj_id_alias = node_alias + "_obj_id"
         result = graph.cypher.execute(query)
+        ret["queries"].append(' '.join(query.split()))
         for each in result:
             value = each[value_alias]
             obj_id = each[obj_id_alias]
-            if obj_id not in ret:
-                ret[obj_id] = {}
-            if node_alias not in ret[obj_id]:
-                ret[obj_id][node_alias] = []
-            ret[obj_id][node_alias].append(value)
+            if obj_id not in ret["data"]:
+                ret["data"][obj_id] = {}
+            if node_alias not in ret["data"][obj_id]:
+                ret["data"][obj_id][node_alias] = []
+            ret["data"][obj_id][node_alias].append(value)
     return jsonify(elements = ret)
 
 @app.route('/storeFormula')
