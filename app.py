@@ -389,37 +389,45 @@ def saveSheets():
     columns = json.loads(request.args.get('arg'))['columns']
     derivedTableName = "_".join([username, originalTableName])
 
-    query = "SELECT * FROM OWNERS WHERE derivedTableName = '{derivedTableName}'".format(derivedTableName = derivedTableName)
-    cursor.execute(query)
-    db.commit()
-    result = cursor.fetchall()
-    if len(result) == 0:
-        query = "CREATE TABLE IF NOT EXISTS {table} ({columns} TEXT);".format(table = derivedTableName, columns = " TEXT, ".join(columns))
+    status = "success"
+    message = "Table saved"
+    try:
+        query = "SELECT * FROM OWNERS WHERE derivedTableName = '{derivedTableName}'".format(derivedTableName = derivedTableName)
         cursor.execute(query)
-        query = "ALTER TABLE {table} CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;".format(table = derivedTableName)
-        cursor.execute(query)
-        query = """
-            INSERT INTO 
-                OWNERS (username, originalTableName, derivedTableName) 
-            VALUES ('{username}', '{originalTableName}', '{derivedTableName}');
-            """.format(
-                username = username,
-                originalTableName = originalTableName,
-                derivedTableName = derivedTableName
-            )
-        cursor.execute(query)
+        db.commit()
+        result = cursor.fetchall()
+        if len(result) == 0:
+            query = "CREATE TABLE IF NOT EXISTS {table} ({columns} TEXT);".format(table = derivedTableName, columns = " TEXT, ".join(columns))
+            cursor.execute(query)
+            query = "ALTER TABLE {table} CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;".format(table = derivedTableName)
+            cursor.execute(query)
+            query = """
+                INSERT INTO 
+                    OWNERS (username, originalTableName, derivedTableName) 
+                VALUES ('{username}', '{originalTableName}', '{derivedTableName}');
+                """.format(
+                    username = username,
+                    originalTableName = originalTableName,
+                    derivedTableName = derivedTableName
+                )
+            cursor.execute(query)
 
-    for each in data:
-        query = "INSERT INTO {table} ({columns}) VALUES (".format(table = derivedTableName, columns = ", ".join(columns))
-        for column in columns:
-            query += " '{value}',".format(value = each[column].replace("'", "''")) if each[column] else " NULL,"
+        for each in data:
+            query = "INSERT INTO {table} ({columns}) VALUES (".format(table = derivedTableName, columns = ", ".join(columns))
+            for column in columns:
+                query += " '{value}',".format(value = each[column].replace("'", "''")) if each[column] else " NULL,"
 
-        query = query[:-1] + ");"
-        cursor.execute(query)
+            query = query[:-1] + ");"
+            cursor.execute(query)
 
-    db.commit()
+        db.commit()
+    except Exception as e:
+        message = str(e)
+        status = "failure"
+        
+    ret = {"status" : status, "message" : message}
 
-    return jsonify(elements = {"message" : "Done"})
+    return jsonify(elements = ret)
 
 @app.route('/getStoredTables')
 def getStoredTables():
@@ -486,6 +494,45 @@ def runQuery():
     except Exception as e:
         ret['message'] = str(e)
 
+    return jsonify(elements = ret)
+
+@app.route('/deleteTable')
+def deleteTable():
+    originalTableName = json.loads(request.args.get('arg'))['originalTableName']
+    derivedTableName = json.loads(request.args.get('arg'))['derivedTableName']
+    username = json.loads(request.args.get('arg'))['username']
+    message = "Table {originalTableName} deleted".format(originalTableName = originalTableName)
+    status = "success"
+    query = """
+            DELETE FROM 
+                OWNERS 
+            WHERE 
+                username = '{username}' 
+                AND 
+                originalTableName = '{originalTableName}'
+                AND
+                derivedTableName = '{derivedTableName}'
+    """.format(username = username, originalTableName = originalTableName, derivedTableName = derivedTableName)
+    try:
+        query = """
+            DELETE FROM 
+                OWNERS 
+            WHERE 
+                username = '{username}' 
+                AND 
+                originalTableName = '{originalTableName}'
+                AND
+                derivedTableName = '{derivedTableName}'
+        """.format(username = username, originalTableName = originalTableName, derivedTableName = derivedTableName)
+        cursor.execute(query)
+        query = "DROP TABLE {derivedTableName}".format(derivedTableName = derivedTableName)
+        cursor.execute(query)
+        db.commit()
+    except Exception as e:
+        message = str(e)
+        status = "failure"
+
+    ret = {"status" : status, "message" : message}
     return jsonify(elements = ret)
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'

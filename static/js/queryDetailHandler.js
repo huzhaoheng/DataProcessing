@@ -287,6 +287,10 @@ function prepareData(data) {
 			var row = {cells: []};
 			properties.forEach(function (property) {
 				var value = raw_row[property];
+				if (Array.isArray(value)) {
+					value = value.join();
+				}
+
 				row['cells'].push({value: value, textAlign: 'center'});
 			});
 			rows.push(row);

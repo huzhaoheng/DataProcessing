@@ -141,13 +141,23 @@ function loadStoredSheetsGrid() {
 						field: "derivedTableName"
 					},{
 						command : [{
-							name : "View Sheet",
+							name : "View Table",
 							iconClass: "k-icon k-i-eye",
 							click : function (e) {
 								e.preventDefault();
 								var tr = $(e.target).closest("tr");
 								var data = this.dataItem(tr);
 								loadStoredTable(data["originalTableName"]);
+								return;
+							}
+						},{
+							name : "Delete Table",
+							iconClass: "k-icon k-i-delete",
+							click : function (e) {
+								e.preventDefault();
+								var tr = $(e.target).closest("tr");
+								var data = this.dataItem(tr);
+								deleteStoredTable(data["originalTableName"], data["derivedTableName"]);
 								return;
 							}
 						}]
@@ -185,6 +195,39 @@ function loadStoredTable(table) {
 			}
 			spreadsheet.fromJSON(data);
 			spreadsheet.activeSheet(spreadsheet.sheets()[activateID]);
+			return;
+		}
+	)
+}
+
+function deleteStoredTable(originalTableName, derivedTableName) {
+	$.getJSON(
+		'/deleteTable',
+		{
+			arg: JSON.stringify({
+				"originalTableName" : originalTableName, 
+				"derivedTableName" : derivedTableName,
+				"username" : window.username
+			})
+		},
+		function (response){
+			var result = response.elements;
+			var status = result['status'];
+			var message = result['message'];
+			loadMessage(message, status);
+			if (status == "success") {
+				loadStoredSheetsGrid();
+				var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+				var data = spreadsheet.toJSON();
+				var check = sheetLoaded(data, {"name" : originalTableName});
+				if (check["loaded"]) {
+					var index = check["index"];
+					data['sheets'].splice(index, 1);
+					activateID = 0;
+					spreadsheet.fromJSON(data);
+					spreadsheet.activeSheet(spreadsheet.sheets()[activateID]);
+				}
+			}
 			return;
 		}
 	)
@@ -268,7 +311,9 @@ function saveSheet() {
 			function (response){
 				var result = response.elements;
 				loadStoredSheetsGrid();
-				loadMessage("Sheet Saved.", "success");
+				var status = result['status'];
+				var message = result['message'];
+				loadMessage(message, status);
 				return;
 			}
 		)
