@@ -26,43 +26,68 @@ function initCodingArea() {
 
 function loadCurrentSheetsGrid() {
 	var sheets = window.opener.sharedObjectToManageSheets['sheets'];
-	var data = sheets.map(function (sheet, index) {
-		return {
-			"ID" : index,
-			"Name" : sheet['name']
-		};
-	})
-	$("#currentSheetsGrid").kendoGrid({
-		columns: [{
-			field: "ID"
-		},{
-			field: "Name"
-		},{
-			command : [{
-				name : "View Sheet",
-				iconClass: "k-icon k-i-eye",
-				click : function (e) {
-					e.preventDefault();
-					var tr = $(e.target).closest("tr");
-					var data = this.dataItem(tr);
-					loadCurrentSheet(data["ID"]);
-					return;
-				}
-			}]
-		}],
-		dataSource: {
-			data: data,
-			schema : {
-				model : {
-					id : "ID",
-					fields: {
-						Name: {type: "string"},
-						ID: {type: "integer"}
+	if (sheets == undefined) {
+		$("#currentSheetsGrid").kendoGrid({
+			columns: [{
+				field: "ID"
+			},{
+				field: "Name"
+			},{
+				command : [{
+					name : "View Sheet",
+					iconClass: "k-icon k-i-eye",
+					click : function (e) {
+						e.preventDefault();
+						var tr = $(e.target).closest("tr");
+						var data = this.dataItem(tr);
+						loadCurrentSheet(data["ID"]);
+						return;
 					}
-				}
-			} 
-		}
-	})
+				}]
+			}],
+			dataSource: null
+		})
+		return;
+	}
+	else {
+		var data = sheets.map(function (sheet, index) {
+			return {
+				"ID" : index,
+				"Name" : sheet['name']
+			};
+		})
+		$("#currentSheetsGrid").kendoGrid({
+			columns: [{
+				field: "ID"
+			},{
+				field: "Name"
+			},{
+				command : [{
+					name : "View Sheet",
+					iconClass: "k-icon k-i-eye",
+					click : function (e) {
+						e.preventDefault();
+						var tr = $(e.target).closest("tr");
+						var data = this.dataItem(tr);
+						loadCurrentSheet(data["ID"]);
+						return;
+					}
+				}]
+			}],
+			dataSource: {
+				data: data,
+				schema : {
+					model : {
+						id : "ID",
+						fields: {
+							Name: {type: "string"},
+							ID: {type: "integer"}
+						}
+					}
+				} 
+			}
+		})
+	}		
 }
 
 function loadCurrentSheet(ID) {
@@ -105,11 +130,13 @@ function loadStoredSheetsGrid() {
 			var result = response.elements;
 			var originalTableNameList = result['originalTableNameList'];
 			var derivedTableNameList = result['derivedTableNameList'];
+			var sizeList = result['sizeList'];
 			var data = originalTableNameList.map(function (originalTableName, index) {
 				return {
 					"ID" : index,
 					"originalTableName" : originalTableName,
-					"derivedTableName" : derivedTableNameList[index]
+					"derivedTableName" : derivedTableNameList[index],
+					"size" : sizeList[index]
 				};
 			})
 
@@ -121,6 +148,7 @@ function loadStoredSheetsGrid() {
 							fields: {
 								originalTableName: {type: "string"},
 								derivedTableName : {type: "string"},
+								sizeList: {type: "integer"},
 								ID: {type: "integer"}
 							}
 						}
@@ -139,6 +167,9 @@ function loadStoredSheetsGrid() {
 						field: "originalTableName"
 					},{
 						field: "derivedTableName"
+					},{
+						field: "size",
+						title: "Size (KB)"
 					},{
 						command : [{
 							name : "View Table",

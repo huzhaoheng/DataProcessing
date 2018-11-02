@@ -119,10 +119,83 @@ def connectNodes(source_id, target_id, rel_name):
 	)
 	graph.cypher.execute(query)
 
+def validateDataStructure(parent_id, schema, node_name):
+	if "anyOf" in schema:
+		new_schema = None
+		sub_schemas = schema["anyOf"]
+		for sub_schema in sub_schemas:
+			if sub_schema["type"] != "null":
+				new_schema = sub_schema
+				break
+
+		validateDataStructure(parent_id, new_schema, node_name)
+	
+	else:
+		data_type = schema["type"]
+		if data_type == "object":
+			query = """
+						MATCH
+							(x)
+						WHERE
+							ID(x) = {parent_id}
+						WITH
+							(x)
+						MERGE
+							(x)-[r:hasChild]->(o:StructureObject {{node_name : '{node_name}'}})
+						RETURN 
+							ID(o)
+			""".format(parent_id = parent_id, node_name = node_name)
+
+			result = graph.cypher.execute(query)
+			this_id = result[0]["ID(o)"]
+
+			if "properties" in schema:
+				for node_name, node_schema in schema["properties"].items():
+					validateDataStructure(this_id, node_schema, node_name)
+			
+
+		elif data_type == "array":
+			try:
+				items = schema['items']
+				new_schema = None
+				if "anyOf" in items:
+					sub_schemas = schema["anyOf"]
+					for sub_schema in sub_schemas:
+						if sub_schema["type"] != "null":
+							new_schema = sub_schema
+							break
+				else:
+					new_schema = schema["items"]
+
+				validateDataStructure(parent_id, new_schema, node_name)
+
+			except Exception as e:
+				pass
+			
+
+
+		elif type(data_type) is list:
+			nonnull_type = None
+			for each in data_type:
+				if each != "null":
+					nonnull_type = each
+
+			validateDataStructure(parent_id, {"type" : nonnull_type}, node_name)
+
+		else:
+			query = """
+						MATCH
+							(x)
+						WHERE
+							ID(x) = {parent_id}
+						WITH
+							(x)
+						MERGE
+							(x)-[:hasChild]->(o:StructureObject {{node_name : '{node_name}'}})
+			""".format(parent_id = parent_id, node_name = node_name)
+			graph.cypher.execute(query)
+
 def storeData(data, schema, node_name, parent_id, curr_time):
-	# print (data)
-	# print (schema)
-	# print ('-----------------------------')
 	if not data:
 		return
 		
@@ -244,22 +317,21 @@ def parameterParser(structure):
                 ret[k] = v
         return ret
 
-
 if __name__ == '__main__':
 	username = 'hu61'
 	query_structure = json.load(open('sample_structure.json', 'r'))
 	query_name = query_structure['name']
 	parsed_parameters = parameterParser(query_structure)
-	data = json.load(open('30tweets.json', 'rb'))
+	data = json.load(open('formated.json', 'rb'))
 	builder.add_object(data)
 	schema = builder.to_schema()
 	json.dump(schema, open("schema.json", "w"))
 
-	# exit()
 	user_id = validateUserNode(username)
 	query_id = validateQueryNode(username, query_name)
 	parameter_id = validateParameterNode(schema, username, query_name, parsed_parameters)
 	connectNodes(user_id, query_id, "hasQuery")
 	connectNodes(query_id, parameter_id, "hasParameter")
+	validateDataStructure(parameter_id, schema, "root")
 	curr_time = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 	storeData(data, schema, "root", parameter_id, curr_time)

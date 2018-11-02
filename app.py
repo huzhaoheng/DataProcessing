@@ -13,7 +13,6 @@ from time import gmtime, strftime, localtime
 import sys
 from aylienapiclient import textapi
 import MySQLdb
-import time
 
 http.socket_timeout = 9999
 
@@ -181,31 +180,27 @@ def getStructure():
 
     query = """
                 MATCH 
-                    p = (a:QueryParameter)-[:hasChild]->(b:Object)-[*]->(c:Object)-[:hasValue]->(d:Value)
+                    p = (a:QueryParameter)-[:hasChild]->(b:StructureObject)-[*]->(c:StructureObject)
                 WHERE
                     ID(a) = {parameter_id}
+                AND
+                    NOT((c)-[:hasChild]->(:StructureObject))
                 RETURN 
                     p;
     """.format(parameter_id = parameter_id)
-    start = time.time()
     result = graph.cypher.execute(query)
-    print ("query executed")
-    print (time.time() - start)
-    start = time.time()
     ret = {}
     for path in result:
         curr = ret
         nodes = path["p"].nodes
-        for node in nodes:
+        for node in nodes[1:]:
             props = node.properties
             node_name = props["node_name"]
             if node_name not in curr:
                 curr[node_name] = {}
 
             curr = curr[node_name]
-    print ("returning")
-    print (time.time() - start)
-
+    
     return jsonify(elements = ret)
 
 @app.route('/queryData')
@@ -217,9 +212,6 @@ def queryData():
     endDate = dates['endDate']
     ret = {"data" : {}, "queries" : []}
     queries = [queryBuilder(path, parameter_id, startDate, endDate) for path in paths]
-    # for path in paths:
-    #     query = 
-    # queries = queryBuilder(paths, parameter_id, startDate, endDate)
     for each in queries:
         node_alias = each["alias"]
         query = each["query"]
@@ -467,7 +459,28 @@ def getStoredTables():
     originalTableNameList = [each[0] for each in result]
     derivedTableNameList = [each[1] for each in result]
 
-    return jsonify(elements = {"originalTableNameList" : originalTableNameList, "derivedTableNameList" : derivedTableNameList})
+    sizeList = []
+    for derivedTableName in derivedTableNameList:
+        query = """
+            SELECT
+                CAST(ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024 ) AS UNSIGNED) AS `Size (KB)`
+            FROM
+                information_schema.TABLES
+            WHERE
+                TABLE_SCHEMA = "ListenOnline"
+            AND
+                TABLE_NAME = "{tableName}"
+            ORDER BY
+                (DATA_LENGTH + INDEX_LENGTH)
+            DESC;
+        """.format(tableName = derivedTableName)
+        cursor.execute(query)
+
+        db.commit()
+        result = cursor.fetchall()
+        sizeList.append(result[0][0])
+
+    return jsonify(elements = {"originalTableNameList" : originalTableNameList, "derivedTableNameList" : derivedTableNameList, "sizeList" : sizeList})
 
 @app.route('/loadTable')
 def loadTable():

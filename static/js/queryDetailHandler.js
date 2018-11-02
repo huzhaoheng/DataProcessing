@@ -383,7 +383,6 @@ function viewData() {
 		var parameter_id = window.selected_parameter;
 		var checkedTreeViewCheckbox = $(".treeview-checkbox:checkbox:checked");
 		var paths = parseCheckedTreeViewCheckbox(checkedTreeViewCheckbox);
-		console.log(paths);
 		$.getJSON(
 			'/queryData',
 			{arg: JSON.stringify({
@@ -397,7 +396,6 @@ function viewData() {
 				var message_type = "success";
 				var message = "Great! Successfully loaded your data!";
 				loadMessage(message, message_type);
-				console.log(queries);
 				loadSpreadSheet(data);
 			}
 		)	
@@ -487,7 +485,9 @@ function manageSheets() {
 
 function updateSharedObjectToManageSheets() {
 	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-	var data = spreadsheet.toJSON();
 	window.sharedObjectToManageSheets = {'sheets':null};
-	window.sharedObjectToManageSheets['sheets'] = data['sheets'];
+	if (spreadsheet != undefined) {
+		var data = spreadsheet.toJSON();
+		window.sharedObjectToManageSheets['sheets'] = data['sheets'];
+	}
 }
