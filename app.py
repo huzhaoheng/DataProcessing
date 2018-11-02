@@ -576,6 +576,10 @@ def deleteTable():
     ret = {"status" : status, "message" : message}
     return jsonify(elements = ret)
 
+@app.route('/visualQueryBuilder')
+def visualQueryBuilder():
+    return render_template('visualQueryBuilder.html')
+
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 if __name__ == '__main__':

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>Query viewer</title>
+
+    <!-- Add Popoto default CSS styles -->
+    <link rel="stylesheet" href="https://unpkg.com/popoto/dist/popoto.min.css">
+    <style>
+        #popoto-graph:fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-moz-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        #popoto-graph:-ms-fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        .ppt-div-graph{
+            height: 50%;
+        }
+    </style>
+</head>
+<body class="ppt-body">
+
+<section class="ppt-section-main" style="height: 800px">
+    <div class="ppt-section-header">
+        <span class="ppt-header-span">Neo4j movie graph -</span> Query viewer example
+    </div>
+
+    <!-- By default the graph is generated on the HTML element with ID "popoto-graph"
+     If needed this id can be modified with property "popoto.graph.containerId" -->
+
+    <div id="popoto-graph" class="ppt-div-graph">
+        <!-- Graph is generated here -->
+    </div>
+
+    <!-- By default the query viewer is generated on the HTML element with ID "popoto-query"
+     If needed this id can be modified with property "popoto.queryviewer.containerId" -->
+
+    <div id="popoto-query" class="ppt-container-query">
+        <!-- Query viewer is generated here -->
+    </div>
+
+    <div id="popoto-cypher" class="ppt-container-query">
+        <!-- Query viewer is generated here -->
+    </div>
+
+    <!-- Add a header with total number of results count -->
+    <div class="ppt-section-header">
+        RESULTS <span id="rescount" class="ppt-count"></span>
+    </div>
+
+     <div id="popoto-results" class="ppt-container-results">
+        <!-- Results are generated here -->
+    </div>
+
+</section>
+
+<!-- Required scripts -->
+<script src="https://unpkg.com/jquery" charset="utf-8"></script>
+<script src="https://unpkg.com/d3" charset="utf-8"></script>
+<script src="https://unpkg.com/popoto" charset="utf-8"></script>
+<script>
+
+    // Demo Neo4j database settings hosted on GrapheneDb
+    popoto.rest.CYPHER_URL = "http://10.195.4.127:7474/db/data/transaction/commit";
+    //popoto.rest.CYPHER_URL = "http://localhost:7474/db/data/transaction/commit";
+    popoto.rest.AUTHORIZATION = "Basic " + btoa("neo4j:123456");
+
+    // Define the list of label provider to customize the graph behavior:
+    // Only two labels are used in Neo4j movie graph example: "Movie" and "Person"
+    popoto.provider.node.Provider = {
+        "Value": {
+            "returnAttributes": ["value", "collected_at"],
+            "constraintAttribute": "value",
+        },
+        "Object": {
+            "returnAttributes": ["node_name", "collected_at"],
+            "constraintAttribute": "node_name",
+        },
+        "SystemUser": {
+            "returnAttributes": ["username"],
+            "constraintAttribute": "username",
+        },
+        "Query": {
+            "returnAttributes": ["name", "username", "comment"],
+            "constraintAttribute": "name",
+        },
+        "QueryParameter": {
+            "returnAttributes": ["comment", "query_name", "username"],
+            "constraintAttribute": "comment",
+        },
+        "StructureObject": {
+            "returnAttributes": ["node_name"],
+            "constraintAttribute": "node_name",
+        }
+    };
+    // Change the number of displayed results:
+    popoto.result.RESULTS_PAGE_SIZE = 20;
+
+    popoto.result.onTotalResultCount(function (count) {
+        d3.select("#rescount").text(function (d) {
+            return "(" + count + ")";
+        })
+    });
+
+    // Start the generation using parameter as root label of the query.
+    popoto.start("SystemUser");
+
+</script>
+</body>
+</html>
