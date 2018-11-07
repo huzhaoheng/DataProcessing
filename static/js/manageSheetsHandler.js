@@ -319,7 +319,7 @@ function convertTableToSheet(tableName, tableData, columns) {
 	return sheet;
 }
 
-function saveSheet() {
+/*function saveSheet() {
 	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
 	var data = spreadsheet.toJSON();
 	var activeSheetName = data['activeSheet'];
@@ -352,46 +352,87 @@ function saveSheet() {
 		return;
 	})
 	return;
+}*/
+
+function toColumnName(num) {
+	for (var ret = '', a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
+		ret = String.fromCharCode(parseInt((num % b) / a) + 65) + ret;
+	}
+	return ret;
+}
+
+function saveSheet() {
+	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+	var sheets = spreadsheet.toJSON();
+	var activeSheetName = sheets['activeSheet'];
+	var activeSheet = null;
+	var sheets = sheets['sheets'];
+	for (var i = 0; i < sheets.length; i ++) {
+		if (sheets[i]['name'] == activeSheetName) {
+			activeSheet = sheets[i];
+			break;
+		}
+	}
+
+	var rows = activeSheet['rows'];
+	var cols = rows[0]['cells'].map(function (cell) {
+		return cell['value'];
+	});
+
+	rowNum = rows.length;
+	colNum = cols.length;
+
+	var range = spreadsheet.activeSheet().range("A2:" + toColumnName(colNum) + rowNum.toString());
+	var data = range.values();
+	var parsedSheet = parseSheet(data, cols);
+
+	promptFunction("Please enter a name:", activeSheetName).then(function (name) {
+		$.getJSON(
+			'/saveSheets',
+			{arg: JSON.stringify({"name" : name, "data" : parsedSheet, "columns" : cols, "username" : window.username})},
+			function (response){
+				var result = response.elements;
+				loadStoredSheetsGrid();
+				var status = result['status'];
+				var message = result['message'];
+				loadMessage(message, status);
+				return;
+			}
+		)
+	}, function () {
+		return;
+	})
+	return;
 }
 
 function promptFunction(content, defaultValue){
 	return $("<div></div>").kendoPrompt({
-		title: "My Title",
+		title: "Options",
 		value: defaultValue,
 		content: content
 	}).data("kendoPrompt").open().result;
 }
 
-function parseSheet(sheet) {
+function parseSheet(data, cols) {
 	var parsedSheet = []; 
-	var rows = sheet['rows'];
-	columns = [];
-	rows[0]['cells'].forEach(function (each) {
-		var column = each['value'];
-		columns.push(column); 
-	});
-	for (var i = 1; i < rows.length; i ++) {
-		var row = rows[i];
+	for (var i = 0; i < data.length; i ++) {
+		var row = data[i];
 		var parsedRow = {};
-		columns.forEach(function (column, index) {
-			if (row['cells'][index]['value'] != undefined) {
-				var value = row['cells'][index]['value'];
-				if (Array.isArray(value)) {
-					parsedRow[column] = row['cells'][index]['value'].join();
-				}
-				else {
-					parsedRow[column] = row['cells'][index]['value'];
-				}
-				
+		cols.forEach(function (column, index) {
+			var value = row[index];
+			if (column == "SystemID") {
+				parsedRow[column] = parseInt(value);
 			}
+			else if (value != null) {
+				parsedRow[column] = value.toString();
+			} 
 			else {
 				parsedRow[column] = null;
 			}
-			
 		})
 		parsedSheet.push(parsedRow);
 	}
-	return {"parsedSheet" : parsedSheet, "columns" : columns};
+	return parsedSheet;
 }
 
 function loadFormula() {
@@ -442,7 +483,7 @@ function runQuery() {
 	var query = window.editor.getValue();
 	$.getJSON(
 		'/runQuery',
-		{arg: JSON.stringify({"query" : query})},
+		{arg: JSON.stringify({"query" : query, "username" : window.username})},
 		function (response){
 			var result = response.elements;
 			var message = result["message"];

@@ -12,6 +12,9 @@ from py2neo.packages.httpstream import http
 from time import gmtime, strftime, localtime
 import sys
 from aylienapiclient import textapi
+import pymysql
+pymysql.install_as_MySQLdb()
+
 import MySQLdb
 
 http.socket_timeout = 9999
@@ -417,7 +420,7 @@ def saveSheets():
         db.commit()
         result = cursor.fetchall()
         if len(result) == 0:
-            query = "CREATE TABLE IF NOT EXISTS {table} ({columns} TEXT);".format(table = derivedTableName, columns = " TEXT, ".join(columns))
+            query = "CREATE TABLE IF NOT EXISTS {table} (SystemID int NOT NULL AUTO_INCREMENT, {columns} TEXT, PRIMARY KEY (SystemID));".format(table = derivedTableName, columns = " TEXT, ".join(columns))
             cursor.execute(query)
             query = "ALTER TABLE {table} CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;".format(table = derivedTableName)
             cursor.execute(query)
@@ -432,13 +435,42 @@ def saveSheets():
                 )
             cursor.execute(query)
 
-        for each in data:
-            query = "INSERT INTO {table} ({columns}) VALUES (".format(table = derivedTableName, columns = ", ".join(columns))
-            for column in columns:
-                query += " '{value}',".format(value = each[column].replace("'", "''")) if each[column] else " NULL,"
+            for each in data:
+                query = "INSERT INTO {table} ({columns}) VALUES (".format(table = derivedTableName, columns = ", ".join(columns))
+                for column in columns:
+                    query += " '{value}',".format(value = each[column].replace("'", "''")) if each[column] else " NULL,"
 
-            query = query[:-1] + ");"
-            cursor.execute(query)
+                query = query[:-1] + ");"
+                cursor.execute(query)
+
+        else:
+            if 'SystemID' not in columns:
+                for each in data:
+                    query = "REPLACE INTO {table} ({columns}) VALUES (".format(table = derivedTableName, columns = ", ".join(columns))
+                    for column in columns:
+                        query += " '{value}',".format(value = each[column].replace("'", "''")) if each[column] else " NULL,"
+
+                    query = query[:-1] + ");"
+                    cursor.execute(query)
+
+            else:
+                for each in data:
+                    if each['SystemID']:
+                        query = "REPLACE INTO {table} ({columns}) VALUES (".format(table = derivedTableName, columns = ", ".join(columns))
+                        for column in columns:
+                            if column != "SystemID":
+                                query += " '{value}',".format(value = each[column].replace("'", "''")) if each[column] else " NULL,"
+                            else:
+                                query += " {value},".format(value = str(each[column]))
+                    else:
+                        columnListWithoutSystemID = [col for col in columns if col != "SystemID"]
+                        query = "REPLACE INTO {table} ({columns}) VALUES (".format(table = derivedTableName, columns = ", ".join(columnListWithoutSystemID))
+                        for column in columns:
+                            if column != "SystemID":
+                                query += " '{value}',".format(value = each[column].replace("'", "''")) if each[column] else " NULL,"                        
+    
+                    query = query[:-1] + ");"
+                    cursor.execute(query)
 
         db.commit()
     except Exception as e:
@@ -523,7 +555,21 @@ def loadTable():
 
 @app.route('/runQuery')
 def runQuery():
-    query = json.loads(request.args.get('arg'))['query']
+    userQuery = json.loads(request.args.get('arg'))['query']
+    username = json.loads(request.args.get('arg'))['username']
+    query = "SELECT originalTableName, derivedTableName FROM OWNERS WHERE username = '{username}';".format(username = username)
+    cursor.execute(query)
+    db.commit()
+    result = cursor.fetchall()
+    prefix = ""
+    if len(result) > 0:
+        prefix = "WITH "
+        for each in result:
+            prefix += "{originalTableName} AS (SELECT * FROM {derivedTableName}),".format(originalTableName = each[0], derivedTableName  = each[1])
+
+        prefix = prefix[:-1] + " "
+
+    query = prefix + userQuery
     ret = {"message" : None, "data" : []}
     try:
         cursor.execute(query)
