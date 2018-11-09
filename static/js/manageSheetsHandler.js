@@ -203,14 +203,16 @@ function loadStoredSheetsGrid() {
 }
 
 function loadStoredTable(table) {
+	console.log(table);
 	$.getJSON(
 		'/loadTable',
 		{arg: JSON.stringify({"table" : table, "username" : window.username})},
 		function (response){
 			var result = response.elements;
-			var tableData = result['data'];
+			var data = result['data'];
 			var columns = result['columns'];
-			var sheet = convertTableToSheet(table, tableData, columns);
+			// var sheet = convertTableToSheet(table, data, columns);
+			var sheet = convertTableToSheet(table, data);
 			var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
 			var data = spreadsheet.toJSON();
 			var check = sheetLoaded(data, sheet);
@@ -264,7 +266,7 @@ function deleteStoredTable(originalTableName, derivedTableName) {
 	)
 }
 
-function convertTableToSheet(tableName, tableData, columns) {
+/*function convertTableToSheet(tableName, tableData, columns) {
 	var rows = [];
 	var fields = [];
 
@@ -317,42 +319,64 @@ function convertTableToSheet(tableName, tableData, columns) {
 	
 	var sheet = {"name" : tableName, "rows" : rows};
 	return sheet;
-}
-
-/*function saveSheet() {
-	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-	var data = spreadsheet.toJSON();
-	var activeSheetName = data['activeSheet'];
-	var activeSheet = null;
-	var sheets = data['sheets'];
-	for (var i = 0; i < sheets.length; i ++) {
-		if (sheets[i]['name'] == activeSheetName) {
-			activeSheet = sheets[i];
-			break;
-		}
-	}
-	var result = parseSheet(activeSheet);
-	parsedSheet = result["parsedSheet"];
-	columns = result["columns"];
-
-	promptFunction("Please enter a name:", activeSheetName).then(function (data) {
-		$.getJSON(
-			'/saveSheets',
-			{arg: JSON.stringify({"name" : data, "data" : parsedSheet, "columns" : columns, "username" : window.username})},
-			function (response){
-				var result = response.elements;
-				loadStoredSheetsGrid();
-				var status = result['status'];
-				var message = result['message'];
-				loadMessage(message, status);
-				return;
-			}
-		)
-	}, function () {
-		return;
-	})
-	return;
 }*/
+
+function convertTableToSheet(tableName, data) {
+	var rows = [];
+	var fields = [];
+
+	if (data.length > 0) {
+		var columns = Object.keys(data[0]);
+		console.log(columns);
+		columns.forEach(function (column) {
+			fields.push({
+				value: column, 
+				bold: "true", 
+				color: "black", 
+				textAlign: "center"
+			});
+		});
+		rows.push({cells: fields});
+		data.forEach(function (each) {
+			var row = {cells: []};
+			for (col in each) {
+				var value = each[col];
+				row['cells'].push({value: value, textAlign: 'center'});
+			}
+			rows.push(row);
+		})
+	}
+
+
+/*	else {
+		var columnNumer = 0;
+		var columnCounted = false;
+		tableData.forEach(function (record) {
+			var row = {cells: []};
+			record.forEach(function (value) {
+				row['cells'].push({value: value, textAlign: 'center'});
+				if (!columnCounted) {
+					columnNumer += 1;
+				}
+			})
+			rows.push(row);
+			columnCounted = true;
+		})
+
+		for (var i = 0; i < columnNumer; i ++) {
+			fields.push({
+				value: "ENTER COLUMN NAME HERE BEFORE STORING !", 
+				bold: "true", 
+				color: "red", 
+				textAlign: "center"
+			})
+		}
+		rows.unshift({cells: fields});
+	}*/
+	
+	var sheet = {"name" : tableName, "rows" : rows};
+	return sheet;
+}
 
 function toColumnName(num) {
 	for (var ret = '', a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
@@ -387,6 +411,7 @@ function saveSheet() {
 	var parsedSheet = parseSheet(data, cols);
 
 	promptFunction("Please enter a name:", activeSheetName).then(function (name) {
+		console.log(parsedSheet);
 		$.getJSON(
 			'/saveSheets',
 			{arg: JSON.stringify({"name" : name, "data" : parsedSheet, "columns" : cols, "username" : window.username})},
@@ -493,8 +518,10 @@ function runQuery() {
 			else {
 				loadMessage(message, "failure");
 			}
-			var tableData = result["data"];
-			var sheet = convertTableToSheet("QueryResult", tableData, []);
+			var data = result["data"];
+			console.log(data);
+			// var sheet = convertTableToSheet("QueryResult", data, []);
+			var sheet = convertTableToSheet("QueryResult", data);
 			var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
 			var data = spreadsheet.toJSON();
 			var check = sheetLoaded(data, sheet);

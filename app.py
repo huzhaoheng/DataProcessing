@@ -35,7 +35,7 @@ db = MySQLdb.connect(
 )
 # db.autocommit(True)
 db.ping(True)
-cursor = db.cursor()
+cursor = db.cursor(MySQLdb.cursors.DictCursor)
 cursor.execute("SET NAMES utf8mb4;")
 cursor.execute("SET CHARACTER SET utf8mb4;")
 cursor.execute("SET character_set_connection=utf8mb4;")
@@ -411,7 +411,7 @@ def saveSheets():
     data = json.loads(request.args.get('arg'))['data']
     columns = json.loads(request.args.get('arg'))['columns']
     derivedTableName = "_".join([username, originalTableName])
-
+    
     status = "success"
     message = "Table saved"
     try:
@@ -420,7 +420,8 @@ def saveSheets():
         db.commit()
         result = cursor.fetchall()
         if len(result) == 0:
-            query = "CREATE TABLE IF NOT EXISTS {table} (SystemID int NOT NULL AUTO_INCREMENT, {columns} TEXT, PRIMARY KEY (SystemID));".format(table = derivedTableName, columns = " TEXT, ".join(columns))
+            columnListWithoutSystemID = [col for col in columns if col != "SystemID"]
+            query = "CREATE TABLE IF NOT EXISTS {table} (SystemID int NOT NULL AUTO_INCREMENT, {columns} TEXT, PRIMARY KEY (SystemID));".format(table = derivedTableName, columns = " TEXT, ".join(columnListWithoutSystemID))
             cursor.execute(query)
             query = "ALTER TABLE {table} CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;".format(table = derivedTableName)
             cursor.execute(query)
@@ -436,8 +437,8 @@ def saveSheets():
             cursor.execute(query)
 
             for each in data:
-                query = "INSERT INTO {table} ({columns}) VALUES (".format(table = derivedTableName, columns = ", ".join(columns))
-                for column in columns:
+                query = "INSERT INTO {table} ({columns}) VALUES (".format(table = derivedTableName, columns = ", ".join(columnListWithoutSystemID))
+                for column in columnListWithoutSystemID:
                     query += " '{value}',".format(value = each[column].replace("'", "''")) if each[column] else " NULL,"
 
                 query = query[:-1] + ");"
@@ -468,7 +469,7 @@ def saveSheets():
                         for column in columns:
                             if column != "SystemID":
                                 query += " '{value}',".format(value = each[column].replace("'", "''")) if each[column] else " NULL,"                        
-    
+                        
                     query = query[:-1] + ");"
                     cursor.execute(query)
 
@@ -488,9 +489,8 @@ def getStoredTables():
     cursor.execute(query)
     db.commit()
     result = cursor.fetchall()
-    originalTableNameList = [each[0] for each in result]
-    derivedTableNameList = [each[1] for each in result]
-
+    originalTableNameList = [each['originalTableName'] for each in result]
+    derivedTableNameList = [each['derivedTableName'] for each in result]
     sizeList = []
     for derivedTableName in derivedTableNameList:
         query = """
@@ -510,7 +510,7 @@ def getStoredTables():
 
         db.commit()
         result = cursor.fetchall()
-        sizeList.append(result[0][0])
+        sizeList.append(result[0]['Size (KB)'])
 
     return jsonify(elements = {"originalTableNameList" : originalTableNameList, "derivedTableNameList" : derivedTableNameList, "sizeList" : sizeList})
 
@@ -530,26 +530,21 @@ def loadTable():
     cursor.execute(query)
     db.commit()
     result = cursor.fetchall()
-    derivedTableName = result[0][0]
+    derivedTableName = result[0]['derivedTableName']
 
     
     query = "DESCRIBE  {derivedTableName}".format(derivedTableName = derivedTableName)
     cursor.execute(query)
     db.commit()
     result = cursor.fetchall()
-    columns = [each[0] for each in result]
+    columns = [each['Field'] for each in result]
 
-    query = "SELECT {columns} FROM {derivedTableName};".format(columns = ', '.join(columns), derivedTableName = derivedTableName)
+    # query = "SELECT {columns} FROM {derivedTableName};".format(columns = ', '.join(columns), derivedTableName = derivedTableName)
+    query = "SELECT * FROM {derivedTableName};".format(derivedTableName = derivedTableName)
     cursor.execute(query)
     db.commit()
     result = cursor.fetchall()
-
-    data = []
-    for row in result:
-        record = {}
-        for i, column in enumerate(columns):
-            record[column] = row[i]
-        data.append(record)
+    data = result
 
     return jsonify(elements = {"data" : data, 'columns' : columns})
 
@@ -565,7 +560,7 @@ def runQuery():
     if len(result) > 0:
         prefix = "WITH "
         for each in result:
-            prefix += "{originalTableName} AS (SELECT * FROM {derivedTableName}),".format(originalTableName = each[0], derivedTableName  = each[1])
+            prefix += "{originalTableName} AS (SELECT * FROM {derivedTableName}),".format(originalTableName = each['originalTableName'], derivedTableName  = each['derivedTableName'])
 
         prefix = prefix[:-1] + " "
 
@@ -576,8 +571,9 @@ def runQuery():
         db.commit()
         result = cursor.fetchall()
         ret['message'] = "Done"
-        for each in result:
-            ret["data"].append(list(each))
+        # for each in result:
+        #     ret["data"].append(list(each))
+        ret["data"] = result
     except Exception as e:
         ret['message'] = str(e)
 
