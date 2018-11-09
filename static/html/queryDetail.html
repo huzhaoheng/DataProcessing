@@ -32,6 +32,9 @@
 		<script src="/static/js/chartHandler.js"></script>
 		<script src="/static/js/textAnalysisHandler.js"></script>
 
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/intro.js"></script>
+    	<link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/introjs.css" rel="stylesheet">
+
 	</head>
 
 	<body onload="initialization();">
@@ -42,7 +45,7 @@
 		<div id="spreadsheet"></div>
 
 		<ul id="panelbar">
-			<li>
+			<li id="plot-li">
 				Plot
 					<div id="plot">
 						<div id="options">
@@ -73,7 +76,7 @@
 					</div>
 			</li>
 
-			<li>
+			<li id="text-analysis-li">
 				Text Functions
 				<div id="text-analysis">
 					<div class="inner">
@@ -89,10 +92,10 @@
 				<div id="text-function-result"></div>
 			</li>
 
-			<li>
+			<li id="others-li">
 				Others
 				<div id="others">
-					<div class="inner">
+					<div class="inner" id="manageFormula">
 						<div class="thumbnail">
 							<img src="https://developer.salesforce.com/resource/images/trailhead/badges/modules/trailhead_module_formulas_and_validations.png">
 							<div class="caption">
@@ -104,7 +107,7 @@
 					</div>
 
 					<div class="inner">
-						<div class="thumbnail">
+						<div class="thumbnail" id="manageSheets">
 							<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM39GmClTSYmjrhIJhUOSAqTWMUmzCJ0jZ7fmbAWPhH8wHF1hW">
 							<div class="caption">
 								<h3>Mangage Sheets</h3>

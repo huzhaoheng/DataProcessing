@@ -15,7 +15,49 @@ function initialization() {
 			loadGrid(parameters);
 			
 		}
-	)	
+	)
+	initIntro();
+}
+
+function initIntro() {
+	var tour = introJs()
+	tour.setOption('tooltipPosition', 'auto');
+	tour.setOption('positionPrecedence', ['left', 'right', 'top', 'bottom']);
+	tour.setOption('steps', [{
+			'element': '#grid',
+			'intro': `Here is a list of parameters for the same query.<br><br>Click 'View Parameter' to see paramter values.<br><br>
+			Click 'View Structure' to see the structure of query below.<br><br>Click 'Edit' to write some comments.<br><br>
+			To query data, please click 'View Structure' firstly`,
+		}, {
+			'element': '#expandBtn',
+			'intro': `Once the structure of query has been loaded, click 'Expand' button to expand the treeview and 
+			select the object you want to see.`
+		}, {
+			'element': '#startDate',
+			'intro': "You can specify the staring point of a specific date range."
+		}, {
+			'element': '#endDate',
+			'intro': "You can specify the ending point of a specific date range."
+		}, {
+			'element': '#viewDataBtn',
+			'intro': "After selecting the objects you want to see, click 'View Data' to query and display the data."
+		}, {
+			'element': '#spreadsheet',
+			'intro': "Data will be displayed in spreadsheet, you can use it like Excel, formulas, filtering, sorting are also supported."
+		}, {
+			'element': '#plot-li',
+			'intro': "Select the data in spreadsheet and use plotting tools here, you can visualize your data."
+		}, {
+			'element': '#text-analysis-li',
+			'intro': "Text analyzation tools are availiable here."
+		}, {
+			'element': '#manageFormula',
+			'intro': "Redirect to another page so you can write your own code, define your own formulas and apply them to spreadsheet."
+		}, {
+			'element': '#manageSheets',
+			'intro': "Redirect to another page so you can store your sheets in MySQL permanently and write SQL query to process them, which is powerful."
+		}])
+	tour.start();
 }
 
 function setWindowParameters() {
@@ -138,6 +180,9 @@ function loadToolBar() {
 				text: "View Data",
 				icon: "arrow-60-right",
 				showIcon: "toolbar",
+				attributes: {
+					"id": "viewDataBtn"
+				},
 				click: function(e) {
 					viewData();
 				}
@@ -146,6 +191,9 @@ function loadToolBar() {
 				text: "Expand",
 				icon: "select-all",
 				showIcon: "toolbar,",
+				attributes: {
+					"id": "expandBtn"
+				},
 				click: function(e) {
 					var treeview = $("#treeview").data("kendoTreeView");
 					if (treeview != undefined) {
@@ -185,6 +233,8 @@ function loadDatePicker() {
 
 function loadPanelBar() {
 	$("#panelbar").kendoPanelBar();
+	var panelBar = $("#panelbar").data("kendoPanelBar");
+	panelBar.expand($("#others-li"), false);
 	return;
 }
 

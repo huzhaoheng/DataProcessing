@@ -3,6 +3,7 @@ function initialization(username) {
 	//$(".navbar-brand").attr("href", "http://listen.online/home?username=" + username);
 	$(".navbar-brand").attr("href", "http://127.0.0.1:1111/home?username=" + username);
 	loadQueries(username);
+	introJs().start();
 }
 
 function loadQueries(username) {
@@ -113,5 +114,17 @@ function viewQueryDetail(username, query_id, query_name) {
 	detailWindow.username = username;
 	detailWindow.query_id = query_id;
 	detailWindow.query_name = query_name;
+	return;
+}
+
+function initIntroComponent() {
+/*	document.getElementById('startButton').onclick = function() {
+		introJs().setOption('doneLabel', 'Next page').start().oncomplete(function() {
+			window.location.href = 'second.html?multipage=true';
+		});
+	};*/
+	/*introJs().setOption('doneLabel', 'Next page').start().oncomplete(function() {
+		window.location.href = 'second.html?multipage=true';
+	});*/
 	return;
 }
