@@ -6,11 +6,35 @@ function initialization() {
 	loadCurrentSheetsGrid();
 	loadStoredSheetsGrid();
 	loadFormula();
+	initIntro();
 }
 
 function initSpreadSheet() {
 	$("#spreadsheet").kendoSpreadsheet();
 	return;
+}
+
+function initIntro() {
+	var tour = introJs()
+	tour.setOption('tooltipPosition', 'auto');
+	tour.setOption('positionPrecedence', ['left', 'right', 'top', 'bottom']);
+	tour.setOption('steps', [{
+		'element': '#currentSheetsGrid',
+		'intro': `These are the sheets from original page, you can load them here to process them.`
+	}, {
+		'element': '#StoredSheetsGrid',
+		'intro': `These are the tables you stored in MySQL database.`
+	}, {
+		'element': '#spreadsheet',
+		'intro': `The data from sheets in original pages or table from MySQL or result of query will be displayed here.`
+	}, {
+		'element': '#saveSheetBtn',
+		'intro': `Save the table displayed in above spreadsheet into MySQL.<br/>NOTICE: rows without 'SystemID' column will be treated as new record when you store the data to existing table.`
+	}, {
+		'element': '#runQueryBtn',
+		'intro': `Click 'Run Query' button to execute the your query.`
+	}]);
+	tour.start();
 }
 
 function initCodingArea() {

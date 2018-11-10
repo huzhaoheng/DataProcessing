@@ -12,8 +12,35 @@ function initialization() {
 			loadDisplayFormulaArgumentsArea();
 			loadDisplayFormulaCodeArea();
 			loadSubmitButton();
+			initIntro();
 		}
 	)
+}
+
+function initIntro() {
+	var tour = introJs()
+	tour.setOption('tooltipPosition', 'auto');
+	tour.setOption('positionPrecedence', ['left', 'right', 'top', 'bottom']);
+	tour.setOption('steps', [{
+		'element': '#grid',
+		'intro': `Here is a list of all formulas you have created.`
+	}, {
+		'element': '#formulaName',
+		'intro': `To create a new formula, first enter the name of it here.`
+	}, {
+		'element': '#addArgument',
+		'intro': `After entering the formula name, click 'Add Argument' button to add an argument for the formula.`
+	}, {
+		'element': '#assignArgument',
+		'intro': `After adding all arguments, click 'Assign Arguments' button to assign them and generate corresponding signature.`
+	}, {
+		'element': '#formula-parameters',
+		'intro': `Here is the list of all arguments you added.`
+	}, {
+		'element': '#code',
+		'intro': `Formula signature will be generated here and you can wirte the code.`
+	}]);
+	tour.start();
 }
 
 function loadGrid(formulaList) {
@@ -128,13 +155,11 @@ function loadDisplayFormulaArgumentsArea() {
 		height: 200,
 		toolbar: [
 			{
-				template: `
-					<input type="text" class="form-control" placeholder="Formula Name" id="formulaName"/>
-				`
-			},
-			"create", 
-			{
-				template: '<a class="k-button" href="\\#" onclick="return AssignArguments()">Assign Arguments</a>'
+				template: `<input type="text" class="form-control" placeholder="Formula Name" id="formulaName"/>`
+			},{
+				template: `<a class="k-button" href="\\#" id="addArgument" onclick="return AddFormulaArgument()">Add Argument</a>`
+			},{
+				template: '<a class="k-button" href="\\#" id="assignArgument" onclick="return AssignArguments()">Assign Arguments</a>'
 			},
 		],
 		editable: "inline",
@@ -175,6 +200,11 @@ function loadDisplayFormulaArgumentsArea() {
 			{ command: ["edit", "destroy"], title: "Action", width: "250px" }
 		]
 	});
+}
+
+function AddFormulaArgument() {
+	var grid = $("#formula-parameters").data("kendoGrid");
+	grid.addRow();
 }
 
 function loadDisplayFormulaCodeArea() {

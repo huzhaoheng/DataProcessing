@@ -33,6 +33,9 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/addon/hint/sql-hint.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/mode/sql/sql.js"></script>
 
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/intro.js"></script>
+    	<link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/introjs.css" rel="stylesheet">
+
 
 	</head>
 
@@ -48,8 +51,8 @@
 		<div id="message"></div>
 		<div id="spreadsheet"></div>
 		<div class="btn-group">
-			<button type="button" class="btn btn-success" onclick="saveSheet();">Save Current Sheet</button>
-			<button type="button" class="btn btn-success" onclick="runQuery();">Run Query</button>	
+			<button type="button" id="saveSheetBtn" class="btn btn-success" onclick="saveSheet();">Save Current Sheet</button>
+			<button type="button" id="runQueryBtn" class="btn btn-success" onclick="runQuery();">Run Query</button>	
 		</div>
 		
 		<textarea id="code"></textarea>
