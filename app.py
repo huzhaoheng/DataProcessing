@@ -28,13 +28,14 @@ db = MySQLdb.connect(
     host = "localhost", 
     user = "root", 
     passwd = "root", 
-    db = "ListenOnline",
+    # db = "ListenOnline",
     use_unicode=True,
     charset = "utf8mb4"
 )
 # db.autocommit(True)
 db.ping(True)
 cursor = db.cursor(MySQLdb.cursors.DictCursor)
+cursor.execute("CREATE DATABASE IF NOT EXISTS ListenOnline")
 cursor.execute("SET NAMES utf8mb4;")
 cursor.execute("SET CHARACTER SET utf8mb4;")
 cursor.execute("SET character_set_connection=utf8mb4;")
