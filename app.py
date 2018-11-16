@@ -97,6 +97,7 @@ def verification():
 
 @app.route('/home')
 def home():
+    pritn ("loading home page...")
     username, hashkey = request.args.get('username'), request.args.get('hashkey')
     return render_template('home.html', username = username)
 #----------------------------------------------------------------------------------------
