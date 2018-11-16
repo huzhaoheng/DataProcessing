@@ -195,7 +195,7 @@ def validateDataStructure(parent_id, schema, node_name):
 			""".format(parent_id = parent_id, node_name = node_name)
 			graph.cypher.execute(query)
 
-def storeData(data, schema, node_name, parent_id, curr_time):
+def storeData(data, schema, node_name, parent_id, curr_time, tx):
 	if not data:
 		return
 		
@@ -334,4 +334,6 @@ if __name__ == '__main__':
 	connectNodes(query_id, parameter_id, "hasParameter")
 	validateDataStructure(parameter_id, schema, "root")
 	curr_time = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+	print ("transaction begins")
 	storeData(data, schema, "root", parameter_id, curr_time)
+	print ("Done")

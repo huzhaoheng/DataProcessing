@@ -6,7 +6,6 @@ import hashlib
 import json
 from helpers import *
 from flask_cors import CORS
-import pandas
 import py2neo
 from py2neo.packages.httpstream import http
 from time import gmtime, strftime, localtime
