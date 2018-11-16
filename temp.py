@@ -208,7 +208,7 @@ def storeData(data, schema, node_name, parent_id, curr_time, tx):
 				break
 
 		if data:
-			storeData(data, new_schema, node_name, parent_id, curr_time)
+			storeData(data, new_schema, node_name, parent_id, curr_time, tx)
 		else:
 			pass
 
@@ -234,7 +234,7 @@ def storeData(data, schema, node_name, parent_id, curr_time, tx):
 			if "properties" in schema:
 				for node_name, node_schema in schema["properties"].items():
 					if node_name in data:
-						storeData(data[node_name], node_schema, node_name, this_id, curr_time)
+						storeData(data[node_name], node_schema, node_name, this_id, curr_time, tx)
 			else:
 				pass
 
@@ -252,7 +252,7 @@ def storeData(data, schema, node_name, parent_id, curr_time, tx):
 
 			for each in data:
 				if each:
-					storeData(each, new_schema, node_name, parent_id, curr_time)
+					storeData(each, new_schema, node_name, parent_id, curr_time, tx)
 
 		elif type(data_type) is list:
 			nonnull_type = None
@@ -260,7 +260,7 @@ def storeData(data, schema, node_name, parent_id, curr_time, tx):
 				if each != "null":
 					nonnull_type = each
 			if data:
-				storeData(data, {"type" : nonnull_type}, node_name, parent_id, curr_time)
+				storeData(data, {"type" : nonnull_type}, node_name, parent_id, curr_time, tx)
 
 		else:
 			value = None
