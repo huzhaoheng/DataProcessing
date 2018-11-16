@@ -1,6 +1,7 @@
 from py2neo.packages.httpstream import http
 from py2neo import Graph, Path, authenticate
 from time import gmtime, strftime, localtime
+import time
 import sys
 import datetime
 import hashlib
@@ -336,7 +337,10 @@ if __name__ == '__main__':
 	validateDataStructure(parameter_id, schema, "root")
 	curr_time = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 	print ("transaction begins")
+	startTime = time.time()
 	tx = graph.cypher.begin()
 	storeData(data, schema, "root", parameter_id, curr_time, tx)
 	tx.commit()
+	endTime = time.time()
 	print ("Done")
+	print ("Duration:", endTime - startTime)
