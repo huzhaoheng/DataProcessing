@@ -36,6 +36,7 @@ db = MySQLdb.connect(
 db.ping(True)
 cursor = db.cursor(MySQLdb.cursors.DictCursor)
 cursor.execute("CREATE DATABASE IF NOT EXISTS ListenOnline")
+cursor.execute("USE ListenOnline")
 cursor.execute("SET NAMES utf8mb4;")
 cursor.execute("SET CHARACTER SET utf8mb4;")
 cursor.execute("SET character_set_connection=utf8mb4;")
