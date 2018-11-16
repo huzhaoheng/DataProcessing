@@ -28,7 +28,7 @@ db = MySQLdb.connect(
     host = "127.0.0.1", 
     user = "root", 
     passwd = "root", 
-    db = "ListenOnline",
+    # db = "ListenOnline",
     use_unicode=True,
     charset = "utf8mb4"
 )
