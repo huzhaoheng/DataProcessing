@@ -195,7 +195,7 @@ def validateDataStructure(parent_id, schema, node_name):
 			""".format(parent_id = parent_id, node_name = node_name)
 			graph.cypher.execute(query)
 
-def storeData(data, schema, node_name, parent_id, curr_time, tx):
+def storeData(data, schema, node_name, parent_id, curr_time):
 	if not data:
 		return
 		
