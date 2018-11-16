@@ -324,7 +324,7 @@ if __name__ == '__main__':
 	query_structure = json.load(open('sample_structure.json', 'r'))
 	query_name = query_structure['name']
 	parsed_parameters = parameterParser(query_structure)
-	data = json.load(open('30tweets.json', 'rb'))
+	data = json.load(open('data.json', 'rb'))
 	builder.add_object(data)
 	schema = builder.to_schema()
 	json.dump(schema, open("schema.json", "w"))
