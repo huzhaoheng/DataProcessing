@@ -291,7 +291,7 @@ def validateDataStructure(parent_id, schema, node_name):
 # 				tx.append(query)
 # 	return;
 
-def storeData(data, schema, node_name, parent_id, curr_time, tx):
+def storeData(data, schema, node_name, parent_id, curr_time):
 	if not data:
 		return
 		
