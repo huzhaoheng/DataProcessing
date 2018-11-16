@@ -195,7 +195,7 @@ def validateDataStructure(parent_id, schema, node_name):
 			""".format(parent_id = parent_id, node_name = node_name)
 			graph.cypher.execute(query)
 
-def storeData(data, schema, node_name, parent_id, curr_time):
+def storeData(data, schema, node_name, parent_id, curr_time, tx):
 	if not data:
 		return
 		
@@ -286,7 +286,8 @@ def storeData(data, schema, node_name, parent_id, curr_time):
 							CREATE 
 								(x)-[:hasChild]->(o:Object {{node_name : '{node_name}', collected_at : '{curr_time}'}})-[:hasValue]->(v:Value {{collected_at : '{curr_time}', value : {value}}})
 				""".format(curr_time = curr_time, parent_id = parent_id, value = value, node_name = node_name)
-				graph.cypher.execute(query)
+				# graph.cypher.execute(query)
+				tx.append(query)
 	return;
 
 def parameterParser(structure):
@@ -335,5 +336,7 @@ if __name__ == '__main__':
 	validateDataStructure(parameter_id, schema, "root")
 	curr_time = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 	print ("transaction begins")
-	storeData(data, schema, "root", parameter_id, curr_time)
+	tx = graph.cypher.begin()
+	storeData(data, schema, "root", parameter_id, curr_time, tx)
+	tx.commit()
 	print ("Done")
