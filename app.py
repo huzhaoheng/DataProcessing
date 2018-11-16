@@ -37,7 +37,7 @@ db.ping(True)
 cursor = db.cursor(MySQLdb.cursors.DictCursor)
 cursor.execute("SELECT VERSION();")
 db.commit()
-MYSQLVERSION = cursor.fetchall()["VERSION()"]
+MYSQLVERSION = cursor.fetchall()
 print (MYSQLVERSION)
 cursor.execute("CREATE DATABASE IF NOT EXISTS ListenOnline")
 cursor.execute("USE ListenOnline")
