@@ -196,102 +196,7 @@ def validateDataStructure(parent_id, schema, node_name):
 			""".format(parent_id = parent_id, node_name = node_name)
 			graph.cypher.execute(query)
 
-# def storeData(data, schema, node_name, parent_id, curr_time, tx):
-# 	if not data:
-# 		return
-		
-# 	if "anyOf" in schema:
-# 		new_schema = None
-# 		sub_schemas = schema["anyOf"]
-# 		for sub_schema in sub_schemas:
-# 			if sub_schema["type"] != "null":
-# 				new_schema = sub_schema
-# 				break
-
-# 		if data:
-# 			storeData(data, new_schema, node_name, parent_id, curr_time, tx)
-# 		else:
-# 			pass
-
-# 	else:
-# 		data_type = schema["type"]
-# 		if data_type == "object":
-# 			query = """
-# 						MATCH
-# 							(x)
-# 						WHERE
-# 							ID(x) = {parent_id}
-# 						WITH
-# 							(x)
-# 						CREATE 
-# 							(x)-[r:hasChild]->(o:Object {{node_name : '{node_name}', collected_at : '{curr_time}'}})
-# 						RETURN 
-# 							ID(o)
-# 			""".format(parent_id = parent_id, node_name = node_name, curr_time = curr_time)
-
-# 			result = graph.cypher.execute(query)
-# 			this_id = result[0]["ID(o)"]
-
-# 			if "properties" in schema:
-# 				for node_name, node_schema in schema["properties"].items():
-# 					if node_name in data:
-# 						storeData(data[node_name], node_schema, node_name, this_id, curr_time, tx)
-# 			else:
-# 				pass
-
-# 		elif data_type == "array":
-# 			items = schema['items']
-# 			new_schema = None
-# 			if "anyOf" in items:
-# 				sub_schemas = schema["anyOf"]
-# 				for sub_schema in sub_schemas:
-# 					if sub_schema["type"] != "null":
-# 						new_schema = sub_schema
-# 						break
-# 			else:
-# 				new_schema = schema["items"]
-
-# 			for each in data:
-# 				if each:
-# 					storeData(each, new_schema, node_name, parent_id, curr_time, tx)
-
-# 		elif type(data_type) is list:
-# 			nonnull_type = None
-# 			for each in data_type:
-# 				if each != "null":
-# 					nonnull_type = each
-# 			if data:
-# 				storeData(data, {"type" : nonnull_type}, node_name, parent_id, curr_time, tx)
-
-# 		else:
-# 			value = None
-# 			if data_type == "string":
-# 				value = '"{data}"'.format(data = data.replace('"', "'"))
-# 			elif data_type == "integer":
-# 				value = "toInteger({data})".format(data = data)
-# 			elif data_type == "number":
-# 				value = "toFloat({data})".format(data = data)
-# 			elif data_type == "boolean":
-# 				value = "toBoolean({data})".format(data = data)
-# 			else:
-# 				pass
-
-# 			if value:
-# 				query = """
-# 							MATCH
-# 								(x)
-# 							WHERE
-# 								ID(x) = {parent_id}
-# 							WITH
-# 								(x)
-# 							CREATE 
-# 								(x)-[:hasChild]->(o:Object {{node_name : '{node_name}', collected_at : '{curr_time}'}})-[:hasValue]->(v:Value {{collected_at : '{curr_time}', value : {value}}})
-# 				""".format(curr_time = curr_time, parent_id = parent_id, value = value, node_name = node_name)
-# 				# graph.cypher.execute(query)
-# 				tx.append(query)
-# 	return;
-
-def storeData(data, schema, node_name, parent_id, curr_time):
+def storeData(data, schema, node_name, parent_id, curr_time, tx):
 	if not data:
 		return
 		
@@ -304,7 +209,7 @@ def storeData(data, schema, node_name, parent_id, curr_time):
 				break
 
 		if data:
-			storeData(data, new_schema, node_name, parent_id, curr_time)
+			storeData(data, new_schema, node_name, parent_id, curr_time, tx)
 		else:
 			pass
 
@@ -330,7 +235,7 @@ def storeData(data, schema, node_name, parent_id, curr_time):
 			if "properties" in schema:
 				for node_name, node_schema in schema["properties"].items():
 					if node_name in data:
-						storeData(data[node_name], node_schema, node_name, this_id, curr_time)
+						storeData(data[node_name], node_schema, node_name, this_id, curr_time, tx)
 			else:
 				pass
 
@@ -348,7 +253,7 @@ def storeData(data, schema, node_name, parent_id, curr_time):
 
 			for each in data:
 				if each:
-					storeData(each, new_schema, node_name, parent_id, curr_time)
+					storeData(each, new_schema, node_name, parent_id, curr_time, tx)
 
 		elif type(data_type) is list:
 			nonnull_type = None
@@ -356,7 +261,7 @@ def storeData(data, schema, node_name, parent_id, curr_time):
 				if each != "null":
 					nonnull_type = each
 			if data:
-				storeData(data, {"type" : nonnull_type}, node_name, parent_id, curr_time)
+				storeData(data, {"type" : nonnull_type}, node_name, parent_id, curr_time, tx)
 
 		else:
 			value = None
@@ -382,7 +287,8 @@ def storeData(data, schema, node_name, parent_id, curr_time):
 							CREATE 
 								(x)-[:hasChild]->(o:Object {{node_name : '{node_name}', collected_at : '{curr_time}'}})-[:hasValue]->(v:Value {{collected_at : '{curr_time}', value : {value}}})
 				""".format(curr_time = curr_time, parent_id = parent_id, value = value, node_name = node_name)
-				graph.cypher.execute(query)
+				# graph.cypher.execute(query)
+				tx.append(query)
 	return;
 
 def parameterParser(structure):
@@ -432,10 +338,10 @@ if __name__ == '__main__':
 	curr_time = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 	print ("transaction begins")
 	startTime = time.time()
-	# tx = graph.cypher.begin()
-	# storeData(data, schema, "root", parameter_id, curr_time, tx)
-	storeData(data, schema, "root", parameter_id, curr_time)
-	# tx.commit()
+	tx = graph.cypher.begin()
+	storeData(data, schema, "root", parameter_id, curr_time, tx)
+	# storeData(data, schema, "root", parameter_id, curr_time)
+	tx.commit()
 	endTime = time.time()
 	print ("Done")
 	print ("Duration:", endTime - startTime)
