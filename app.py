@@ -25,16 +25,20 @@ neo4jUrl = os.environ.get('NEO4J_URL',"http://localhost:7474/db/data/")
 graph = Graph(neo4jUrl)
 textAPIClient = textapi.Client("bcbe7ef4", "627c1e3eeb321a490f68057c197cee6f")
 db = MySQLdb.connect(
-    host = "localhost", 
+    host = "127.0.0.1", 
     user = "root", 
     passwd = "root", 
-    # db = "ListenOnline",
+    db = "ListenOnline",
     use_unicode=True,
     charset = "utf8mb4"
 )
 # db.autocommit(True)
 db.ping(True)
 cursor = db.cursor(MySQLdb.cursors.DictCursor)
+cursor.execute("SELECT VERSION();")
+db.commit()
+MYSQLVERSION = cursor.fetchall()["VERSION()"]
+print (MYSQLVERSION)
 cursor.execute("CREATE DATABASE IF NOT EXISTS ListenOnline")
 cursor.execute("USE ListenOnline")
 cursor.execute("SET NAMES utf8mb4;")
