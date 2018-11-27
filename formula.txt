@@ -4,6 +4,12 @@ function absOfDiff(cell2,cell1) {
 	return Math.abs(val1 - val2);
 }
 
+function absOfDiff(cell2,cell1) {
+	var val1 = this.getRefData(cell1);
+	var val2 = this.getRefData(cell2);
+	return Math.abs(parseInt(val1) - parseInt(val2));
+}
+
 function countOfPositive(area) {
 	var data = this.getRefData(area);
 	var ret = 0;

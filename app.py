@@ -1,6 +1,6 @@
 # coding=utf-8
 import os
-from flask import Flask, jsonify, render_template, redirect, url_for, request, make_response
+from flask import Flask, jsonify, render_template, redirect, url_for, request, make_response, Response
 from py2neo import Graph, Path, authenticate
 import hashlib
 import json
@@ -12,6 +12,8 @@ from time import gmtime, strftime, localtime
 import sys
 from aylienapiclient import textapi
 import pymysql
+from genson import SchemaBuilder
+import time
 pymysql.install_as_MySQLdb()
 
 import MySQLdb
@@ -48,61 +50,99 @@ cursor.execute("SET character_set_connection=utf8mb4;")
 cursor.execute("CREATE TABLE IF NOT EXISTS OWNERS (username TEXT NOT NULL, originalTableName TEXT NOT NULL, derivedTableName TEXT NOT NULL);")
 db.commit()
 
-@app.route('/verification', methods=['GET', 'POST'])
-def verification():
-    print("request received")
-    curr_time = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime())
-    username, data, query_name, structure = request.json["username"], json.loads(request.json["data"]), request.json["name"], json.loads(request.json["structure"])
-    with open('sample_structure.json', 'w') as fp:
-        json.dump(structure, fp)
-    with open('data.json', 'w') as fp:
-        json.dump(data, fp)
-    hashkey = hashlib.md5((username).encode()).hexdigest()
-    parameters = parameterParser(structure)
-    parameter_id = generateParameterID(parameters, username)
-    query = "MATCH (d:SystemUser) WHERE d.username = '" + username + "' RETURN d"
-    exists = graph.cypher.execute(query)
-    redirect_url = "http://listen.online:1111" + url_for('home', username = username, hashkey = hashkey)
-    response = make_response(redirect_url)
-    response.set_cookie('hashkey', hashkey)
-    response.set_cookie('username', username)
-    if not exists:
-        query = "CREATE (u:SystemUser {username : '" + username + "', hashkey : '" + hashkey + "'})"
-        graph.cypher.execute(query)
-    query_name_exist = graph.cypher.execute("MATCH (q:Query {name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) RETURN q")
-    if not query_name_exist:
-        query = "MATCH (a:SystemUser {username:'" + username + "'}) CREATE (a)-[:hasQuery]->(b:Query {name:'" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', update_time : '" + curr_time + "'})-[:hasParameter]->(c:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
-        for k, v in parameters.items():
-            if v:
-                if (type(v) is int) or (type(v) is float):
-                    query += ", " + k + ": " + str(v)
-                else:
-                    query += ", " + k + ": '" + str(v) + "'"
-        query += "})"
-        graph.cypher.execute(query)
-        createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
-    else:
-        query = "MATCH (a:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'}) RETURN a;"
-        query_parameter_exist = graph.cypher.execute(query)
-        if not query_parameter_exist:
-            query = "MATCH (a:Query {name:'" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) CREATE (a)-[:hasParameter]->(b:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
-            for k, v in parameters.items():
-                if v:
-                    if (type(v) is int) or (type(v) is float):
-                        query += ", " + k + ": " + str(v)
-                    else:
-                        query += ", " + k + ": '" + str(v) + "'"
-            query += "})"
-            graph.cypher.execute(query)
-            createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
-        
-    storeData(graph, data, username, hashkey, structure, query_name, parameter_id)
-    return response
+@app.route('/home/handshake')
+def handshake():
+    return Response("{'message':'handshaking from dataprocessing'}", status=201, mimetype='application/json')
 
 @app.route('/home')
 def home():
-    username, hashkey = request.args.get('username'), request.args.get('hashkey')
+    userInfo = json.loads(request.json["user"])
+    queryInfo = json.loads(request.json["value"])
+    username = userInfo["name"]
+    data = queryInfo["result"]
+    query_name = queryInfo["queryName"]
+    structure = queryInfo["structure"]
+
+    parsed_parameters = parameterParser(query_structure)
+
+    builder = SchemaBuilder()
+    builder.add_object(data)
+    schema = builder.to_schema()
+
+    user_id = validateUserNode(username)
+    query_id = validateQueryNode(username, query_name)
+    parameter_id = validateParameterNode(schema, username, query_name, parsed_parameters)
+    connectNodes(user_id, query_id, "hasQuery")
+    connectNodes(query_id, parameter_id, "hasParameter")
+    validateDataStructure(parameter_id, schema, "root")
+    curr_time = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+    print ("transaction begins")
+    startTime = time.time()
+    tx = graph.cypher.begin()
+    storeData(data, schema, "root", parameter_id, curr_time, tx)
+    tx.commit()
+    endTime = time.time()
+    print ("dataprocessing finished")
+    print ("Duration:", endTime - startTime)
+
     return render_template('home.html', username = username)
+
+
+# @app.route('/verification', methods=['GET', 'POST'])
+# def verification():
+#     print("request received")
+#     curr_time = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime())
+#     username, data, query_name, structure = request.json["username"], json.loads(request.json["data"]), request.json["name"], json.loads(request.json["structure"])
+#     with open('sample_structure.json', 'w') as fp:
+#         json.dump(structure, fp)
+#     with open('data.json', 'w') as fp:
+#         json.dump(data, fp)
+#     hashkey = hashlib.md5((username).encode()).hexdigest()
+#     parameters = parameterParser(structure)
+#     parameter_id = generateParameterID(parameters, username)
+#     query = "MATCH (d:SystemUser) WHERE d.username = '" + username + "' RETURN d"
+#     exists = graph.cypher.execute(query)
+#     redirect_url = "http://listen.online:1111" + url_for('home', username = username, hashkey = hashkey)
+#     response = make_response(redirect_url)
+#     response.set_cookie('hashkey', hashkey)
+#     response.set_cookie('username', username)
+#     if not exists:
+#         query = "CREATE (u:SystemUser {username : '" + username + "', hashkey : '" + hashkey + "'})"
+#         graph.cypher.execute(query)
+#     query_name_exist = graph.cypher.execute("MATCH (q:Query {name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) RETURN q")
+#     if not query_name_exist:
+#         query = "MATCH (a:SystemUser {username:'" + username + "'}) CREATE (a)-[:hasQuery]->(b:Query {name:'" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', update_time : '" + curr_time + "'})-[:hasParameter]->(c:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
+#         for k, v in parameters.items():
+#             if v:
+#                 if (type(v) is int) or (type(v) is float):
+#                     query += ", " + k + ": " + str(v)
+#                 else:
+#                     query += ", " + k + ": '" + str(v) + "'"
+#         query += "})"
+#         graph.cypher.execute(query)
+#         createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
+#     else:
+#         query = "MATCH (a:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'}) RETURN a;"
+#         query_parameter_exist = graph.cypher.execute(query)
+#         if not query_parameter_exist:
+#             query = "MATCH (a:Query {name:'" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) CREATE (a)-[:hasParameter]->(b:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
+#             for k, v in parameters.items():
+#                 if v:
+#                     if (type(v) is int) or (type(v) is float):
+#                         query += ", " + k + ": " + str(v)
+#                     else:
+#                         query += ", " + k + ": '" + str(v) + "'"
+#             query += "})"
+#             graph.cypher.execute(query)
+#             createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
+        
+#     storeData(graph, data, username, hashkey, structure, query_name, parameter_id)
+#     return Response
+
+# @app.route('/home')
+# def home():
+#     username = request.args.get('username')
+#     return render_template('home.html', username = username)
 #----------------------------------------------------------------------------------------
 @app.route('/getQueries')
 def getQueries():
