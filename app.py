@@ -53,6 +53,7 @@ db.commit()
 @app.route('/home/handshake', methods=['GET', 'POST'])
 def handshake():
     print ("handshaking started")
+    print (request.json)
     return Response("{'message':'handshaking from dataprocessing'}", status=201, mimetype='application/json')
 
 @app.route('/test/handshake', methods=['GET', 'POST'])
