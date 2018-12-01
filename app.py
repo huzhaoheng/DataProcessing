@@ -50,7 +50,7 @@ cursor.execute("SET character_set_connection=utf8mb4;")
 cursor.execute("CREATE TABLE IF NOT EXISTS OWNERS (username TEXT NOT NULL, originalTableName TEXT NOT NULL, derivedTableName TEXT NOT NULL);")
 db.commit()
 
-@app.route('/home/handshake')
+@app.route('/home/handshake', methods=['GET', 'POST'])
 def handshake():
     print ("handshaking started")
     return Response("{'message':'handshaking from dataprocessing'}", status=201, mimetype='application/json')
@@ -60,7 +60,7 @@ def test():
     print ("testing")
     return 'Hello, World'
 
-@app.route('/home')
+@app.route('/home', methods=['GET', 'POST'])
 def home():
     print ("request received in /home")
     print (request.json)
