@@ -52,17 +52,24 @@ db.commit()
 
 @app.route('/home/handshake')
 def handshake():
+    print ("handshaking started")
     return Response("{'message':'handshaking from dataprocessing'}", status=201, mimetype='application/json')
 
 @app.route('/home')
 def home():
+    print ("request received in /home")
+    print (request.json)
     userInfo = json.loads(request.json["user"])
     queryInfo = json.loads(request.json["value"])
     username = userInfo["name"]
     data = queryInfo["result"]
     query_name = queryInfo["queryName"]
     structure = queryInfo["structure"]
-
+    print ("username:", username)
+    print ("query_name:", query_name)
+    print ("structure:", structure)
+    print ("data:", data)
+    
     parsed_parameters = parameterParser(query_structure)
 
     builder = SchemaBuilder()
