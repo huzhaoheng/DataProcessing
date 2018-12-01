@@ -63,6 +63,7 @@ def test():
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     print ("request received in /home")
+    print (request)
     print (request.json)
     userInfo = json.loads(request.json["user"])
     queryInfo = json.loads(request.json["value"])
