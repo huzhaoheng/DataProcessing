@@ -34,6 +34,9 @@ function initIntro() {
 		'element': '#assignArgument',
 		'intro': `After adding all arguments, click 'Assign Arguments' button to assign them and generate corresponding signature.`
 	}, {
+		'element': '#howToUse',
+		'intro': `Click here for more information.`
+	}, {
 		'element': '#formula-parameters',
 		'intro': `Here is the list of all arguments you added.`
 	}, {
@@ -160,6 +163,8 @@ function loadDisplayFormulaArgumentsArea() {
 				template: `<a class="k-button" href="\\#" id="addArgument" onclick="return AddFormulaArgument()">Add Argument</a>`
 			},{
 				template: '<a class="k-button" href="\\#" id="assignArgument" onclick="return AssignArguments()">Assign Arguments</a>'
+			},{
+				template: '<a class="k-button" href="\\#" id="howToUse" onclick="return openHowToUseFormulaPage();">How To Use?</a>'
 			},
 		],
 		editable: "inline",
@@ -177,6 +182,8 @@ function loadDisplayFormulaArgumentsArea() {
 					input.appendTo(container);
 					input.kendoDropDownList({
 						dataSource: [
+							"cell",
+							"area",
 							"number",
 							"number+", 
 							"number++",
@@ -190,9 +197,6 @@ function loadDisplayFormulaArgumentsArea() {
 							"date",
 							"datetime",
 							"anyvalue",
-							"cell",
-							"area",
-
 						]
 					}).appendTo(container);
 				}
@@ -377,4 +381,10 @@ function storeFormula(formulaName, evalCode, writtenCode, args) {
 			initialization();
 		}
 	)
+}
+
+function openHowToUseFormulaPage() {
+	var path = "/static/html/howToUseFormula.html";
+	var name = "How To Use Customized Formula?";
+	window.open(path, name);
 }

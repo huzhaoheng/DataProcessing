@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>How To Manage Tables?</title>
+	</head>
+
+	<body>
+		<h2>
+			Add Argument
+		</h2>
+		<p>
+			Click 'Add Argument' to add new argument for your function, arguments will be automatically displayed in function signature. 
+		</p>
+		<br/>
+		
+		<h2>
+			Type of Arguments
+		</h2>
+		<p>
+			"cell":		Reuqires a cell in spreadsheet.</br>
+			"area":		Requires an area in spreadsheet.</br>
+			"number": 	Requires a numeric argument.<br/>
+			"number+":	Requires a number bigger than or equal to zero.<br/>
+			"number++":	Requires a non-zero positive number.<br/>
+			"integer"/"integer+"/"integer++":	Similar to number-s, but requires integer argument. Note that these may actually modify the argument value: if a number is specified and it has a decimal part, it will silently be truncated to integer, instead of returning an error. This is similar to Excel.<br/>
+			"divisor"":	Requires a non-zero number. Produces a #DIV/0! error if the argument is zero.<br/>
+			"string":	Requires a string argument.<br/>
+			"boolean":	Requires a boolean argument. Most times you may want to use "logical" though.<br/>
+			"logical":	Requires a logical argument. That is, Booleans true or false, but 1 and 0 are also accepted. It gets converted to an actual Boolean.<br/>
+			"date":		Requires a date argument. Internally, dates are stored as numbers (the number of days since December 31 1899), so this works the same as "integer". It was added for consistency.<br/>
+			"datetime":	This is like "number", because the time part is represented as a fraction of a day.<br/>
+			"anyvalue":	Accepts any value type.<br/>
+			"matrix":	Accepts a matrix argument. This is either a range, for example, A1:C3, or a literal matrix (see the Matrices section below). <br/>
+		</p>
+		<br/>
+
+		<h2>
+			Assign Argument
+		</h2>
+		<p>
+			Click 'Assign Arguments' after all arguments are added, function signature will be generated in the coding area.<strong>NOTICE: DO NOT EDIT FUNCTION SIGNATURE, JUST WRITE THE CODE.</strong> 
+		</p>
+		<br/>
+
+		<h2>
+			How to Write Code
+		</h2>
+		<p>
+			1. To access the value of a cell, use 
+			<pre>		this.getRefData(cell)</pre>
+			For example:</br>
+			<pre>
+				function abs(cell) {
+					var val = this.getRefData(cell);
+					return Math.abs(val);
+				}
+			</pre>
+				
+				In this function, "this.getRefData(cell)" gives the value of input cell and then the function computes the absolute value of it as return value.
+		</p>
+		<br/>
+		<p>
+			2. To access the values in an area, use 
+			<pre>		this.getRefData(area)</pre>
+			For example:</br>
+			<pre>
+				function countOfPositive(area) {
+					var data = this.getRefData(area);
+					var counter = 0;
+					data.forEach(function (each) {
+						if (each > 0) {
+							counter += 1;
+						}	
+					})
+					return counter;
+				}
+			</pre>
+				
+				In this function, "this.getRefData(area)" gives the values of input area as an array, column by column. E.g. if the area looks like
+				<pre>
+					1|2|3
+					-----
+					4|5|6
+				</pre>
+				the 1-D array will be [1,4,2,5,3,6]. Then the function computes the number of positive values in this area.
+		</p>
+
+		<br/>
+		<p>
+			3. Other, just write code in JavaScript syntax. 
+		</p>
+	</body>
+
+</html>

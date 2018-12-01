@@ -14,7 +14,7 @@ function countOfPositive(area) {
 	var data = this.getRefData(area);
 	var ret = 0;
 	data.forEach(function (each) {
-		if (each[0] > 0) {
+		if (each > 0) {
 			ret += 1;
 		}	
 	})
