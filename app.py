@@ -144,7 +144,12 @@ def loginSuccess():
     username = json.loads(request.args.get('arg'))['username']
     print (username)
     print (url_for('home', username = username))
-    return redirect(url_for('index', username = username))
+    # return redirect(url_for('index', username = username))
+    return render_template('index.html', username = username)
+
+# @app.route('/index')
+# def index():
+    
 
 # @app.route('/verification', methods=['GET', 'POST'])
 # def verification():
