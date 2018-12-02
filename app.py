@@ -114,7 +114,7 @@ def home():
             pass
 
 
-        return render_template('home.html', username = username)
+        return render_template('index.html', username = username)
 
     else:
         return render_template('login.html', username = None)        
@@ -144,7 +144,7 @@ def loginSuccess():
     username = json.loads(request.args.get('arg'))['username']
     print (username)
     print (url_for('home', username = username))
-    return redirect(url_for('home', username = username))
+    return redirect(url_for('index', username = username))
 
 # @app.route('/verification', methods=['GET', 'POST'])
 # def verification():

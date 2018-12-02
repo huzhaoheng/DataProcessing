@@ -1,7 +1,8 @@
 function initialization(username) {
+	console.log(username);
 	window.username = username;
 	//$(".navbar-brand").attr("href", "http://listen.online/home?username=" + username);
-	$(".navbar-brand").attr("href", "http://127.0.0.1:1111/home?username=" + username);
+	$(".navbar-brand").attr("href", "http://127.0.0.1:1111/index?username=" + username);
 	loadQueries(username);
 	introJs().start();
 }
