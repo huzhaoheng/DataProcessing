@@ -134,7 +134,9 @@ def verifyUser():
     if not result:
         ret = {"valid" : False, "url" : None}
     else:
-        ret = {"valid" : True, "url" : url_for('home', username = username)}
+        url = url_for('home', username = username)
+        print (url)
+        ret = {"valid" : True, "url" : url}
 
     return jsonify(elements = ret)
 
