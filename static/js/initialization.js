@@ -1,8 +1,10 @@
 function initialization(username) {
 	console.log(username);
-	window.username = username;
-	//$(".navbar-brand").attr("href", "http://listen.online/home?username=" + username);
-	$(".navbar-brand").attr("href", "http://127.0.0.1:1111/index?username=" + username);
+	var args = location.search.replace('?','').split('&').reduce(function(s,c){var t=c.split('=');s[t[0]]=t[1];return s;},{});
+	window.username = args['username'];
+	console.log(window.username);
+	//window.username = username;
+	//$(".navbar-brand").attr("href", "http://127.0.0.1:1111/index?username=" + username);
 	loadQueries(username);
 	introJs().start();
 }
