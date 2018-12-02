@@ -23,17 +23,17 @@ function verifyUser(result) {
 			var valid = result['valid'];
 			console.log(valid);
 			if (valid == true) {
-				console.log('loginSuccess')
-				$.getJSON(
+				console.log('loginSuccess');
+				var url = result['url']
+				console.log(url);
+				window.location.href = url;
+				/*$.getJSON(
 					'/loginSuccess',
 					{arg: JSON.stringify({"username" : username})},
 					function (response) {
-						/*console.log(response);
-						console.log(response.redirect)
-						window.location.href = response.redirect;*/
 						return;
 					}
-				)
+				)*/
 			}
 			else {
 				$('#error-message').show();

@@ -117,7 +117,7 @@ def home():
         return render_template('index.html', username = username)
 
     else:
-        return render_template('login.html', username = None)        
+        return render_template('login.html')        
 
 @app.route('/verifyUser')
 def verifyUser():
@@ -133,22 +133,23 @@ def verifyUser():
     ret = {}
     print (result)
     if not result:
-        ret = {"valid" : False}
+        ret = {"valid" : False, "url" : None}
     else:
-        ret = {"valid" : True}
-
+        ret = {"valid" : True, "url" : url_for('index', username = username)}
+        
     return jsonify(elements = ret)
 
-@app.route('/loginSuccess')
-def loginSuccess():
-    username = json.loads(request.args.get('arg'))['username']
-    print (username)
-    print (url_for('home', username = username))
-    # return redirect(url_for('index', username = username))
-    return render_template('index.html', username = username)
+# @app.route('/loginSuccess')
+# def loginSuccess():
+#     username = json.loads(request.args.get('arg'))['username']
+#     print (username)
+#     print (url_for('index', username = username))
+#     # return redirect(url_for('index', username = username))
+#     return render_template('index.html', username = username)
 
-# @app.route('/index')
-# def index():
+@app.route('/index')
+def index():
+    print ("request received in /index")
     
 
 # @app.route('/verification', methods=['GET', 'POST'])
