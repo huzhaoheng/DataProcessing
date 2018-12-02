@@ -133,13 +133,9 @@ def verifyUser():
     ret = {}
     print (result)
     if not result:
-        ret = {"valid" : False, "url" : None}
+        ret = {"valid" : False, "redirect" : None}
     else:
-        url = url_for('home', username = username)
-        print ('---------------------------------------')
-        print (url)
-        print ('---------------------------------------')
-        ret = {"valid" : True, "url" : url}
+        ret = {"valid" : True, "redirect" : redirect(url_for('home', username = username))}
 
     return jsonify(elements = ret)
 

@@ -21,11 +21,9 @@ function verifyUser(result) {
 		function (response){
 			var result = response.elements;
 			var valid = result['valid'];
-			var url = result['url'];
 			console.log(valid);
 			if (valid == true) {
-				console.log(url);
-				window.location.href = url;
+				window.location.href = result['redirect'];
 			}
 			else {
 				$('#error-message').show();
