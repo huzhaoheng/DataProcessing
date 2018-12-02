@@ -102,7 +102,7 @@ def home():
         return render_template('home.html', username = username)
 
     else:
-        return render_template('home.html', username = None)        
+        return render_template('login.html', username = None)        
 
 # @app.route('/verification', methods=['GET', 'POST'])
 # def verification():
