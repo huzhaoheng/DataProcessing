@@ -23,7 +23,12 @@ function verifyUser(result) {
 			var valid = result['valid'];
 			console.log(valid);
 			if (valid == true) {
-				window.location.href = result['redirect'];
+				$.getJSON(
+					'/loginSuccess',
+					{arg: JSON.stringify({"username" : username})},
+					function (response) {
+						window.location.href = response.redirect;
+					}
 			}
 			else {
 				$('#error-message').show();

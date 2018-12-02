@@ -133,11 +133,16 @@ def verifyUser():
     ret = {}
     print (result)
     if not result:
-        ret = {"valid" : False, "redirect" : None}
+        ret = {"valid" : False}
     else:
-        ret = {"valid" : True, "redirect" : redirect(url_for('home', username = username))}
+        ret = {"valid" : True}
 
     return jsonify(elements = ret)
+
+@app.route('/loginSuccess')
+def loginSuccess():
+    username = json.loads(request.args.get('arg'))['username']
+    return redirect(url_for('home', username = username))
 
 # @app.route('/verification', methods=['GET', 'POST'])
 # def verification():
