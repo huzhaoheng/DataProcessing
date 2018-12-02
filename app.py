@@ -149,7 +149,8 @@ def verifyUser():
 
 @app.route('/index')
 def index():
-    print (request.args)
+    print (request.json)
+    username = request.json['username']
     return render_template('index.html', username = username)
     
 
