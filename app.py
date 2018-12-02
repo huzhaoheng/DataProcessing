@@ -142,6 +142,8 @@ def verifyUser():
 @app.route('/loginSuccess')
 def loginSuccess():
     username = json.loads(request.args.get('arg'))['username']
+    print (username)
+    print (url_for('home', username = username))
     return redirect(url_for('home', username = username))
 
 # @app.route('/verification', methods=['GET', 'POST'])
