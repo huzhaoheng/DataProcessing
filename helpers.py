@@ -1,5 +1,6 @@
 import nltk
 from nltk.tokenize import RegexpTokenizer
+import hashlib
 
 def queryBuilder(path, parameter_id, startDate, endDate):
 	query = """

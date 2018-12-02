@@ -2,7 +2,6 @@
 import os
 from flask import Flask, jsonify, render_template, redirect, url_for, request, make_response, Response
 from py2neo import Graph, Path, authenticate
-import hashlib
 import json
 from helpers import *
 from flask_cors import CORS
