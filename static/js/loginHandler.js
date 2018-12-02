@@ -28,6 +28,7 @@ function verifyUser(result) {
 				window.location.href = url;
 			}
 			else {
+				$('#error-message').show();
 				return;
 			}
 		}
