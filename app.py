@@ -106,10 +106,11 @@ def home():
             print ("Duration:", endTime - startTime)
 
         else:
+            json.dump(payload, open("payload.json", "w"))
             pass
 
 
-        # return render_template('index.html', username = username)
+        return render_template('index.html', username = username)
 
     else:
         return render_template('login.html')        
