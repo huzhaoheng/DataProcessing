@@ -210,7 +210,7 @@ def validateDataStructure(parent_id, schema, node_name, graph):
 				new_schema = sub_schema
 				break
 
-		validateDataStructure(parent_id, new_schema, node_name)
+		validateDataStructure(parent_id, new_schema, node_name, graph)
 	
 	else:
 		data_type = schema["type"]
@@ -233,7 +233,7 @@ def validateDataStructure(parent_id, schema, node_name, graph):
 
 			if "properties" in schema:
 				for node_name, node_schema in schema["properties"].items():
-					validateDataStructure(this_id, node_schema, node_name)
+					validateDataStructure(this_id, node_schema, node_name, graph)
 			
 
 		elif data_type == "array":
@@ -249,7 +249,7 @@ def validateDataStructure(parent_id, schema, node_name, graph):
 				else:
 					new_schema = schema["items"]
 
-				validateDataStructure(parent_id, new_schema, node_name)
+				validateDataStructure(parent_id, new_schema, node_name, graph)
 
 			except Exception as e:
 				pass
@@ -262,7 +262,7 @@ def validateDataStructure(parent_id, schema, node_name, graph):
 				if each != "null":
 					nonnull_type = each
 
-			validateDataStructure(parent_id, {"type" : nonnull_type}, node_name)
+			validateDataStructure(parent_id, {"type" : nonnull_type}, node_name, graph)
 
 		else:
 			query = """
@@ -290,7 +290,7 @@ def storeData(data, schema, node_name, parent_id, curr_time, tx, graph):
 				break
 
 		if data:
-			storeData(data, new_schema, node_name, parent_id, curr_time, tx)
+			storeData(data, new_schema, node_name, parent_id, curr_time, tx, graph)
 		else:
 			pass
 
@@ -316,7 +316,7 @@ def storeData(data, schema, node_name, parent_id, curr_time, tx, graph):
 			if "properties" in schema:
 				for node_name, node_schema in schema["properties"].items():
 					if node_name in data:
-						storeData(data[node_name], node_schema, node_name, this_id, curr_time, tx)
+						storeData(data[node_name], node_schema, node_name, this_id, curr_time, tx, graph)
 			else:
 				pass
 
@@ -334,7 +334,7 @@ def storeData(data, schema, node_name, parent_id, curr_time, tx, graph):
 
 			for each in data:
 				if each:
-					storeData(each, new_schema, node_name, parent_id, curr_time, tx)
+					storeData(each, new_schema, node_name, parent_id, curr_time, tx, graph)
 
 		elif type(data_type) is list:
 			nonnull_type = None
@@ -342,7 +342,7 @@ def storeData(data, schema, node_name, parent_id, curr_time, tx, graph):
 				if each != "null":
 					nonnull_type = each
 			if data:
-				storeData(data, {"type" : nonnull_type}, node_name, parent_id, curr_time, tx)
+				storeData(data, {"type" : nonnull_type}, node_name, parent_id, curr_time, tx, graph)
 
 		else:
 			value = None
