@@ -84,24 +84,34 @@ def applyTextFunction(textFunctionName, data, textAPIClient, parameters):
 # 	except Exception as e:
 # 		return {"succeed": False, "message": str(e)}
 	
-
-def validateUserNode(username, email, graph):
+def getUserNameByUserID(userID, graph):
 	query = """
 				MATCH 
 					(u:SystemUser) 
 				WHERE 
-					u.username = '{username}' 
+					u.userID = '{userID}' 
+				RETURN u.username AS username
+			""".format(userID = userID)
+	username = graph.cypher.execute(query)[0]["username"]
+	return username
+
+def validateUserNode(username, email, userID, graph):
+	query = """
+				MATCH 
+					(u:SystemUser) 
+				WHERE 
+					u.userID = '{userID}' 
 				RETURN ID(u)
-			""".format(username = username)
+			""".format(userID = userID)
 	user_exists = graph.cypher.execute(query)
 	user_id = None
 	if not user_exists:
 		query = """
 					CREATE 
-						(u:SystemUser {{username : '{username}', email : '{email}'}}) 
+						(u:SystemUser {{username : '{username}', email : '{email}', userID: '{userID}'}}) 
 					RETURN
 						ID(u)
-				""".format(username = username, email = email)
+				""".format(username = username, email = email, userID = userID)
 		result = graph.cypher.execute(query)
 		user_id = result[0]["ID(u)"]
 	else:
