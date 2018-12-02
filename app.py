@@ -83,7 +83,7 @@ def home():
         if queryType == 'query':
             query_name = payload['value']['name']
             data = json.loads(payload['value']['data'])
-            data = json.loads(payload['value']['structure'])
+            structure = json.loads(payload['value']['structure'])
             
             print ("username:", username)
             print ("query_name:", query_name)
