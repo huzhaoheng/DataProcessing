@@ -128,8 +128,7 @@ def verifyUser():
         WHERE u.username = '{username}'
         AND u.email = '{email}'
         RETURN u
-    """
-    print (query)
+    """.format(username = username, email = email)
     result = graph.cypher.execute(query)
     ret = {}
     if not result:
