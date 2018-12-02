@@ -13,6 +13,7 @@ from aylienapiclient import textapi
 import pymysql
 from genson import SchemaBuilder
 import time
+import datetime
 pymysql.install_as_MySQLdb()
 
 import MySQLdb
