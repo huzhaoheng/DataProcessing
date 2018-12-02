@@ -129,6 +129,7 @@ def verifyUser():
         AND u.email = '{email}'
         RETURN u
     """
+    print (query)
     result = graph.cypher.execute(query)
     ret = {}
     if not result:
