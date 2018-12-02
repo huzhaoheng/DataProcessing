@@ -58,7 +58,8 @@ def handshake():
     username = request.json['user']['name']
     email = request.json['user']['email']
     userID = request.json['user']['id']
-    validateUserNode(username, email, userID, graph)
+    res = validateUserNode(username, email, userID, graph)
+    print (res)
     return Response("{'message':'handshaking from dataprocessing'}", status=201, mimetype='application/json')
 
 @app.route('/home', methods=['GET', 'POST'])
