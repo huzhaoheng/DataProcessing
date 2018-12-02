@@ -29,6 +29,7 @@ function verifyUser(result) {
 					function (response) {
 						window.location.href = response.redirect;
 					}
+				)
 			}
 			else {
 				$('#error-message').show();
