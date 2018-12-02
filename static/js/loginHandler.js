@@ -21,9 +21,11 @@ function verifyUser(result) {
 		function (response){
 			var result = response.elements;
 			var valid = result['valid'];
+			var url = result['url'];
 			console.log(valid);
 			if (valid == true) {
-				window.location.href = '/templates/home.html?username=' + username;
+				console.log(url);
+				window.location.href = url;
 			}
 			else {
 				return;

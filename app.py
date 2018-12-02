@@ -132,9 +132,9 @@ def verifyUser():
     result = graph.cypher.execute(query)
     ret = {}
     if not result:
-        ret = {"valid" : False}
+        ret = {"valid" : False, "url" : None}
     else:
-        ret = {"valid" : True}
+        ret = {"valid" : True, "url" : url_for('home', username = username)}
 
     return jsonify(elements = ret)
 
