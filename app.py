@@ -149,7 +149,8 @@ def verifyUser():
 
 @app.route('/index')
 def index():
-    print ("request received in /index")
+    print (request.args)
+    return render_template('index.html', username = username)
     
 
 # @app.route('/verification', methods=['GET', 'POST'])
