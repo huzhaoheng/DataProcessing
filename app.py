@@ -118,6 +118,25 @@ def home():
     else:
         return render_template('login.html', username = None)        
 
+@app.route('/verifyUser')
+def verifyUser():
+    username = json.loads(request.args.get('arg'))['username']
+    email = json.loads(request.args.get('arg'))['email']
+    query = """
+        MATCH (u:SystemUser)
+        WHERE u.username = '{username}'
+        AND u.email = '{email}'
+        RETURN u
+    """
+    result = graph.cypher.execute(query)
+    ret = {}
+    if not result:
+        ret = {"valid" : False}
+    else:
+        ret = {"valid" : True}
+
+    return jsonify(elements = ret)
+
 # @app.route('/verification', methods=['GET', 'POST'])
 # def verification():
 #     print("request received")
