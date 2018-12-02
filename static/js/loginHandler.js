@@ -1,6 +1,12 @@
 function submitForm() {
-	console.log('here');
 	var data = $("#Login").serializeArray();
 	console.log(data);
-	return;
+	result = {}
+	data.forEach(function (each) {
+		var key = each['name'];
+		var value = each['value'];
+		result[key] = value;
+	});
+	console.log(result);
+	return result;
 }
