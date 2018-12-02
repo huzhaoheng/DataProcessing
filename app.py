@@ -84,17 +84,11 @@ def home():
             query_name = payload['value']['name']
             data = json.loads(payload['value']['data'])
             structure = json.loads(payload['value']['structure'])
-            
-            print ("username:", username)
-            print ("query_name:", query_name)
-            print ("structure:", structure)
-            print ("data:", data)
-            
+
             parsed_parameters = parameterParser(structure)
             builder = SchemaBuilder()
             builder.add_object(data)
             schema = builder.to_schema()
-            # user_id = validateUserNode(username)
             user_id = graph.cypher.execute("MATCH (u:SystemUser) WHERE u.username = '{username}' RETURN ID(u) AS id".format(username = username))[0]["id"]
             query_id = validateQueryNode(username, query_name, graph)
             parameter_id = validateParameterNode(schema, username, query_name, parsed_parameters, graph)
@@ -115,7 +109,7 @@ def home():
             pass
 
 
-        return render_template('index.html', username = username)
+        # return render_template('index.html', username = username)
 
     else:
         return render_template('login.html')        
