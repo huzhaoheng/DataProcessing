@@ -54,6 +54,10 @@ db.commit()
 def handshake():
     print ("handshaking started")
     print (request.json)
+    # requese.json example: {'user': {'id': '6ee840e0-f541-11e8-b36a-d331d74ace97', 'name': 'Zhaoheng', 'email': 'hu61@illinois.edu'}}
+    username = request.json['user']['name']
+    email = request.json['user']['email']
+    userID = validateUserNode(username, email, graph)
     return Response("{'message':'handshaking from dataprocessing'}", status=201, mimetype='application/json')
 
 @app.route('/home', methods=['GET', 'POST'])
@@ -61,41 +65,44 @@ def home():
     print ("request received in /home")
     print (request)
     print (request.json)
-    userInfo = json.loads(request.json["user"])
-    queryInfo = json.loads(request.json["value"])
-    username = userInfo["name"]
-    data = queryInfo["result"]
-    query_name = queryInfo["queryName"]
-    structure = queryInfo["structure"]
-    print ("username:", username)
-    print ("query_name:", query_name)
-    print ("structure:", structure)
-    print ("data:", data)
-    
-    parsed_parameters = parameterParser(query_structure)
+    payload = request.json
+    if payload:
+        userInfo = json.loads(request.json["user"])
+        queryInfo = json.loads(request.json["value"])
+        username = userInfo["name"]
+        data = queryInfo["result"]
+        query_name = queryInfo["queryName"]
+        structure = queryInfo["structure"]
+        print ("username:", username)
+        print ("query_name:", query_name)
+        print ("structure:", structure)
+        print ("data:", data)
+        
+        parsed_parameters = parameterParser(query_structure)
+        builder = SchemaBuilder()
+        builder.add_object(data)
+        schema = builder.to_schema()
+        user_id = validateUserNode(username)
+        query_id = validateQueryNode(username, query_name)
+        parameter_id = validateParameterNode(schema, username, query_name, parsed_parameters)
+        connectNodes(user_id, query_id, "hasQuery")
+        connectNodes(query_id, parameter_id, "hasParameter")
+        validateDataStructure(parameter_id, schema, "root")
+        curr_time = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+        print ("transaction begins")
+        startTime = time.time()
+        tx = graph.cypher.begin()
+        storeData(data, schema, "root", parameter_id, curr_time, tx)
+        tx.commit()
+        endTime = time.time()
+        print ("dataprocessing finished")
+        print ("Duration:", endTime - startTime)
 
-    builder = SchemaBuilder()
-    builder.add_object(data)
-    schema = builder.to_schema()
 
-    user_id = validateUserNode(username)
-    query_id = validateQueryNode(username, query_name)
-    parameter_id = validateParameterNode(schema, username, query_name, parsed_parameters)
-    connectNodes(user_id, query_id, "hasQuery")
-    connectNodes(query_id, parameter_id, "hasParameter")
-    validateDataStructure(parameter_id, schema, "root")
-    curr_time = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-    print ("transaction begins")
-    startTime = time.time()
-    tx = graph.cypher.begin()
-    storeData(data, schema, "root", parameter_id, curr_time, tx)
-    tx.commit()
-    endTime = time.time()
-    print ("dataprocessing finished")
-    print ("Duration:", endTime - startTime)
+        return render_template('home.html', username = username)
 
-    return render_template('home.html', username = username)
-
+    else:
+        return render_template('home.html', username = None)        
 
 # @app.route('/verification', methods=['GET', 'POST'])
 # def verification():

@@ -70,7 +70,22 @@ def applyTextFunction(textFunctionName, data, textAPIClient, parameters):
 		
 	return result
 
-def validateUserNode(username):
+# def createUserNode(username, email, graph):
+# 	try:
+# 		query = """
+# 				CREATE 
+# 					(u:SystemUser {{
+# 						username : '{username}',
+# 						email : '{email}'
+# 					}})
+# 			""".format(username = username, email = email)
+# 		graph.cypher.execute(query)
+# 		return {"succeed": True, "message": "Done"}
+# 	except Exception as e:
+# 		return {"succeed": False, "message": str(e)}
+	
+
+def validateUserNode(username, email, graph):
 	query = """
 				MATCH 
 					(u:SystemUser) 
@@ -83,10 +98,10 @@ def validateUserNode(username):
 	if not user_exists:
 		query = """
 					CREATE 
-						(u:SystemUser {{username : '{username}'}}) 
-					RETURN 
+						(u:SystemUser {{username : '{username}', email : '{email}'}}) 
+					RETURN
 						ID(u)
-				""".format(username = username)
+				""".format(username = username, email = email)
 		result = graph.cypher.execute(query)
 		user_id = result[0]["ID(u)"]
 	else:
@@ -94,7 +109,7 @@ def validateUserNode(username):
 
 	return user_id
 
-def validateQueryNode(username, query_name):
+def validateQueryNode(username, query_name, graph):
 	query = """
 				MATCH 
 					(q:Query) 
@@ -118,7 +133,7 @@ def validateQueryNode(username, query_name):
 
 	return query_id
 
-def validateParameterNode(schema, username, query_name, parsed_parameters):
+def validateParameterNode(schema, username, query_name, parsed_parameters, graph):
 	parameter_hash = hashlib.md5(json.dumps(schema).encode()).hexdigest()
 	query = """
 				MATCH 
@@ -157,7 +172,7 @@ def validateParameterNode(schema, username, query_name, parsed_parameters):
 
 	return parameter_id
 
-def connectNodes(source_id, target_id, rel_name):
+def connectNodes(source_id, target_id, rel_name, graph):
 	query = """
 		MATCH 
 			(s), (t)
@@ -174,7 +189,7 @@ def connectNodes(source_id, target_id, rel_name):
 	)
 	graph.cypher.execute(query)
 
-def validateDataStructure(parent_id, schema, node_name):
+def validateDataStructure(parent_id, schema, node_name, graph):
 	if "anyOf" in schema:
 		new_schema = None
 		sub_schemas = schema["anyOf"]
@@ -250,7 +265,7 @@ def validateDataStructure(parent_id, schema, node_name):
 			""".format(parent_id = parent_id, node_name = node_name)
 			graph.cypher.execute(query)
 
-def storeData(data, schema, node_name, parent_id, curr_time, tx):
+def storeData(data, schema, node_name, parent_id, curr_time, tx, graph):
 	if not data:
 		return
 		
