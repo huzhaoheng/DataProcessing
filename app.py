@@ -56,11 +56,6 @@ def handshake():
     print (request.json)
     return Response("{'message':'handshaking from dataprocessing'}", status=201, mimetype='application/json')
 
-@app.route('/test/handshake', methods=['GET', 'POST'])
-def test():
-    print ("testing")
-    return 'Hello, World'
-
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     print ("request received in /home")
