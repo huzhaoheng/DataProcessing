@@ -28,9 +28,10 @@ function verifyUser(result) {
 					'/loginSuccess',
 					{arg: JSON.stringify({"username" : username})},
 					function (response) {
-						console.log(response);
+						/*console.log(response);
 						console.log(response.redirect)
-						window.location.href = response.redirect;
+						window.location.href = response.redirect;*/
+						return;
 					}
 				)
 			}
