@@ -131,11 +131,14 @@ def verifyUser():
     """.format(username = username, email = email)
     result = graph.cypher.execute(query)
     ret = {}
+    print (result)
     if not result:
         ret = {"valid" : False, "url" : None}
     else:
         url = url_for('home', username = username)
+        print ('---------------------------------------')
         print (url)
+        print ('---------------------------------------')
         ret = {"valid" : True, "url" : url}
 
     return jsonify(elements = ret)
