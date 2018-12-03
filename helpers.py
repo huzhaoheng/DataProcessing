@@ -178,6 +178,7 @@ def validateParameterNode(schema, username, query_name, parsed_parameters, graph
 						ID(p)
 				""".format(query_name = query_name, username = username, parameter_hash = parameter_hash, parameters_str = parameters_str)
 		result = graph.cypher.execute(query)
+		print (query)
 		parameter_id = result[0]["ID(p)"]
 	else:
 		parameter_id = parameter_exists[0]["ID(p)"]
