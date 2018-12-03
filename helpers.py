@@ -165,11 +165,11 @@ def validateParameterNode(schema, username, query_name, parsed_parameters, graph
 		for k, v in parsed_parameters.items():
 			if v:
 				if type(v) is str:
-					parameters_str += "{k} : '{v}', ".format(k = k, v = v)
+					parameters_str += "{k} : '{v}', ".format(k = "_".join(k.split('.')), v = v)
 				else:
-					parameters_str += "{k} : {v}, ".format(k = k, v = v)
+					parameters_str += "{k} : {v}, ".format(k = "_".join(k.split('.')), v = v)
 			else:
-				parameters_str += "{k} : {v}, ".format(k = k, v = "null")
+				parameters_str += "{k} : {v}, ".format(k = "_".join(k.split('.')), v = "null")
 
 		query = """
 					CREATE 
@@ -178,7 +178,6 @@ def validateParameterNode(schema, username, query_name, parsed_parameters, graph
 						ID(p)
 				""".format(query_name = query_name, username = username, parameter_hash = parameter_hash, parameters_str = parameters_str)
 		result = graph.cypher.execute(query)
-		print (query)
 		parameter_id = result[0]["ID(p)"]
 	else:
 		parameter_id = parameter_exists[0]["ID(p)"]
