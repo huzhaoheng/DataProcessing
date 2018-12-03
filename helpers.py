@@ -466,7 +466,6 @@ def generateDataFromNode(node):
 				curr[step] = values
 
 	print ("data generated")
-	print (data)
 	return data
 
 def storeDataStructure(data, nodeName, parentID, graph):
@@ -537,4 +536,9 @@ def storeDataInMetaQuery(data, nodeName, parentID, currTime, tx, graph):
 					(x)-[:hasChild]->(o:Object {{node_name : '{nodeName}', collected_at : '{currTime}'}})-[:hasValue]->(v:Value {{collected_at : '{currTime}', value : {value}}})
 			""".format(currTime = currTime, parentID = parentID, value = value, nodeName = nodeName)
 			# graph.cypher.execute(query)
-			tx.append(query)
+			try:
+				tx.append(query)
+			except Exception as e:
+				print (e)
+				print (query)
+			
