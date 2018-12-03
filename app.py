@@ -366,7 +366,6 @@ def queryData():
                 ret["data"][objectID][node_alias] = []
             ret["data"][objectID][node_alias].append(value)
 
-    print (ret)
     return jsonify(elements = ret)
 
 @app.route('/storeFormula')
