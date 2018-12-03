@@ -539,6 +539,3 @@ def storeDataInMetaQuery(data, nodeName, parentID, currTime, tx, graph):
 				""".format(currTime = currTime, parentID = parentID, value = valStr, nodeName = nodeName)
 				# graph.cypher.execute(query)
 				tx.append(query)
-
-	result = graph.cypher.execute(query)
-	this_id = result[0]["ID(o)"]
