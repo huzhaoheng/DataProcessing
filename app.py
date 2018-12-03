@@ -114,7 +114,7 @@ def home():
                 stage = stages[i]
                 nodes = stage["nodes"]
                 #last basic query
-                if len(nodes) == 1 and nodes[0]["type"] = "query":
+                if len(nodes) == 1 and nodes[0]["type"] == "query":
                     node = nodes[0]
                     query_name = node["name"]
                     user_id = graph.cypher.execute("MATCH (u:SystemUser) WHERE u.username = '{username}' RETURN ID(u) AS id".format(username = username))[0]["id"]
