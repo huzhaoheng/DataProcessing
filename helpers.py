@@ -511,7 +511,7 @@ def storeDataInMetaQuery(data, nodeName, parentID, currTime, tx, graph):
 			storeDataInMetaQuery(v, k, this_id, currTime, tx, graph)
 
 	elif type(data) is list:
-			for each in value:
+			for each in data:
 				storeDataInMetaQuery(each, nodeName, parentID, currTime, tx, graph)
 	else:
 		for value in data:
