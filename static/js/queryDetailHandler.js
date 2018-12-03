@@ -289,8 +289,8 @@ function prepareData(data) {
 			var values = each[property_alias];
 			var layer = property_alias.split('_')[0];
 			var prefix = layer + "_"
-			//var property = property_alias.slice(prefix.length);
-			var property = property_alias.split('_')[1];
+			var property = property_alias.slice(prefix.length);
+			//var property = property_alias.split('_')[1];
 
 			if (!(layer in dict)) {
 				dict[layer] = {};
@@ -442,6 +442,7 @@ function viewData() {
 			function (response){
 				var result = response.elements;
 				var data = result["data"];
+				console.log("Number of entities: " + data.length.toString())
 				var queries = result["queries"];
 				var message_type = "success";
 				var message = "Great! Successfully loaded your data!";

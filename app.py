@@ -162,14 +162,6 @@ def verifyUser():
         
     return jsonify(elements = ret)
 
-# @app.route('/loginSuccess')
-# def loginSuccess():
-#     username = json.loads(request.args.get('arg'))['username']
-#     print (username)
-#     print (url_for('index', username = username))
-#     # return redirect(url_for('index', username = username))
-#     return render_template('index.html', username = username)
-
 @app.route('/index')
 def index():
     args = request.args.to_dict()
@@ -178,61 +170,6 @@ def index():
     return render_template('index.html', username = username)
     
 
-# @app.route('/verification', methods=['GET', 'POST'])
-# def verification():
-#     print("request received")
-#     curr_time = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime())
-#     username, data, query_name, structure = request.json["username"], json.loads(request.json["data"]), request.json["name"], json.loads(request.json["structure"])
-#     with open('sample_structure.json', 'w') as fp:
-#         json.dump(structure, fp)
-#     with open('data.json', 'w') as fp:
-#         json.dump(data, fp)
-#     hashkey = hashlib.md5((username).encode()).hexdigest()
-#     parameters = parameterParser(structure)
-#     parameter_id = generateParameterID(parameters, username)
-#     query = "MATCH (d:SystemUser) WHERE d.username = '" + username + "' RETURN d"
-#     exists = graph.cypher.execute(query)
-#     redirect_url = "http://listen.online:1111" + url_for('home', username = username, hashkey = hashkey)
-#     response = make_response(redirect_url)
-#     response.set_cookie('hashkey', hashkey)
-#     response.set_cookie('username', username)
-#     if not exists:
-#         query = "CREATE (u:SystemUser {username : '" + username + "', hashkey : '" + hashkey + "'})"
-#         graph.cypher.execute(query)
-#     query_name_exist = graph.cypher.execute("MATCH (q:Query {name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) RETURN q")
-#     if not query_name_exist:
-#         query = "MATCH (a:SystemUser {username:'" + username + "'}) CREATE (a)-[:hasQuery]->(b:Query {name:'" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', update_time : '" + curr_time + "'})-[:hasParameter]->(c:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
-#         for k, v in parameters.items():
-#             if v:
-#                 if (type(v) is int) or (type(v) is float):
-#                     query += ", " + k + ": " + str(v)
-#                 else:
-#                     query += ", " + k + ": '" + str(v) + "'"
-#         query += "})"
-#         graph.cypher.execute(query)
-#         createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
-#     else:
-#         query = "MATCH (a:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "'}) RETURN a;"
-#         query_parameter_exist = graph.cypher.execute(query)
-#         if not query_parameter_exist:
-#             query = "MATCH (a:Query {name:'" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "'}) CREATE (a)-[:hasParameter]->(b:QueryParameter {query_name : '" + query_name + "', system_user_username : '" + username + "', system_user_hashkey : '" + hashkey + "', parameter_id : '" + parameter_id + "', update_time : '" + curr_time + "'"
-#             for k, v in parameters.items():
-#                 if v:
-#                     if (type(v) is int) or (type(v) is float):
-#                         query += ", " + k + ": " + str(v)
-#                     else:
-#                         query += ", " + k + ": '" + str(v) + "'"
-#             query += "})"
-#             graph.cypher.execute(query)
-#             createQueryParameterStructure(graph, username, hashkey, structure, query_name, parameter_id)
-        
-#     storeData(graph, data, username, hashkey, structure, query_name, parameter_id)
-#     return Response
-
-# @app.route('/home')
-# def home():
-#     username = request.args.get('username')
-#     return render_template('home.html', username = username)
 #----------------------------------------------------------------------------------------
 @app.route('/getQueries')
 def getQueries():
@@ -341,6 +278,33 @@ def getStructure():
     
     return jsonify(elements = ret)
 
+# @app.route('/queryData')
+# def queryData():
+#     paths = json.loads(request.args.get('arg'))['paths']
+#     parameter_id = json.loads(request.args.get('arg'))['parameter_id']
+#     dates = json.loads(request.args.get('arg'))['dates']
+#     startDate = dates['startDate']
+#     endDate = dates['endDate']
+#     ret = {"data" : {}, "queries" : []}
+#     queries = [queryBuilder(path, parameter_id, startDate, endDate) for path in paths]
+#     for each in queries:
+#         node_alias = each["alias"]
+#         query = each["query"]
+#         value_alias = node_alias + "_value"
+#         objectID_alias = node_alias + "_objectID"
+#         result = graph.cypher.execute(query)
+#         ret["queries"].append(' '.join(query.split()))
+#         for each in result:
+#             value = each[value_alias]
+#             objectID = each[objectID_alias]
+#             if objectID not in ret["data"]:
+#                 ret["data"][objectID] = {}
+#             if node_alias not in ret["data"][objectID]:
+#                 ret["data"][objectID][node_alias] = []
+#             ret["data"][objectID][node_alias].append(value)
+
+#     return jsonify(elements = ret)
+
 @app.route('/queryData')
 def queryData():
     paths = json.loads(request.args.get('arg'))['paths']
@@ -350,21 +314,28 @@ def queryData():
     endDate = dates['endDate']
     ret = {"data" : {}, "queries" : []}
     queries = [queryBuilder(path, parameter_id, startDate, endDate) for path in paths]
-    for each in queries:
-        node_alias = each["alias"]
-        query = each["query"]
-        value_alias = node_alias + "_value"
-        objectID_alias = node_alias + "_objectID"
-        result = graph.cypher.execute(query)
+    queryList = [each["query"] for each in queries]
+    propertyAliasList = [each["alias"] for each in queries]
+    tx = graph.cypher.begin()
+    for query in queryList:
+        tx.append(query)
+    results = tx.commit()
+    for i, result in enumerate(results):
+        query = queryList[i]
         ret["queries"].append(' '.join(query.split()))
+
+        propertyAlias = propertyAliasList[i]
+        valueAlias = propertyAlias + "_value"
+        entityIDAlias = propertyAlias + "_objectID"
+
         for each in result:
-            value = each[value_alias]
-            objectID = each[objectID_alias]
-            if objectID not in ret["data"]:
-                ret["data"][objectID] = {}
-            if node_alias not in ret["data"][objectID]:
-                ret["data"][objectID][node_alias] = []
-            ret["data"][objectID][node_alias].append(value)
+            value = each[valueAlias]
+            entityID = each[entityIDAlias]
+            if entityID not in ret["data"]:
+                ret["data"][entityID] = {}
+            if propertyAlias not in ret["data"][entityID]:
+                ret["data"][entityID][propertyAlias] = []
+            ret["data"][entityID][propertyAlias].append(value)
 
     return jsonify(elements = ret)
 

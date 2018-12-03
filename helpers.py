@@ -534,7 +534,7 @@ def storeDataInMetaQuery(data, nodeName, parentID, currTime, tx, graph):
 				WITH
 					(x)
 				CREATE 
-					(x)-[:hasChild]->(o:Object {{node_name : '{nodeName}', collected_at : '{currTime}'}})-[:hasValue]->(v:Value {{collected_at : '{parentID}', value : {value}}})
+					(x)-[:hasChild]->(o:Object {{node_name : '{nodeName}', collected_at : '{currTime}'}})-[:hasValue]->(v:Value {{collected_at : '{currTime}', value : {value}}})
 			""".format(currTime = currTime, parentID = parentID, value = value, nodeName = nodeName)
 			# graph.cypher.execute(query)
 			tx.append(query)
