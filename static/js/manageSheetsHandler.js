@@ -44,7 +44,8 @@ function initCodingArea() {
 		lineNumbers: true,
 		matchBrackets : true,
 		autofocus: true,
-		mode: 'text/x-mysql'
+		mode: 'text/x-mysql',
+		value: "# NOTE: All values stored in tables are in STRING type, so if you want to use them as other any type, such as integer, please do CAST(value AS UNSIGNED/...)"
 	});
 }
 
