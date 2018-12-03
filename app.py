@@ -194,9 +194,11 @@ def getParameters():
     query = """
                 MATCH 
                     (q:Query)-[r:hasParameter]->(p:QueryParameter)
+                WHERE
+                    ID(q) = {query_id}
                 RETURN
                     p
-    """
+    """.format(query_id = query_id)
     ret = {}
     result = graph.cypher.execute(query)
     for each in result:
