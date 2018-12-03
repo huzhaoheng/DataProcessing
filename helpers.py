@@ -514,28 +514,27 @@ def storeDataInMetaQuery(data, nodeName, parentID, currTime, tx, graph):
 			for each in data:
 				storeDataInMetaQuery(each, nodeName, parentID, currTime, tx, graph)
 	else:
-		for value in data:
-			if value:
-				valStr = None
-				if type(value) is int:
-					valStr = "toInteger({value})".format(value = value)
-				elif type(value) is float:
-					valStr = "toFloat({value})".format(value = value)
-				elif type(value) is bool:
-					valStr = "toBoolean({value})".format(value = value)
-				else:
-					valStr = '"{value}"'.format(value = value.replace('"', "'"))
+		if data:
+			value = None
+			if type(data) is int:
+				value = "toInteger({data})".format(data = data)
+			elif type(data) is float:
+				value = "toFloat({data})".format(data = data)
+			elif type(data) is bool:
+				value = "toBoolean({data})".format(data = data)
+			else:
+				value = '"{data}"'.format(data = data.replace('"', "'"))
 
 
-				query = """
-					MATCH
-						(x)
-					WHERE
-						ID(x) = {parentID}
-					WITH
-						(x)
-					CREATE 
-						(x)-[:hasChild]->(o:Object {{node_name : '{nodeName}', collected_at : '{currTime}'}})-[:hasValue]->(v:Value {{collected_at : '{parentID}', value : {value}}})
-				""".format(currTime = currTime, parentID = parentID, value = valStr, nodeName = nodeName)
-				# graph.cypher.execute(query)
-				tx.append(query)
+			query = """
+				MATCH
+					(x)
+				WHERE
+					ID(x) = {parentID}
+				WITH
+					(x)
+				CREATE 
+					(x)-[:hasChild]->(o:Object {{node_name : '{nodeName}', collected_at : '{currTime}'}})-[:hasValue]->(v:Value {{collected_at : '{parentID}', value : {value}}})
+			""".format(currTime = currTime, parentID = parentID, value = value, nodeName = nodeName)
+			# graph.cypher.execute(query)
+			tx.append(query)
