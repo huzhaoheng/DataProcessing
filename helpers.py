@@ -455,7 +455,7 @@ def generateDataFromNode(node):
 	for each in outputs:
 		curr = data
 		path = each['path']
-		values = path['value']
+		values = each['value']
 		steps = path.split(".")
 		for i, step in enumerate(steps):
 			if step not in curr:
