@@ -373,29 +373,172 @@ def storeData(data, schema, node_name, parent_id, curr_time, tx, graph):
 	return;
 
 def parameterParser(structure):
-    ret = {}
-    if type(structure) is dict:
-        if structure["selected"]:
-            curr_name = structure["name"]
-            if structure["inputs"]:
-                for each in structure["inputs"]:
-                    name = each["name"]
-                    value = each["value"]
-                    inputType = each["inputType"]
-                    if inputType == "Int":
-                        ret[curr_name + "_" + name] = int(value)
-                    elif inputType == "Float":
-                        ret[curr_name + "_" + name] = float(value)
-                    else:
-                        ret[curr_name + "_" + name] = value
-            if structure["children"]:
-                children_ret = parameterParser(structure["children"])
-                for k, v in children_ret.items():
-                    ret[curr_name + "_" + k]  = v
-        return ret
-    
-    else:
-        for each in structure:
-            for k, v in parameterParser(each).items():
-                ret[k] = v
-        return ret
+	ret = {}
+	if type(structure) is dict:
+		if structure["selected"]:
+			curr_name = structure["name"]
+			if structure["inputs"]:
+				for each in structure["inputs"]:
+					name = each["name"]
+					value = each["value"]
+					inputType = each["inputType"]
+					if inputType == "Int":
+						ret[curr_name + "_" + name] = int(value)
+					elif inputType == "Float":
+						ret[curr_name + "_" + name] = float(value)
+					else:
+						ret[curr_name + "_" + name] = value
+			if structure["children"]:
+				children_ret = parameterParser(structure["children"])
+				for k, v in children_ret.items():
+					ret[curr_name + "_" + k]  = v
+		return ret
+	
+	else:
+		for each in structure:
+			for k, v in parameterParser(each).items():
+				ret[k] = v
+		return ret
+
+def generateNodesMapping(stages):
+	ret = {}
+	for stage in stages:
+		nodes = stage['nodes']
+		for node in nodes:
+			nodeID = node['id']
+			ret[nodeID] = node
+	return ret
+
+def generateNodeSchema(node, nodesMapping):
+	nestedSchema = {}
+	schemas = []
+	inputs = node["inputs"]
+	dependencies = node["dependencies"]
+	inputID2NodeIDMapping = {}
+	for dep in dependencies:
+		inputID2NodeIDMapping[dep['input_id']] = dep['node_id']
+		for each in inputs:
+			if each['input_id'] in inputID2NodeIDMapping:
+				nodeID = inputID2NodeIDMapping[each['input_id']]
+				inputNode = nodesMapping[nodeID]
+				values = inputNode['outputs'][0]['value']
+				nestedSchema[each['path']] = values
+	
+	print ("nestedSchema generated")
+	print (nestedSchema)
+	return nestedSchema
+
+	# schemasNum = 1
+	
+	# for v in nestedSchema.values():
+	# 	schemasNum *= len(v)
+
+	# for i in range(schemasNum):
+	# 	initSchema = {}
+	# 	for k in nestedSchema.keys():
+	# 		initSchema[k] = None
+	# 	schemas.append(initSchema)
+
+	# for k, v in nestedSchema.items():
+	# 	valuesNum = len(v)
+	# 	period = schemasNum // valuesNum
+	# 	for i in range(valuesNum):
+	# 		for j in range(period):
+	# 			schemas[i * period + j][k] = v[i]
+
+	# print (str(schemasNum), "schemas are generated")
+	# return schemas
+
+def generateDataFromNode(node):
+	data = {}
+	outputs = node['outputs']
+	for each in outputs:
+		curr = data
+		path = each['path']
+		values = path['value']
+		steps = path.split(".")
+		for i, step in enumerate(steps):
+			if step not in curr:
+				curr[step] = {}
+			if i != len(steps) - 1:
+				curr = curr[step]
+			else:
+				curr[step] = values
+
+	print ("data generated")
+	print (data)
+	return data
+
+def storeDataStructure(data, nodeName, parentID, graph):
+	query = """
+				MATCH
+					(x)
+				WHERE
+					ID(x) = {parentID}
+				WITH
+					(x)
+				MERGE
+					(x)-[r:hasChild]->(o:StructureObject {{node_name : '{nodeName}'}})
+				RETURN 
+					ID(o)
+			""".format(parentID = parentID, nodeName = nodeName)
+
+	result = graph.cypher.execute(query)
+	this_id = result[0]["ID(o)"]
+	if type(data) is dict:
+		for k, v in data.items():
+			storeDataStructure(v, k, this_id, graph)
+
+def storeDataInMetaQuery(data, nodeName, parentID, currTime, tx, graph):
+	if type(data) is dict:
+		query = """
+					MATCH
+						(x)
+					WHERE
+						ID(x) = {parentID}
+					WITH
+						(x)
+					CREATE 
+						(x)-[r:hasChild]->(o:Object {{node_name : '{nodeName}', collected_at : '{currTime}'}})
+					RETURN 
+						ID(o)
+				""".format(parentID = parentID, nodeName = nodeName, currTime = currTime)
+
+		result = graph.cypher.execute(query)
+		this_id = result[0]["ID(o)"]
+
+		for k, v in data.items():
+			storeDataInMetaQuery(v, k, this_id, currTime, tx, graph)
+
+	elif type(data) is list:
+			for each in value:
+				storeDataInMetaQuery(each, nodeName, parentID, currTime, tx, graph)
+	else:
+		for value in data:
+			if value:
+				valStr = None
+				if type(value) is int:
+					valStr = "toInteger({value})".format(value = value)
+				elif type(value) is float:
+					valStr = "toFloat({value})".format(value = value)
+				elif type(value) is bool:
+					valStr = "toBoolean({value})".format(value = value)
+				else:
+					valStr = '"{value}"'.format(value = value.replace('"', "'"))
+
+
+				query = """
+					MATCH
+						(x)
+					WHERE
+						ID(x) = {parentID}
+					WITH
+						(x)
+					CREATE 
+						(x)-[:hasChild]->(o:Object {{node_name : '{nodeName}', collected_at : '{currTime}'}})-[:hasValue]->(v:Value {{collected_at : '{parentID}', value : {value}}})
+				""".format(currTime = currTime, parentID = parentID, value = valStr, nodeName = nodeName)
+				# graph.cypher.execute(query)
+				tx.append(query)
+
+	result = graph.cypher.execute(query)
+	this_id = result[0]["ID(o)"]

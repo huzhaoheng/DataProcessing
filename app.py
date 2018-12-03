@@ -65,8 +65,6 @@ def handshake():
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     print ("request received in /home")
-    print (request)
-    print (request.json)
     payload = request.json
     if payload:
         # userInfo = json.loads(request.json["user"])
@@ -107,7 +105,36 @@ def home():
 
         else:
             json.dump(payload, open("payload.json", "w"))
-            pass
+            metaQueryName = payload["value"]["name"]
+            structure = payload["value"]["structure"]
+            stages = structure["stages"]
+            nodesMapping = generateNodesMapping(stages)
+            numStages = len(stages)
+            for i in range(numStages - 1, -1, -1):
+                stage = stages[i]
+                nodes = stage["nodes"]
+                #last basic query
+                if len(nodes) == 1 and nodes[0]["type"] = "query":
+                    node = nodes[0]
+                    query_name = node["name"]
+                    user_id = graph.cypher.execute("MATCH (u:SystemUser) WHERE u.username = '{username}' RETURN ID(u) AS id".format(username = username))[0]["id"]
+                    query_id = validateQueryNode(username, query_name, graph)
+                    connectNodes(user_id, query_id, "hasQuery", graph)
+                    nestedSchema = generateNodeSchema(node, nodesMapping)   
+                    parameter_id = validateParameterNode(nestedSchema, username, query_name, nestedSchema, graph)                     
+                    connectNodes(query_id, parameter_id, "hasParameter", graph)
+                    data = generateDataFromNode(node)
+                    storeDataStructure(data, "root", parameter_id, graph)
+                    curr_time = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+                    print ("transaction begins")
+                    startTime = time.time()
+                    tx = graph.cypher.begin()
+                    storeDataInMetaQuery(data, "root", parameter_id, curr_time, tx, graph)
+                    tx.commit()
+                    endTime = time.time()
+                    print ("dataprocessing finished")
+                    print ("Duration:", endTime - startTime)
+                    break
 
 
         return render_template('index.html', username = username)
