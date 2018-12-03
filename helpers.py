@@ -539,6 +539,6 @@ def storeDataInMetaQuery(data, nodeName, parentID, currTime, tx, graph):
 			try:
 				tx.append(query)
 			except Exception as e:
-				print (e)
+				print (str(e))
 				print (query)
 			
