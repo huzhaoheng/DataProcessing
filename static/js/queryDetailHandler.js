@@ -442,7 +442,7 @@ function viewData() {
 			function (response){
 				var result = response.elements;
 				var data = result["data"];
-				console.log("Number of entities: " + data.length.toString())
+				console.log("Number of entities: " + Object.keys(data).length.toString())
 				var queries = result["queries"];
 				var message_type = "success";
 				var message = "Great! Successfully loaded your data!";
