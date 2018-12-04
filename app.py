@@ -344,28 +344,49 @@ def queryData():
 @app.route('/storeFormula')
 def storeFormula():
     print ("here")
-    passedArgs = json.loads(request.args.get('arg'))
-    username = passedArgs['username']
-    formulaName = passedArgs['formulaName']
-    evalCode = passedArgs['evalCode']
-    writtenCode = passedArgs['writtenCode']
-    args = passedArgs['args']
-    query = """
-        MATCH
-            (u:SystemUser {{username : '{username}'}})
-        WITH 
-            (u)
-        MERGE 
-            (u)-[:hasFormula]->(f:Formula {{
-                formulaName : '{formulaName}',
-                username : '{username}',
-                evalCode : '{evalCode}',
-                writtenCode : '{writtenCode}',
-                args : '{args}'}})
-        RETURN (f)
-    """.format(formulaName = formulaName, username = username, evalCode = evalCode, writtenCode = writtenCode, args = args)
+    # passedArgs = json.loads(request.args.get('arg'))
+    # username = passedArgs['username']
+    # formulaName = passedArgs['formulaName']
+    # evalCode = passedArgs['evalCode']
+    # writtenCode = passedArgs['writtenCode']
+    # args = passedArgs['args']
+    # query = """
+    #     MATCH
+    #         (u:SystemUser {{username : '{username}'}})
+    #     WITH 
+    #         (u)
+    #     MERGE 
+    #         (u)-[:hasFormula]->(f:Formula {{
+    #             formulaName : '{formulaName}',
+    #             username : '{username}',
+    #             evalCode : '{evalCode}',
+    #             writtenCode : '{writtenCode}',
+    #             args : '{args}'}})
+    #     RETURN (f)
+    # """.format(formulaName = formulaName, username = username, evalCode = evalCode, writtenCode = writtenCode, args = args)
 
-    print (query)
+    # print (query)
+
+    query = """
+        WITH 
+            {formula}
+        AS
+            formula
+        MATCH
+            (u:SystemUser {username : formula.username})
+        WITH
+            (u)
+        MERGE
+            (u)-[:hasFormula]->(f:Formula {
+                formulaName : formula.formulaName,
+                username : formula.username,
+                evalCode : formula.evalCode,
+                writtenCode : formula.writtenCode,
+                args : formula.args
+            })
+    """
+
+    formula = json.loads(request.args.get('arg'))
 
     ret = {"message" : "", "status" : ""};
     try:
@@ -374,6 +395,7 @@ def storeFormula():
         ret["status"] = "success"
         ret["message"] = "Great! Your formula has been successfully created!"
     except Exception as e:
+        print (e)
         ret["status"] = "failure"
         ret["message"] = "Oops! Something wrong, check console for more details :("
 
