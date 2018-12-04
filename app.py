@@ -351,10 +351,6 @@ def storeFormula():
     writtenCode = passedArgs['writtenCode']
     args = passedArgs['args']
     query = """
-        WITH 
-            {formula} 
-        AS 
-            formula
         MATCH
             (u:SystemUser {{username : '{username}'}})
         
