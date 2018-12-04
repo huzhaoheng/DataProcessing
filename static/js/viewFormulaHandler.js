@@ -357,7 +357,11 @@ function submitFormula() {
 		code += `["` + each.join('","') + `"],`;
 	})
 	code += `]);`
+	console.log(code);
 	eval(code);
+	console.log(formulaName);
+	console.log(value);
+	console.log(args_list);
 	storeFormula(formulaName, code, value, args_list);
 }
 
