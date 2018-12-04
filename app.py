@@ -374,7 +374,7 @@ def storeFormula():
 
         MERGE 
             (u)-[:hasFormula]->(f)
-    """
+    """.format(formula = formula)
 
     print (query)
 
