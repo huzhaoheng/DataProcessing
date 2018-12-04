@@ -345,7 +345,7 @@ def queryData():
 def storeFormula():
     print ("here")
     passedArgs = json.loads(request.args.get('arg'))
-    username = passedArgs['username']
+    username = passedArgs['username'].replace('+', ' ')
     formulaName = passedArgs['formulaName']
     evalCode = passedArgs['evalCode']
     writtenCode = passedArgs['writtenCode']
