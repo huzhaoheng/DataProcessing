@@ -1,6 +1,6 @@
 function initialization() {
 	var args = location.search.replace('?','').split('&').reduce(function(s,c){var t=c.split('=');s[t[0]]=t[1];return s;},{});
-	window.username = args['username'];
+	window.username = args['username'].replace("+", " ");;
 	initSpreadSheet();
 	initCodingArea();
 	loadCurrentSheetsGrid();

@@ -345,7 +345,7 @@ def queryData():
 def storeFormula():
     print ("here")
     passedArgs = json.loads(request.args.get('arg'))
-    username = passedArgs['username'].replace('+', ' ')
+    username = passedArgs['username']
     formulaName = passedArgs['formulaName']
     evalCode = passedArgs['evalCode']
     writtenCode = passedArgs['writtenCode']
@@ -378,7 +378,7 @@ def storeFormula():
 
 @app.route('/getFormulaList')
 def getFormulaList():
-    username = json.loads(request.args.get('arg'))['username'].replace('+', ' ')
+    username = json.loads(request.args.get('arg'))['username']
     query = """
         MATCH 
             (f:Formula)
@@ -460,7 +460,7 @@ def loadFormulaByID():
 
 @app.route('/loadFormulaByUser')
 def loadFormulaByUser():
-    username = json.loads(request.args.get('arg'))['username'].replace('+', ' ')
+    username = json.loads(request.args.get('arg'))['username']
     query = """
         MATCH
             (f:Formula)
