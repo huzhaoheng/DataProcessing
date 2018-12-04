@@ -353,7 +353,8 @@ def storeFormula():
     query = """
         MATCH
             (u:SystemUser {{username : '{username}'}})
-        
+        WITH 
+            (u)
         MERGE 
             (f:Formula {{formulaName : '{formulaName}'}})
         ON
