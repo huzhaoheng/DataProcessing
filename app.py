@@ -378,7 +378,7 @@ def storeFormula():
 
 @app.route('/getFormulaList')
 def getFormulaList():
-    username = json.loads(request.args.get('arg'))['username']
+    username = json.loads(request.args.get('arg'))['username'].replace('+', ' ')
     query = """
         MATCH 
             (f:Formula)
@@ -460,7 +460,7 @@ def loadFormulaByID():
 
 @app.route('/loadFormulaByUser')
 def loadFormulaByUser():
-    username = json.loads(request.args.get('arg'))['username']
+    username = json.loads(request.args.get('arg'))['username'].replace('+', ' ')
     query = """
         MATCH
             (f:Formula)
