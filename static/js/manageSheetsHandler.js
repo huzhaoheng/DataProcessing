@@ -45,7 +45,8 @@ function initCodingArea() {
 		matchBrackets : true,
 		autofocus: true,
 		mode: 'text/x-mysql'
-	}).setValue("# NOTE: All values stored in tables are in STRING type, so if you want to use them as other any type, such as integer, please do CAST(value AS UNSIGNED/...)");
+	});
+	window.editor.setValue("# NOTE: All values stored in tables are in STRING type, so if you want to use them as other any type, such as integer, please do CAST(value AS UNSIGNED/...)");
 }
 
 function loadCurrentSheetsGrid() {
