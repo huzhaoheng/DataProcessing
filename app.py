@@ -344,37 +344,42 @@ def queryData():
 @app.route('/storeFormula')
 def storeFormula():
     print ("here")
-    formula = json.loads(request.args.get('arg'))
+    passedArgs = json.loads(request.args.get('arg'))
+    username = passedArgs['username']
+    formulaName = passedArgs['formulaName']
+    evalCode = passedArgs['evalCode']
+    writtenCode = passedArgs['writtenCode']
+    args = passedArgs['args']
     query = """
         WITH 
             {formula} 
         AS 
             formula
         MATCH
-            (u:SystemUser {{username : formula.username}})
+            (u:SystemUser {{username : '{username}'}})
         
         MERGE 
-            (f:Formula {{formulaName : formula.formulaName}})
+            (f:Formula {{formulaName : '{formulaName}'}})
         ON
             CREATE 
         SET 
-            f.formulaName = formula.formulaName, 
-            f.username = formula.username,
-            f.evalCode = formula.evalCode,
-            f.writtenCode = formula.writtenCode,
-            f.args = formula.args
+            f.formulaName = '{formulaName}', 
+            f.username = '{username}',
+            f.evalCode = '{evalCode}',
+            f.writtenCode = '{writtenCode}',
+            f.args = '{args}'
         ON 
             MATCH
         SET
-            f.formulaName = formula.formulaName, 
-            f.username = formula.username,
-            f.evalCode = formula.evalCode,
-            f.writtenCode = formula.writtenCode,
-            f.args = formula.args
+            f.formulaName = '{formulaName}', 
+            f.username = '{username}',
+            f.evalCode = '{evalCode}',
+            f.writtenCode = '{writtenCode}',
+            f.args = '{args}'
 
         MERGE 
             (u)-[:hasFormula]->(f)
-    """.format(formula = formula)
+    """.format(formulaName = formulaName, username = username, evalCode = evalCode, writtenCode = writtenCode, args = args)
 
     print (query)
 
