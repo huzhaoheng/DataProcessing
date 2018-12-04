@@ -351,10 +351,10 @@ def storeFormula():
         AS 
             formula
         MATCH
-            (u:SystemUser {username : formula.username})
+            (u:SystemUser {{username : formula.username}})
         
         MERGE 
-            (f:Formula {formulaName : formula.formulaName})
+            (f:Formula {{formulaName : formula.formulaName}})
         ON
             CREATE 
         SET 
