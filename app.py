@@ -367,25 +367,6 @@ def storeFormula():
 
     # print (query)
 
-    # query = """
-    #     WITH 
-    #         {formula}
-    #     AS
-    #         formula
-    #     MATCH
-    #         (u:SystemUser {username : formula.username})
-    #     WITH
-    #         (u)
-    #     MERGE
-    #         (u)-[:hasFormula]->(f:Formula {
-    #             formulaName : formula.formulaName,
-    #             username : formula.username,
-    #             evalCode : formula.evalCode,
-    #             writtenCode : formula.writtenCode,
-    #             args : formula.args
-    #         })
-    # """
-
     query = """
         WITH 
             {formula}
@@ -394,13 +375,32 @@ def storeFormula():
         MATCH
             (u:SystemUser {username : formula.username})
         WITH
-            (u)
+            (u), formula
         MERGE
             (u)-[:hasFormula]->(f:Formula {
                 formulaName : formula.formulaName,
-                username : formula.username
+                username : formula.username,
+                evalCode : formula.evalCode,
+                writtenCode : formula.writtenCode,
+                args : formula.args
             })
     """
+
+    # query = """
+    #     WITH 
+    #         {formula}
+    #     AS
+    #         formula
+    #     MATCH
+    #         (u:SystemUser {username : formula.username})
+    #     WITH
+    #         (u), formula
+    #     MERGE
+    #         (u)-[:hasFormula]->(f:Formula {
+    #             formulaName : formula.formulaName,
+    #             username : formula.username
+    #         })
+    # """
 
     formula = json.loads(request.args.get('arg'))
 
