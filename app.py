@@ -14,6 +14,7 @@ import pymysql
 from genson import SchemaBuilder
 import time
 import datetime
+import re
 pymysql.install_as_MySQLdb()
 
 import MySQLdb
@@ -55,7 +56,8 @@ def handshake():
     print ("handshaking started")
     print (request.json)
     # requese.json example: {'user': {'id': '6ee840e0-f541-11e8-b36a-d331d74ace97', 'name': 'Zhaoheng', 'email': 'hu61@illinois.edu'}}
-    username = request.json['user']['name']
+    rawUsername = request.json['user']['name']
+    username = re.sub('[\W_]+', '', rawUsername)
     email = request.json['user']['email']
     userID = request.json['user']['id']
     res = validateUserNode(username, email, userID, graph)
@@ -144,7 +146,8 @@ def home():
 
 @app.route('/verifyUser')
 def verifyUser():
-    username = json.loads(request.args.get('arg'))['username']
+    rawUsername = json.loads(request.args.get('arg'))['username']
+    username = re.sub('[\W_]+', '', rawUsername)
     email = json.loads(request.args.get('arg'))['email']
     query = """
         MATCH (u:SystemUser)
@@ -166,7 +169,8 @@ def verifyUser():
 def index():
     args = request.args.to_dict()
     print (args)
-    username = args['username']
+    rawUsername = args['username']
+    username = re.sub('[\W_]+', '', rawUsername)
     return render_template('index.html', username = username)
     
 
@@ -385,22 +389,6 @@ def storeFormula():
                 args : formula.args
             })
     """
-
-    # query = """
-    #     WITH 
-    #         {formula}
-    #     AS
-    #         formula
-    #     MATCH
-    #         (u:SystemUser {username : formula.username})
-    #     WITH
-    #         (u), formula
-    #     MERGE
-    #         (u)-[:hasFormula]->(f:Formula {
-    #             formulaName : formula.formulaName,
-    #             username : formula.username
-    #         })
-    # """
 
     formula = json.loads(request.args.get('arg'))
 

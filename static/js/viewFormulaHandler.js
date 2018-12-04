@@ -85,6 +85,7 @@ function loadGrid(formulaList) {
 						e.preventDefault();
 						var tr = $(e.target).closest("tr");
 						var data = this.dataItem(tr);
+						console.log(data);
 						var formulaID = data["ID"];
 						loadFormula(formulaID);
 						return;
