@@ -376,7 +376,7 @@ def storeFormula():
             (u)-[:hasFormula]->(f)
     """
 
-
+    print (query)
 
     ret = {"message" : "", "status" : ""};
     try:
