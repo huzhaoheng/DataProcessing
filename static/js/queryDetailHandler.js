@@ -66,7 +66,7 @@ function setWindowParameters() {
 	window.sheets = [];
 
 	var args = location.search.replace('?','').split('&').reduce(function(s,c){var t=c.split('=');s[t[0]]=t[1];return s;},{});
-	window.username = args['username'].replace("+", " ");;
+	window.username = args['username'].replace("+", " ").replace("%20", " ");
 	window.query_name = args['query_name'];
 	window.query_id = parseInt(args['query_id']);
 }

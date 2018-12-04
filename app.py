@@ -362,6 +362,7 @@ def storeFormula():
                 evalCode : '{evalCode}',
                 writtenCode : '{writtenCode}',
                 args : '{args}'}})
+        RETURN (f)
     """.format(formulaName = formulaName, username = username, evalCode = evalCode, writtenCode = writtenCode, args = args)
 
     print (query)
@@ -369,11 +370,14 @@ def storeFormula():
     ret = {"message" : "", "status" : ""};
     try:
         result = graph.cypher.execute(query, formula = formula)
+        print (result)
         ret["status"] = "success"
         ret["message"] = "Great! Your formula has been successfully created!"
     except Exception as e:
         ret["status"] = "failure"
         ret["message"] = "Oops! Something wrong, check console for more details :("
+
+    print (ret)
     return jsonify(elements = ret)
 
 @app.route('/getFormulaList')

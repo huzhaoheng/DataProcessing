@@ -1,7 +1,7 @@
 function initialization(username) {
 	console.log(username);
 	var args = location.search.replace('?','').split('&').reduce(function(s,c){var t=c.split('=');s[t[0]]=t[1];return s;},{});
-	window.username = args['username'].replace("+", " ");;
+	window.username = args['username'].replace("+", " ").replace("%20", " ");
 	console.log(window.username);
 	//window.username = username;
 	//$(".navbar-brand").attr("href", "http://127.0.0.1:1111/index?username=" + username);
