@@ -356,26 +356,12 @@ def storeFormula():
         WITH 
             (u)
         MERGE 
-            (f:Formula {{formulaName : '{formulaName}'}})
-        ON
-            CREATE 
-        SET 
-            f.formulaName = '{formulaName}', 
-            f.username = '{username}',
-            f.evalCode = '{evalCode}',
-            f.writtenCode = '{writtenCode}',
-            f.args = '{args}'
-        ON 
-            MATCH
-        SET
-            f.formulaName = '{formulaName}', 
-            f.username = '{username}',
-            f.evalCode = '{evalCode}',
-            f.writtenCode = '{writtenCode}',
-            f.args = '{args}'
-
-        MERGE 
-            (u)-[:hasFormula]->(f)
+            (u)-[:hasFormula]->(f:Formula {{
+                formulaName : '{formulaName}',
+                username : '{username}',
+                evalCode : '{evalCode}',
+                writtenCode : '{writtenCode}',
+                args : '{args}'}})
     """.format(formulaName = formulaName, username = username, evalCode = evalCode, writtenCode = writtenCode, args = args)
 
     print (query)
