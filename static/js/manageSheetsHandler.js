@@ -52,13 +52,6 @@ function initCodingArea() {
 function loadCurrentSheetsGrid() {
 	//var sheets = window.opener.sharedObjectToManageSheets['sheets'];
 	var sheets = JSON.parse(localStorage.getItem('sharedObjectToManageSheets'))['sheets'];
-	console.log(sheets);
-	for(var i=0, len=localStorage.length; i<len; i++) {
-		var key = localStorage.key(i);
-		var value = JSON.parse(localStorage[key]);
-		console.log(key + " => " + value);
-		console.log(typeof(value));
-	}
 	if (sheets == undefined) {
 		$("#currentSheetsGrid").kendoGrid({
 			columns: [{

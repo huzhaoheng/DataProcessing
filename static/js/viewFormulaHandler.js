@@ -381,8 +381,8 @@ function storeFormula(formulaName, evalCode, writtenCode, args) {
 			var res = response.elements;
 			var message = res["message"];
 			var message_type = res["status"];
-			window.opener.sharedObjectToManageFormula['evalCode'] = evalCode;
-			window.opener.loadNewFormula();
+			/*window.opener.sharedObjectToManageFormula['evalCode'] = evalCode;
+			window.opener.loadNewFormula();*/
 			initialization();
 		}
 	)

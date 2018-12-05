@@ -497,17 +497,17 @@ function parseCheckedTreeViewCheckbox(checkedTreeViewCheckbox) {
 }
 
 function manageFormula() {
-	window.sharedObjectToManageFormula = {"evalCode" : null};
+	//window.sharedObjectToManageFormula = {"evalCode" : null};
 	var path = "/static/html/viewFormula.html?username=" + window.username;
 	var name = "viewFormula";
 	var new_window = window.open(path, name);
 	new_window.username = window.username;
 }
 
-function loadNewFormula() {
+/*function loadNewFormula() {
 	var evalCode = window.sharedObjectToManageFormula['evalCode'];
 	eval(evalCode);
-}
+}*/
 
 function loadFormula() {
 	$.getJSON(
@@ -543,10 +543,5 @@ function updateSharedObjectToManageSheets() {
 		var data = spreadsheet.toJSON();
 		//window.sharedObjectToManageSheets['sheets'] = data['sheets'];
 		localStorage.setItem('sharedObjectToManageSheets', JSON.stringify({'sheets': data['sheets']}));
-		for(var i=0, len=localStorage.length; i<len; i++) {
-			var key = localStorage.key(i);
-			var value = localStorage[key];
-			console.log(key + " => " + value);
-		}
 	}
 }
