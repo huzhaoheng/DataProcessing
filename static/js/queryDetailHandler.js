@@ -268,7 +268,8 @@ function loadMessage(message, message_type) {
 function loadSpreadSheet(data) {
 	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
 	var sheets = prepareData(data);
-	window.sheets = window.sheets.concat(sheets);
+	// window.sheets = window.sheets.concat(sheets);
+	window.sheets = sheets;
 	//window.sharedObjectToJoinSheets = {'sheets' : window.sheets};
 	if (spreadsheet != undefined) {
 		$("#spreadsheet").empty();
