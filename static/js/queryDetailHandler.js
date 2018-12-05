@@ -542,6 +542,9 @@ function updateSharedObjectToManageSheets() {
 	if (spreadsheet != undefined) {
 		var data = spreadsheet.toJSON();
 		//window.sharedObjectToManageSheets['sheets'] = data['sheets'];
-		localStorage.setItem('sharedObjectToManageSheets', {'sheets': data['sheets']})
+		localStorage.setItem('sharedObjectToManageSheets', {'sheets': data['sheets']});
+		for (key in localStorage) {
+			console.log(localStorage[key]);
+		}
 	}
 }
