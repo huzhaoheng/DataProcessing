@@ -383,7 +383,8 @@ function storeFormula(formulaName, evalCode, writtenCode, args) {
 			var message_type = res["status"];
 			/*window.opener.sharedObjectToManageFormula['evalCode'] = evalCode;
 			window.opener.loadNewFormula();*/
-			initialization();
+			//initialization();
+			location.reload();
 		}
 	)
 }
