@@ -51,11 +51,11 @@ function initCodingArea() {
 
 function loadCurrentSheetsGrid() {
 	//var sheets = window.opener.sharedObjectToManageSheets['sheets'];
-	var sheets = localStorage.getItem('sharedObjectToManageSheets')['sheets'];
+	var sheets = JSON.parse(localStorage.getItem('sharedObjectToManageSheets'))['sheets'];
 	console.log(sheets);
 	for(var i=0, len=localStorage.length; i<len; i++) {
 		var key = localStorage.key(i);
-		var value = localStorage[key];
+		var value = JSON.parse(localStorage[key]);
 		console.log(key + " => " + value);
 		console.log(typeof(value));
 	}
@@ -124,7 +124,7 @@ function loadCurrentSheetsGrid() {
 }
 
 function loadCurrentSheet(ID) {
-	var sheets = localStorage.getItem('sharedObjectToManageSheets')['sheets'];
+	var sheets = JSON.parse(localStorage.getItem('sharedObjectToManageSheets'))['sheets'];
 	//var sheets = window.window.opener.sharedObjectToManageSheets['sheets'];
 	var sheet = sheets[ID];
 	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");

@@ -537,12 +537,12 @@ function manageSheets() {
 
 function updateSharedObjectToManageSheets() {
 	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-	localStorage.setItem('sharedObjectToManageSheets', {'sheets':null});
+	localStorage.setItem('sharedObjectToManageSheets', JSON.stringify({'sheets':null}));
 	//window.sharedObjectToManageSheets = {'sheets':null};
 	if (spreadsheet != undefined) {
 		var data = spreadsheet.toJSON();
 		//window.sharedObjectToManageSheets['sheets'] = data['sheets'];
-		localStorage.setItem('sharedObjectToManageSheets', {'sheets': data['sheets']});
+		localStorage.setItem('sharedObjectToManageSheets', JSON.stringify({'sheets': data['sheets']}));
 		for(var i=0, len=localStorage.length; i<len; i++) {
 			var key = localStorage.key(i);
 			var value = localStorage[key];
