@@ -277,7 +277,7 @@ function loadSpreadSheet(data) {
 	$("#spreadsheet").kendoSpreadsheet({
 		sheets: window.sheets
 	});
-
+	updateSharedObjectToManageSheets();
 	return;
 }
 
@@ -537,9 +537,11 @@ function manageSheets() {
 
 function updateSharedObjectToManageSheets() {
 	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-	window.sharedObjectToManageSheets = {'sheets':null};
+	localStorage.setItem('sharedObjectToManageSheets', {'sheets':null});
+	//window.sharedObjectToManageSheets = {'sheets':null};
 	if (spreadsheet != undefined) {
 		var data = spreadsheet.toJSON();
-		window.sharedObjectToManageSheets['sheets'] = data['sheets'];
+		//window.sharedObjectToManageSheets['sheets'] = data['sheets'];
+		localStorage.setItem('sharedObjectToManageSheets', {'sheets': data['sheets']})
 	}
 }
