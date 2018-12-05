@@ -53,6 +53,9 @@ function loadCurrentSheetsGrid() {
 	//var sheets = window.opener.sharedObjectToManageSheets['sheets'];
 	var sheets = localStorage.getItem('sharedObjectToManageSheets')['sheets'];
 	console.log(sheets);
+	for (key in localStorage) {
+		console.log(localStorage[key]);
+	}
 	if (sheets == undefined) {
 		$("#currentSheetsGrid").kendoGrid({
 			columns: [{
