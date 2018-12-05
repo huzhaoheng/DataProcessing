@@ -57,6 +57,9 @@ function loadCurrentSheetsGrid() {
 		var key = localStorage.key(i);
 		var value = localStorage[key];
 		console.log(key + " => " + value);
+		value.forEach(function (each) {
+			console.log(each);
+		})
 	}
 	if (sheets == undefined) {
 		$("#currentSheetsGrid").kendoGrid({
