@@ -543,8 +543,10 @@ function updateSharedObjectToManageSheets() {
 		var data = spreadsheet.toJSON();
 		//window.sharedObjectToManageSheets['sheets'] = data['sheets'];
 		localStorage.setItem('sharedObjectToManageSheets', {'sheets': data['sheets']});
-		for (key in localStorage) {
-			console.log(localStorage[key]);
+		for(var i=0, len=localStorage.length; i<len; i++) {
+			var key = localStorage.key(i);
+			var value = localStorage[key];
+			console.log(key + " => " + value);
 		}
 	}
 }
