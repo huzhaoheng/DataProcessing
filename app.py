@@ -84,7 +84,7 @@ def home():
             query_name = payload['value']['name']
             data = json.loads(payload['value']['data'])
             structure = json.loads(payload['value']['structure'])
-
+            json.dump(structure, open("sample_structure.json"))
             parsed_parameters = parameterParser(structure)
             builder = SchemaBuilder()
             builder.add_object(data)
