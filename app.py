@@ -91,7 +91,7 @@ def home():
             schema = builder.to_schema()
             user_id = graph.cypher.execute("MATCH (u:SystemUser) WHERE u.username = '{username}' RETURN ID(u) AS id".format(username = username))[0]["id"]
             query_id = validateQueryNode(username, query_name, graph)
-            parameter_id = validateParameterNode(schema, username, query_name, parsed_parameters, graph)
+            parameter_id = validateParameterNode(username, query_name, parsed_parameters, graph)
             connectNodes(user_id, query_id, "hasQuery", graph)
             connectNodes(query_id, parameter_id, "hasParameter", graph)
             validateDataStructure(parameter_id, schema, "root", graph)
@@ -123,7 +123,7 @@ def home():
                     query_id = validateQueryNode(username, query_name, graph)
                     connectNodes(user_id, query_id, "hasQuery", graph)
                     nestedSchema = generateNodeSchema(node, nodesMapping)   
-                    parameter_id = validateParameterNode(nestedSchema, username, query_name, nestedSchema, graph)                     
+                    parameter_id = validateParameterNode(username, query_name, nestedSchema, graph)                     
                     connectNodes(query_id, parameter_id, "hasParameter", graph)
                     data = generateDataFromNode(node)
                     storeDataStructure(data, "root", parameter_id, graph)

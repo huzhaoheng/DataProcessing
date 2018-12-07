@@ -146,8 +146,8 @@ def validateQueryNode(username, query_name, graph):
 
 	return query_id
 
-def validateParameterNode(schema, username, query_name, parsed_parameters, graph):
-	parameter_hash = hashlib.md5(json.dumps(schema).encode()).hexdigest()
+def validateParameterNode(username, query_name, parsed_parameters, graph):
+	parameter_hash = hashlib.md5(json.dumps(parsed_parameters).encode()).hexdigest()
 	query = """
 				MATCH 
 					(p:QueryParameter) 

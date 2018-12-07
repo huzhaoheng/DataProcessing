@@ -1,1 +1,795 @@
-{"name": "query", "inputs": [], "output": {"type": {"kind": "OBJECT", "name": "twitterQuery", "fields": [{"args": [{"name": "q", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "The search query to run against people search.", "defaultValue": null}, {"name": "count", "type": {"kind": "SCALAR", "name": "Int", "ofType": null}, "description": "The number of potential user results to retrieve per page. This value has a maximum of 20.", "defaultValue": "3"}, {"name": "pageNum", "type": {"kind": "SCALAR", "name": "Int", "ofType": null}, "description": "madeup field; the aggregated pages", "defaultValue": "5"}], "name": "queryUser", "type": {"kind": "LIST", "name": null, "ofType": {"kind": "OBJECT", "name": "twtUser", "ofType": null}}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [{"name": "q", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "value": "UIUC CS", "description": "A UTF-8, URL-encoded search query of 500 characters maximum, \n\t\t\t\t\t\t\t\t\t\tincluding operators. Queries may additionally be limited \n\t\t\t\t\t\t\t\t\t\tby complexity.", "defaultValue": null}, {"name": "count", "type": {"kind": "SCALAR", "name": "Int", "ofType": null}, "value": 3, "description": "The number of tweets to return per page, up to a maximum of 100. \n\t\t\t\t\t\t\t\t\t\tDefaults to 15. This was formerly the \u201crpp\u201d parameter in the \n\t\t\t\t\t\t\t\t\t\told Search API.", "defaultValue": "3"}, {"name": "pages", "type": {"kind": "SCALAR", "name": "Int", "ofType": null}, "value": 3, "description": "This is not in the original twitter api. This fields is the iterator that append new pages\n\t\t\t\t\t\t\t\t\t\tto the search. if you specify the number of pages you want to go through, you will get the \n\t\t\t\t\t\t\t\t\t\tamount of tweets = count * pages; detail check out API/twitterAPI.js and the max_id,since_id fields\n\t\t\t\t\t\t\t\t\t\tin twitter restful API documentation.", "defaultValue": "3"}, {"name": "geocode", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "value": null, "description": "37.781157 -122.398720 1mi", "defaultValue": null}, {"name": "result_type", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "value": "\"mixed\"", "description": "Optional. Specifies what type of search results you would prefer \n\t\t\t\t\t\t\t\t\t\t\tto receive. The current default is \u201cmixed.\u201d Valid values include:\n\t\t\t\t\t\t\t\t\t\t\t* mixed : Include both popular and real time results in the response.\n\t\t\t\t\t\t\t\t\t\t\t* recent : return only the most recent results in the response\n\t\t\t\t\t\t\t\t\t\t\t* popular : return only the most popular results in the response.", "defaultValue": "\"mixed\""}, {"name": "locale", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "value": "\"en\"", "description": "Specify the language of the query you are sending \n\t\t\t\t\t\t\t\t\t\t\t(only ja is currently effective). This is intended for \n\t\t\t\t\t\t\t\t\t\t\tlanguage-specific consumers and the default should work in \n\t\t\t\t\t\t\t\t\t\t\tthe majority of cases.", "defaultValue": "\"en\""}, {"name": "until", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "value": null, "description": "Returns tweets created before the given date. Date should\n\t\t\t\t\t\t\t\t\t\t\tbe formatted as YYYY-MM-DD. Keep in mind that the search index \n\t\t\t\t\t\t\t\t\t\t\thas a 7-day limit. In other words, no tweets will be found \n\t\t\t\t\t\t\t\t\t\t\tfor a date older than one week.", "defaultValue": null}, {"name": "lang", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "value": "\"en\"", "description": null, "defaultValue": "\"en\""}], "name": "queryTweet", "type": {"kind": "LIST", "name": null, "ofType": {"kind": "OBJECT", "name": "tweet", "ofType": null}}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [{"name": "user_id", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "The ID of the user for whom to return results.", "defaultValue": null}, {"name": "screen_name", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "The screen name of the user for whom to return results.", "defaultValue": null}, {"name": "since_id", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "Returns results with an ID greater than (that is, more recent than) \n\t\t\t\t\t\t\tthe specified ID. There are limits to the number of Tweets that can be accessed \n\t\t\t\t\t\t\tthrough the API. If the limit of Tweets has occured since the since_id, the \n\t\t\t\t\t\t\tsince_id will be forced to the oldest ID available.", "defaultValue": null}, {"name": "count", "type": {"kind": "SCALAR", "name": "Int", "ofType": null}, "description": "Specifies the number of Tweets to try and retrieve, up to \n\t\t\t\t\t\t\ta maximum of 200 per distinct request. The value of count is best thought \n\t\t\t\t\t\t\tof as a limit to the number of Tweets to return because suspended or deleted\n\t\t\t\t\t\t\tcontent is removed after the count has been applied. We include retweets in \n\t\t\t\t\t\t\tthe count, even if include_rts is not supplied. It is recommended you always \n\t\t\t\t\t\t\tsend include_rts=1 when using this API method.", "defaultValue": null}, {"name": "max_id", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "Returns results with an ID less than (that is, older than) or equal to the specified ID.", "defaultValue": null}, {"name": "trim_user", "type": {"kind": "SCALAR", "name": "Boolean", "ofType": null}, "description": "When set to either true , t or 1 , each Tweet returned in a timeline will include \n\t\t\t\t\t\t\t\ta user object including only the status authors numerical ID. Omit this parameter to receive \n\t\t\t\t\t\t\t\tthe complete user object.", "defaultValue": null}, {"name": "exclude_replies", "type": {"kind": "SCALAR", "name": "Boolean", "ofType": null}, "description": "This parameter will prevent replies from appearing in the returned timeline. \n\t\t\t\t\t\t\t\tUsing exclude_replies with the count parameter will mean you will receive up-to count \n\t\t\t\t\t\t\t\ttweets \u2014 this is because the count parameter retrieves that many Tweets before filtering \n\t\t\t\t\t\t\t\tout retweets and replies", "defaultValue": null}, {"name": "include_rts", "type": {"kind": "SCALAR", "name": "Boolean", "ofType": null}, "description": "When set to false , the timeline will strip any native retweets \n\t\t\t\t\t\t\t\t(though they will still count toward both the maximal length of the timeline \n\t\t\t\t\t\t\t\tand the slice selected by the count parameter). Note: If you\u2019re using the \n\t\t\t\t\t\t\t\ttrim_user parameter in conjunction with include_rts, the retweets will still \n\t\t\t\t\t\t\t\tcontain a full user object.", "defaultValue": null}], "name": "getTimeline", "type": {"kind": "LIST", "name": null, "ofType": {"kind": "OBJECT", "name": "tweet", "ofType": null}}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [{"name": "query", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "Free-form text to match against while executing a geo-based query, \n\t\t\t\t\t\t\t\t\tbest suited for finding nearby locations by name. Remember \n\t\t\t\t\t\t\t\t\tto URL encode the query.", "defaultValue": null}, {"name": "ip", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "An IP address. Used when attempting to fix geolocation based \n\t\t\t\t\t\t\t\t\toff of the user\u2019s IP address.", "defaultValue": null}, {"name": "lat", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "eg. 37.7821120598956", "defaultValue": null}, {"name": "long", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "eg. -122.400612831116", "defaultValue": null}, {"name": "granularity", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "This is the minimal granularity of place types to return and \n\t\t\t\t\t\t\t\t\t\t\tmust be one of: poi , neighborhood , city , admin or country . \n\t\t\t\t\t\t\t\t\t\t\tIf no granularity is provided for the request neighborhood is assumed.\n\t\t\t\t\t\t\t\t\t\t\tSetting this to city , for example, will find places which have \n\t\t\t\t\t\t\t\t\t\t\ta type of city , admin or country .", "defaultValue": null}, {"name": "accuracy", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "A hint on the \u201cregion\u201d in which to search. If a number, then this \n\t\t\t\t\t\t\t\tis a radius in meters, but it can also take a string that is suffixed with ft to \n\t\t\t\t\t\t\t\tspecify feet. If this is not passed in, then it is assumed to be 0m . If coming \n\t\t\t\t\t\t\t\tfrom a device, in practice, this value is whatever accuracy the device has measuring \n\t\t\t\t\t\t\t\tits location (whether it be coming from a GPS, WiFi triangulation, etc.).", "defaultValue": null}, {"name": "max_results", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "A hint as to the number of results to return. This does not guarantee \n\t\t\t\t\t\t\t\tthat the number of results returned will equal max_results, but instead informs how \n\t\t\t\t\t\t\t\tmany \u201cnearby\u201d results to return. Ideally, only pass in the number of places you \n\t\t\t\t\t\t\t\tintend to display to the user here.", "defaultValue": null}], "name": "queryGeo", "type": {"kind": "LIST", "name": null, "ofType": {"kind": "OBJECT", "name": "twtGeo", "ofType": null}}, "description": null, "isDeprecated": false, "deprecationReason": null}], "enumValues": null, "interfaces": [], "description": "Query user, tweet, geolocation by keywords.", "inputFields": null, "possibleTypes": null}, "isAList": "false", "isObject": "true", "isScalar": "false"}, "children": [{"name": "queryTweet", "inputs": [{"name": "q", "value": "UIUC CS", "inputType": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "A UTF-8, URL-encoded search query of 500 characters maximum, \n\t\t\t\t\t\t\t\t\t\tincluding operators. Queries may additionally be limited \n\t\t\t\t\t\t\t\t\t\tby complexity."}, {"name": "count", "value": 3, "inputType": {"kind": "SCALAR", "name": "Int", "ofType": null}, "description": "The number of tweets to return per page, up to a maximum of 100. \n\t\t\t\t\t\t\t\t\t\tDefaults to 15. This was formerly the \u201crpp\u201d parameter in the \n\t\t\t\t\t\t\t\t\t\told Search API."}, {"name": "pages", "value": 3, "inputType": {"kind": "SCALAR", "name": "Int", "ofType": null}, "description": "This is not in the original twitter api. This fields is the iterator that append new pages\n\t\t\t\t\t\t\t\t\t\tto the search. if you specify the number of pages you want to go through, you will get the \n\t\t\t\t\t\t\t\t\t\tamount of tweets = count * pages; detail check out API/twitterAPI.js and the max_id,since_id fields\n\t\t\t\t\t\t\t\t\t\tin twitter restful API documentation."}, {"name": "geocode", "value": null, "inputType": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "37.781157 -122.398720 1mi"}, {"name": "result_type", "value": "\"mixed\"", "inputType": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "Optional. Specifies what type of search results you would prefer \n\t\t\t\t\t\t\t\t\t\t\tto receive. The current default is \u201cmixed.\u201d Valid values include:\n\t\t\t\t\t\t\t\t\t\t\t* mixed : Include both popular and real time results in the response.\n\t\t\t\t\t\t\t\t\t\t\t* recent : return only the most recent results in the response\n\t\t\t\t\t\t\t\t\t\t\t* popular : return only the most popular results in the response."}, {"name": "locale", "value": "\"en\"", "inputType": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "Specify the language of the query you are sending \n\t\t\t\t\t\t\t\t\t\t\t(only ja is currently effective). This is intended for \n\t\t\t\t\t\t\t\t\t\t\tlanguage-specific consumers and the default should work in \n\t\t\t\t\t\t\t\t\t\t\tthe majority of cases."}, {"name": "until", "value": null, "inputType": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": "Returns tweets created before the given date. Date should\n\t\t\t\t\t\t\t\t\t\t\tbe formatted as YYYY-MM-DD. Keep in mind that the search index \n\t\t\t\t\t\t\t\t\t\t\thas a 7-day limit. In other words, no tweets will be found \n\t\t\t\t\t\t\t\t\t\t\tfor a date older than one week."}, {"name": "lang", "value": "\"en\"", "inputType": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null}], "output": {"type": {"kind": "OBJECT", "name": "tweet", "fields": [{"args": [], "name": "id", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "id_str", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "created_at", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "text", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "retweet_count", "type": {"kind": "SCALAR", "name": "Int", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "favorite_count", "type": {"kind": "SCALAR", "name": "Int", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "retweeted", "type": {"kind": "SCALAR", "name": "Boolean", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "favorited", "type": {"kind": "SCALAR", "name": "Boolean", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "possibly_sensitive", "type": {"kind": "SCALAR", "name": "Boolean", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "truncated", "type": {"kind": "SCALAR", "name": "Boolean", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "lang", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "in_reply_to_user_id_str", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "in_reply_to_status_id_str", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "in_reply_to_screen_name", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "timestamp_ms", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "mentions", "type": {"kind": "LIST", "name": null, "ofType": {"kind": "SCALAR", "name": "String", "ofType": null}}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "hashtags", "type": {"kind": "LIST", "name": null, "ofType": {"kind": "SCALAR", "name": "String", "ofType": null}}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "urls", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "is_quote_status", "type": {"kind": "SCALAR", "name": "Boolean", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "emoticons", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "source", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "sentiments", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "filter_level", "type": {"kind": "SCALAR", "name": "String", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "place", "type": {"kind": "OBJECT", "name": "twtPlace", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "coordinates", "type": {"kind": "OBJECT", "name": "twtCoordinateType", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "user_mentions", "type": {"kind": "OBJECT", "name": "twtUserMention", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "user", "type": {"kind": "OBJECT", "name": "twtUser", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [], "name": "entities", "type": {"kind": "OBJECT", "name": "twtEntity", "ofType": null}, "description": null, "isDeprecated": false, "deprecationReason": null}, {"args": [{"name": "count", "type": {"kind": "SCALAR", "name": "Int", "ofType": null}, "description": null, "defaultValue": "3"}], "name": "retweet", "type": {"kind": "LIST", "name": null, "ofType": {"kind": "OBJECT", "name": "retweet", "ofType": null}}, "description": "Get a list of retweets", "isDeprecated": false, "deprecationReason": null}], "enumValues": null, "interfaces": [], "description": "Return a tweet.", "inputFields": null, "possibleTypes": null}, "isAList": "false", "isObject": "true", "isScalar": "false"}, "children": [{"name": "text", "inputs": [], "output": {"type": {"kind": "SCALAR", "name": "String", "fields": null, "enumValues": null, "interfaces": null, "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.", "inputFields": null, "possibleTypes": null}, "isAList": "false", "isObject": "false", "isScalar": "true"}, "children": [], "selected": true}, {"name": "retweet_count", "inputs": [], "output": {"type": {"kind": "SCALAR", "name": "Int", "fields": null, "enumValues": null, "interfaces": null, "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. ", "inputFields": null, "possibleTypes": null}, "isAList": "false", "isObject": "false", "isScalar": "true"}, "children": [], "selected": true}], "selected": true}], "selected": true}
+{
+	"name": "query",
+	"inputs": [],
+	"output": {
+		"type": {
+			"kind": "OBJECT",
+			"name": "twitterQuery",
+			"fields": [{
+				"args": [{
+					"name": "q",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": "The search query to run against people search.",
+					"defaultValue": null
+				}, {
+					"name": "count",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"description": "The number of potential user results to retrieve per page. This value has a maximum of 20.",
+					"defaultValue": "3"
+				}, {
+					"name": "pageNum",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"description": "madeup field; the aggregated pages",
+					"defaultValue": "5"
+				}],
+				"name": "queryUser",
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "twtUser",
+						"ofType": null
+					}
+				},
+				"description": null,
+				"isDeprecated": false,
+				"deprecationReason": null
+			}, {
+				"args": [{
+					"name": "q",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"value": "UIUC CS",
+					"description": "A UTF-8, URL-encoded search query of 500 characters maximum, \n\t\t\t\t\t\t\t\t\t\tincluding operators. Queries may additionally be limited \n\t\t\t\t\t\t\t\t\t\tby complexity.",
+					"defaultValue": null
+				}, {
+					"name": "count",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"value": 3,
+					"description": "The number of tweets to return per page, up to a maximum of 100. \n\t\t\t\t\t\t\t\t\t\tDefaults to 15. This was formerly the \u201crpp\u201d parameter in the \n\t\t\t\t\t\t\t\t\t\told Search API.",
+					"defaultValue": "3"
+				}, {
+					"name": "pages",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"value": 3,
+					"description": "This is not in the original twitter api. This fields is the iterator that append new pages\n\t\t\t\t\t\t\t\t\t\tto the search. if you specify the number of pages you want to go through, you will get the \n\t\t\t\t\t\t\t\t\t\tamount of tweets = count * pages; detail check out API/twitterAPI.js and the max_id,since_id fields\n\t\t\t\t\t\t\t\t\t\tin twitter restful API documentation.",
+					"defaultValue": "3"
+				}, {
+					"name": "geocode",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"value": null,
+					"description": "37.781157 -122.398720 1mi",
+					"defaultValue": null
+				}, {
+					"name": "result_type",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"value": "\"mixed\"",
+					"description": "Optional. Specifies what type of search results you would prefer \n\t\t\t\t\t\t\t\t\t\t\tto receive. The current default is \u201cmixed.\u201d Valid values include:\n\t\t\t\t\t\t\t\t\t\t\t* mixed : Include both popular and real time results in the response.\n\t\t\t\t\t\t\t\t\t\t\t* recent : return only the most recent results in the response\n\t\t\t\t\t\t\t\t\t\t\t* popular : return only the most popular results in the response.",
+					"defaultValue": "\"mixed\""
+				}, {
+					"name": "locale",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"value": "\"en\"",
+					"description": "Specify the language of the query you are sending \n\t\t\t\t\t\t\t\t\t\t\t(only ja is currently effective). This is intended for \n\t\t\t\t\t\t\t\t\t\t\tlanguage-specific consumers and the default should work in \n\t\t\t\t\t\t\t\t\t\t\tthe majority of cases.",
+					"defaultValue": "\"en\""
+				}, {
+					"name": "until",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"value": null,
+					"description": "Returns tweets created before the given date. Date should\n\t\t\t\t\t\t\t\t\t\t\tbe formatted as YYYY-MM-DD. Keep in mind that the search index \n\t\t\t\t\t\t\t\t\t\t\thas a 7-day limit. In other words, no tweets will be found \n\t\t\t\t\t\t\t\t\t\t\tfor a date older than one week.",
+					"defaultValue": null
+				}, {
+					"name": "lang",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"value": "\"en\"",
+					"description": null,
+					"defaultValue": "\"en\""
+				}],
+				"name": "queryTweet",
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "tweet",
+						"ofType": null
+					}
+				},
+				"description": null,
+				"isDeprecated": false,
+				"deprecationReason": null
+			}, {
+				"args": [{
+					"name": "user_id",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": "The ID of the user for whom to return results.",
+					"defaultValue": null
+				}, {
+					"name": "screen_name",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": "The screen name of the user for whom to return results.",
+					"defaultValue": null
+				}, {
+					"name": "since_id",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": "Returns results with an ID greater than (that is, more recent than) \n\t\t\t\t\t\t\tthe specified ID. There are limits to the number of Tweets that can be accessed \n\t\t\t\t\t\t\tthrough the API. If the limit of Tweets has occured since the since_id, the \n\t\t\t\t\t\t\tsince_id will be forced to the oldest ID available.",
+					"defaultValue": null
+				}, {
+					"name": "count",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"description": "Specifies the number of Tweets to try and retrieve, up to \n\t\t\t\t\t\t\ta maximum of 200 per distinct request. The value of count is best thought \n\t\t\t\t\t\t\tof as a limit to the number of Tweets to return because suspended or deleted\n\t\t\t\t\t\t\tcontent is removed after the count has been applied. We include retweets in \n\t\t\t\t\t\t\tthe count, even if include_rts is not supplied. It is recommended you always \n\t\t\t\t\t\t\tsend include_rts=1 when using this API method.",
+					"defaultValue": null
+				}, {
+					"name": "max_id",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": "Returns results with an ID less than (that is, older than) or equal to the specified ID.",
+					"defaultValue": null
+				}, {
+					"name": "trim_user",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"description": "When set to either true , t or 1 , each Tweet returned in a timeline will include \n\t\t\t\t\t\t\t\ta user object including only the status authors numerical ID. Omit this parameter to receive \n\t\t\t\t\t\t\t\tthe complete user object.",
+					"defaultValue": null
+				}, {
+					"name": "exclude_replies",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"description": "This parameter will prevent replies from appearing in the returned timeline. \n\t\t\t\t\t\t\t\tUsing exclude_replies with the count parameter will mean you will receive up-to count \n\t\t\t\t\t\t\t\ttweets \u2014 this is because the count parameter retrieves that many Tweets before filtering \n\t\t\t\t\t\t\t\tout retweets and replies",
+					"defaultValue": null
+				}, {
+					"name": "include_rts",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"description": "When set to false , the timeline will strip any native retweets \n\t\t\t\t\t\t\t\t(though they will still count toward both the maximal length of the timeline \n\t\t\t\t\t\t\t\tand the slice selected by the count parameter). Note: If you\u2019re using the \n\t\t\t\t\t\t\t\ttrim_user parameter in conjunction with include_rts, the retweets will still \n\t\t\t\t\t\t\t\tcontain a full user object.",
+					"defaultValue": null
+				}],
+				"name": "getTimeline",
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "tweet",
+						"ofType": null
+					}
+				},
+				"description": null,
+				"isDeprecated": false,
+				"deprecationReason": null
+			}, {
+				"args": [{
+					"name": "query",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": "Free-form text to match against while executing a geo-based query, \n\t\t\t\t\t\t\t\t\tbest suited for finding nearby locations by name. Remember \n\t\t\t\t\t\t\t\t\tto URL encode the query.",
+					"defaultValue": null
+				}, {
+					"name": "ip",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": "An IP address. Used when attempting to fix geolocation based \n\t\t\t\t\t\t\t\t\toff of the user\u2019s IP address.",
+					"defaultValue": null
+				}, {
+					"name": "lat",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": "eg. 37.7821120598956",
+					"defaultValue": null
+				}, {
+					"name": "long",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": "eg. -122.400612831116",
+					"defaultValue": null
+				}, {
+					"name": "granularity",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": "This is the minimal granularity of place types to return and \n\t\t\t\t\t\t\t\t\t\t\tmust be one of: poi , neighborhood , city , admin or country . \n\t\t\t\t\t\t\t\t\t\t\tIf no granularity is provided for the request neighborhood is assumed.\n\t\t\t\t\t\t\t\t\t\t\tSetting this to city , for example, will find places which have \n\t\t\t\t\t\t\t\t\t\t\ta type of city , admin or country .",
+					"defaultValue": null
+				}, {
+					"name": "accuracy",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": "A hint on the \u201cregion\u201d in which to search. If a number, then this \n\t\t\t\t\t\t\t\tis a radius in meters, but it can also take a string that is suffixed with ft to \n\t\t\t\t\t\t\t\tspecify feet. If this is not passed in, then it is assumed to be 0m . If coming \n\t\t\t\t\t\t\t\tfrom a device, in practice, this value is whatever accuracy the device has measuring \n\t\t\t\t\t\t\t\tits location (whether it be coming from a GPS, WiFi triangulation, etc.).",
+					"defaultValue": null
+				}, {
+					"name": "max_results",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": "A hint as to the number of results to return. This does not guarantee \n\t\t\t\t\t\t\t\tthat the number of results returned will equal max_results, but instead informs how \n\t\t\t\t\t\t\t\tmany \u201cnearby\u201d results to return. Ideally, only pass in the number of places you \n\t\t\t\t\t\t\t\tintend to display to the user here.",
+					"defaultValue": null
+				}],
+				"name": "queryGeo",
+				"type": {
+					"kind": "LIST",
+					"name": null,
+					"ofType": {
+						"kind": "OBJECT",
+						"name": "twtGeo",
+						"ofType": null
+					}
+				},
+				"description": null,
+				"isDeprecated": false,
+				"deprecationReason": null
+			}],
+			"enumValues": null,
+			"interfaces": [],
+			"description": "Query user, tweet, geolocation by keywords.",
+			"inputFields": null,
+			"possibleTypes": null
+		},
+		"isAList": "false",
+		"isObject": "true",
+		"isScalar": "false"
+	},
+	"children": [{
+		"name": "queryTweet",
+		"inputs": [{
+			"name": "q",
+			"value": "UIUC CS",
+			"inputType": {
+				"kind": "SCALAR",
+				"name": "String",
+				"ofType": null
+			},
+			"description": "A UTF-8, URL-encoded search query of 500 characters maximum, \n\t\t\t\t\t\t\t\t\t\tincluding operators. Queries may additionally be limited \n\t\t\t\t\t\t\t\t\t\tby complexity."
+		}, {
+			"name": "count",
+			"value": 3,
+			"inputType": {
+				"kind": "SCALAR",
+				"name": "Int",
+				"ofType": null
+			},
+			"description": "The number of tweets to return per page, up to a maximum of 100. \n\t\t\t\t\t\t\t\t\t\tDefaults to 15. This was formerly the \u201crpp\u201d parameter in the \n\t\t\t\t\t\t\t\t\t\told Search API."
+		}, {
+			"name": "pages",
+			"value": 3,
+			"inputType": {
+				"kind": "SCALAR",
+				"name": "Int",
+				"ofType": null
+			},
+			"description": "This is not in the original twitter api. This fields is the iterator that append new pages\n\t\t\t\t\t\t\t\t\t\tto the search. if you specify the number of pages you want to go through, you will get the \n\t\t\t\t\t\t\t\t\t\tamount of tweets = count * pages; detail check out API/twitterAPI.js and the max_id,since_id fields\n\t\t\t\t\t\t\t\t\t\tin twitter restful API documentation."
+		}, {
+			"name": "geocode",
+			"value": null,
+			"inputType": {
+				"kind": "SCALAR",
+				"name": "String",
+				"ofType": null
+			},
+			"description": "37.781157 -122.398720 1mi"
+		}, {
+			"name": "result_type",
+			"value": "\"mixed\"",
+			"inputType": {
+				"kind": "SCALAR",
+				"name": "String",
+				"ofType": null
+			},
+			"description": "Optional. Specifies what type of search results you would prefer \n\t\t\t\t\t\t\t\t\t\t\tto receive. The current default is \u201cmixed.\u201d Valid values include:\n\t\t\t\t\t\t\t\t\t\t\t* mixed : Include both popular and real time results in the response.\n\t\t\t\t\t\t\t\t\t\t\t* recent : return only the most recent results in the response\n\t\t\t\t\t\t\t\t\t\t\t* popular : return only the most popular results in the response."
+		}, {
+			"name": "locale",
+			"value": "\"en\"",
+			"inputType": {
+				"kind": "SCALAR",
+				"name": "String",
+				"ofType": null
+			},
+			"description": "Specify the language of the query you are sending \n\t\t\t\t\t\t\t\t\t\t\t(only ja is currently effective). This is intended for \n\t\t\t\t\t\t\t\t\t\t\tlanguage-specific consumers and the default should work in \n\t\t\t\t\t\t\t\t\t\t\tthe majority of cases."
+		}, {
+			"name": "until",
+			"value": null,
+			"inputType": {
+				"kind": "SCALAR",
+				"name": "String",
+				"ofType": null
+			},
+			"description": "Returns tweets created before the given date. Date should\n\t\t\t\t\t\t\t\t\t\t\tbe formatted as YYYY-MM-DD. Keep in mind that the search index \n\t\t\t\t\t\t\t\t\t\t\thas a 7-day limit. In other words, no tweets will be found \n\t\t\t\t\t\t\t\t\t\t\tfor a date older than one week."
+		}, {
+			"name": "lang",
+			"value": "\"en\"",
+			"inputType": {
+				"kind": "SCALAR",
+				"name": "String",
+				"ofType": null
+			},
+			"description": null
+		}],
+		"output": {
+			"type": {
+				"kind": "OBJECT",
+				"name": "tweet",
+				"fields": [{
+					"args": [],
+					"name": "id",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "id_str",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "created_at",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "text",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "retweet_count",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "favorite_count",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Int",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "retweeted",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "favorited",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "possibly_sensitive",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "truncated",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "lang",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "in_reply_to_user_id_str",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "in_reply_to_status_id_str",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "in_reply_to_screen_name",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "timestamp_ms",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "mentions",
+					"type": {
+						"kind": "LIST",
+						"name": null,
+						"ofType": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						}
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "hashtags",
+					"type": {
+						"kind": "LIST",
+						"name": null,
+						"ofType": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						}
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "urls",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "is_quote_status",
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "emoticons",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "source",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "sentiments",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "filter_level",
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "place",
+					"type": {
+						"kind": "OBJECT",
+						"name": "twtPlace",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "coordinates",
+					"type": {
+						"kind": "OBJECT",
+						"name": "twtCoordinateType",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "user_mentions",
+					"type": {
+						"kind": "OBJECT",
+						"name": "twtUserMention",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "user",
+					"type": {
+						"kind": "OBJECT",
+						"name": "twtUser",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [],
+					"name": "entities",
+					"type": {
+						"kind": "OBJECT",
+						"name": "twtEntity",
+						"ofType": null
+					},
+					"description": null,
+					"isDeprecated": false,
+					"deprecationReason": null
+				}, {
+					"args": [{
+						"name": "count",
+						"type": {
+							"kind": "SCALAR",
+							"name": "Int",
+							"ofType": null
+						},
+						"description": null,
+						"defaultValue": "3"
+					}],
+					"name": "retweet",
+					"type": {
+						"kind": "LIST",
+						"name": null,
+						"ofType": {
+							"kind": "OBJECT",
+							"name": "retweet",
+							"ofType": null
+						}
+					},
+					"description": "Get a list of retweets",
+					"isDeprecated": false,
+					"deprecationReason": null
+				}],
+				"enumValues": null,
+				"interfaces": [],
+				"description": "Return a tweet.",
+				"inputFields": null,
+				"possibleTypes": null
+			},
+			"isAList": "false",
+			"isObject": "true",
+			"isScalar": "false"
+		},
+		"children": [{
+			"name": "text",
+			"inputs": [],
+			"output": {
+				"type": {
+					"kind": "SCALAR",
+					"name": "String",
+					"fields": null,
+					"enumValues": null,
+					"interfaces": null,
+					"description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
+					"inputFields": null,
+					"possibleTypes": null
+				},
+				"isAList": "false",
+				"isObject": "false",
+				"isScalar": "true"
+			},
+			"children": [],
+			"selected": true
+		}, {
+			"name": "retweet_count",
+			"inputs": [],
+			"output": {
+				"type": {
+					"kind": "SCALAR",
+					"name": "Int",
+					"fields": null,
+					"enumValues": null,
+					"interfaces": null,
+					"description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. ",
+					"inputFields": null,
+					"possibleTypes": null
+				},
+				"isAList": "false",
+				"isObject": "false",
+				"isScalar": "true"
+			},
+			"children": [],
+			"selected": true
+		}],
+		"selected": true
+	}],
+	"selected": true
+}
