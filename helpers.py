@@ -131,6 +131,7 @@ def validateQueryNode(username, query_name, graph):
 			""".format(query_name = query_name, username = username)
 	query_exist = graph.cypher.execute(query)
 	query_id = None
+	print (query_exist)
 	if not query_exist:
 		query = """
 					CREATE 
@@ -142,6 +143,8 @@ def validateQueryNode(username, query_name, graph):
 		query_id = result[0]["ID(q)"]
 	else:
 		query_id = query_exist[0]["ID(q)"]
+
+	print (query_exist)
 
 	return query_id
 
