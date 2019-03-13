@@ -1,0 +1,11 @@
+Server is implemented on python3.6
+
+required python package:
+
+nltk
+genson
+pymysql
+py2neo==2.0.8
+flask
+aylien-apiclient
+(see script.sh for installing command)
